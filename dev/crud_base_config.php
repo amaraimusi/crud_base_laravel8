@@ -37,7 +37,7 @@ define('CRUD_BASE_APP_PATH', $crud_base_app_path);
 $crud_base_path = dirname(__FILE__) . '/vendor/CrudBase/';
 define('CRUD_BASE_PATH', $crud_base_path);
 
-$crud_base_project_path = '/crud_base_laravel8/dev'; // 例：「/animal/mng」
+$crud_base_project_path = '/crud_base_laravel8/dev/public'; // 例：「/animal/mng」
 define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推奨）
 
 $crud_base_url_base = $crud_base_project_path . '/';
