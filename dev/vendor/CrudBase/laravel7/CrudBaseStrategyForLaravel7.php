@@ -199,7 +199,6 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 		
 		
 		if(empty($ent['id'])){
-			
 			// ▽ idが空であればINSERTをする。
 			$id = $this->model->insertGetId($ent); // INSERT
 			$ent['id'] = $id;

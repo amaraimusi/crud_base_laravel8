@@ -299,7 +299,9 @@ class Neko extends AppModel
 	 */
 	public function saveEntity(&$ent, &$regParam){
 		
-		
+		//■■■□□□■■■□□□
+	    if(empty($ent['neko_dt'])) $ent['neko_dt'] = '2021-01-01 12:12:12';
+	    
 		return $this->cb->saveEntity($ent, $regParam);
 		
 

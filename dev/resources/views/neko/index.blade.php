@@ -1,6 +1,6 @@
 <?php 
 
-
+//phpinfo();
 extract($crudBaseData, EXTR_REFS);
 extract($masters, EXTR_REFS);
 

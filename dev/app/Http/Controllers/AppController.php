@@ -14,7 +14,10 @@ class AppController {
 	protected function setCommonToData($data){
 	
 		// 更新ユーザー
-		$update_user = \Auth::user()->name; // ユーザー名
+	    $update_user = '';
+	    if(!empty(\Auth::user())){
+	        $update_user = \Auth::user()->name; // ユーザー名
+	    }
 		
 		// ユーザーエージェント
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];

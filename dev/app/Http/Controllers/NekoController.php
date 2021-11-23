@@ -23,7 +23,6 @@ class NekoController extends AppController
 	 */
 	public function index(){
 		
-
 		$this->init();
 
  		// CrudBase共通処理（前）
@@ -88,7 +87,7 @@ class NekoController extends AppController
 		// CBBXS-2024
 		
 		// CBBXE
-		
+		$ent = $this->setCommonToEntity($ent);
 		$ent = $this->md->saveEntity($ent, $regParam);
 		
 
