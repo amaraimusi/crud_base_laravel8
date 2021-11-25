@@ -15,6 +15,8 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+					<div style="margin-top:12px;"><a href="{{ url('/dashboard') }}" class="btn btn-lg btn-success">ダッシュボード</a></div>
+					<br>
                 </div>
             </div>
         </div>

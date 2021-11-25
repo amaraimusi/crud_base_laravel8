@@ -22,7 +22,7 @@ class NekoController extends AppController
 	 * ネコCRUDページ
 	 */
 	public function index(){
-		
+	    
 		$this->init();
 
  		// CrudBase共通処理（前）

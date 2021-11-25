@@ -13,9 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//■■■□□□■■■□□□
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', 'App\Http\Controllers\DashboardController@index');
+    
+    
+Route::post('ajax_login_with_cake/login_check', 'App\Http\Controllers\AjaxLoginWithCakeController@login_check');
+Route::get('ajax_login_with_cake/login_rap', 'App\Http\Controllers\AjaxLoginWithCakeController@login_rap');
+Route::get('ajax_login_with_cake/logout', 'App\Http\Controllers\AjaxLoginWithCakeController@logout');
+
+Route::get('dashboard', 'App\Http\Controllers\DashboardController@index');
 
 // Neko
 Route::get('neko', 'App\Http\Controllers\NekoController@index');
@@ -25,6 +35,15 @@ Route::post('neko/auto_save', 'App\Http\Controllers\NekoController@auto_save');
 Route::post('neko/ajax_pwms', 'App\Http\Controllers\NekoController@ajax_pwms');
 Route::get('neko/csv_download', 'App\Http\Controllers\NekoController@csv_download');
 Route::post('neko/bulk_reg', 'App\Http\Controllers\NekoController@bulk_reg');
+
+// UserMng
+Route::get('user_mng', 'UserMngController@index');
+Route::post('user_mng/ajax_reg', 'UserMngController@ajax_reg');
+Route::post('user_mng/ajax_delete', 'UserMngController@ajax_delete');
+Route::post('user_mng/auto_save', 'UserMngController@auto_save');
+Route::post('user_mng/ajax_pwms', 'UserMngController@ajax_pwms');
+Route::get('user_mng/csv_download', 'UserMngController@csv_download');
+Route::post('user_mng/bulk_reg', 'UserMngController@bulk_reg');
 
 Auth::routes();
 

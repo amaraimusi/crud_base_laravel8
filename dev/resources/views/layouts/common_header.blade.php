@@ -26,7 +26,7 @@
 		@auth
 			@if ($auth_level >= 30)
 				<li>
-					<a class="nav-link text-light" href="user_mng">ユーザー管理</a>
+					<a class="nav-link text-light" href="neko">見本管理画面</a>
 				</li>
 			@endif
 		@endguest
@@ -42,7 +42,7 @@
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="username_navbarDropdownMenuLink">
 						<span class="dropdown-item">{{$authority_wamei}}</span>
 						<span class="dropdown-item">{{$user_name}}</span>
-						<a class=" btn btn-info btn-sm dropdown-item" href="<?php echo CRUD_BASE_PROJECT_PATH;?>/public/ajax_login_with_cake/logout" >ログアウト</a>
+						<a class=" btn btn-info btn-sm dropdown-item" href="<?php echo CRUD_BASE_PROJECT_PATH;?>/ajax_login_with_cake/logout" >ログアウト</a>
 					</div>
 				@else
 					<a href="{{ route('login') }}" class="nav-link text-light">ログイン</a>
