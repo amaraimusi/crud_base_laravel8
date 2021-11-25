@@ -13,7 +13,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
-	<a class="navbar-brand text-light" href="<?php echo CRUD_BASE_PROJECT_PATH;?>/public/">CrudBase</a>
+	<a class="navbar-brand text-light" href="<?php echo CRUD_BASE_PROJECT_PATH;?>">CrudBase</a>
 
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	<span class="navbar-toggler-icon"></span>
