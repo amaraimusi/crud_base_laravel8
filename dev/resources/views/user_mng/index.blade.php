@@ -200,7 +200,7 @@ foreach($data as $i=>&$ent){
 <?php $this->CrudBase->divPagenationB(); ?>
 <br>
 	
-<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');">新規追加</span></button>	
+<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_bottom');">新規追加</span></button>	
 
 <?php $this->CrudBase->divPwms(); // 複数有効/削除の区分を表示する ?>
 
