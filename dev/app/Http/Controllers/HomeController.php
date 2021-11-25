@@ -18,6 +18,7 @@ class HomeController extends Controller
 
     /**
      * Show the application dashboard.
+	 * ログイン入力フォーム画面とログイン後画面になっている。
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
