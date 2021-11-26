@@ -5,7 +5,7 @@ extract($crudBaseData, EXTR_REFS);
 extract($masters, EXTR_REFS);
 
 require_once $crud_base_path . 'CrudBaseHelper.php';
-$this->CrudBase = new CrudBaseHelper($crudBaseData);
+$cbh = new CrudBaseHelper($crudBaseData);
 $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン文字列
 
 
@@ -18,7 +18,6 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<title>ユーザー管理管理画面</title>
 	
 	<script src="{{ asset('/js/app.js') }}" defer></script>
-	<script src="{{ asset('/js/test.js') }}" defer></script>
 	<script src="{{ $crud_base_js . $ver_str }}" defer></script>
 	<script src="{{ asset('/js/UserMng/index.js')  . $ver_str }}" defer></script>
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
@@ -26,19 +25,20 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<link href="{{ $crud_base_css . $ver_str }}" rel="stylesheet">
 	
 </head>
-<body><div class="container">
-
-
-<div class="cb_func_line">
+<body>
 
 @include('layouts.common_header')
+
+<div class="container-fluid">
+<div class="cb_func_line">
+
 
 	<div id="ajax_login_with_cake"></div><!-- ログイン or ログアウト 　AjaxLoginWithCake.js　-->
 	<div class="cb_kj_main">
 	<!-- 検索条件入力フォーム -->
 	<form action="" class="form_kjs" id="user_mngIndexForm" method="post" accept-charset="utf-8">
 		
-		<?php $this->CrudBase->inputKjMain('kj_main','',null,'ユーザー管理名、備考を検索する');?>
+		<?php $cbh->inputKjMain('kj_main','',null,'ユーザー管理名、備考を検索する');?>
 		<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success btn-sm' />
 		<div class="btn-group">
 			<button type="button" class="btn btn-secondary btn-sm" title="詳細検索項目を表示する" onclick="jQuery('.cb_kj_detail').toggle(300)">詳細検索</button>
@@ -52,16 +52,26 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<?php 
 		
 		// --- CBBXS-2004
-		$this->CrudBase->inputKjId(); 
-		$this->CrudBase->inputKjText('kj_name','name');
-		$this->CrudBase->inputKjText('kj_email','email');
-		$this->CrudBase->inputKjSelect('kj_role','権限', $masters['roleList']); 
-		$this->CrudBase->inputKjHidden('kj_sort_no');
-		$this->CrudBase->inputKjDeleteFlg();
+		$cbh->inputKjId(); 
+		$cbh->inputKjText('kj_name','name');
+		$cbh->inputKjText('kj_email','email');
+		$cbh->inputKjText('kj_email_verified_at','email_verified_at');
+		$cbh->inputKjText('kj_nickname','名前');
+		$cbh->inputKjText('kj_password','password');
+		$cbh->inputKjText('kj_remember_token','remember_token');
+		$cbh->inputKjSelect('kj_role','権限', $masters['roleList']); 
+		$cbh->inputKjText('kj_temp_hash','仮登録ハッシュコード');
+		$cbh->inputKjText('kj_temp_datetime','仮登録制限時刻');
+		$cbh->inputKjHidden('kj_sort_no');
+		$cbh->inputKjDeleteFlg();
+		$cbh->inputKjText('kj_update_user','更新ユーザー');
+		$cbh->inputKjText('kj_ip_addr','更新IPアドレス');
+		$cbh->inputKjCreated();
+		$cbh->inputKjModified();
 
 		// --- CBBXE
 		
-		$this->CrudBase->inputKjLimit();
+		$cbh->inputKjLimit();
 		echo "<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success' />";
 		
 		
@@ -85,7 +95,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <!-- 一括追加機能  -->
 <div id="crud_base_bulk_add" style="display:none"></div>
 
-<?php $this->CrudBase->divNewPageVarsion(); // 新バージョン通知区分を表示?>
+<?php $cbh->divNewPageVarsion(); // 新バージョン通知区分を表示?>
 <div id="err" class="text-danger"><?php echo $errMsg;?></div>
 
 <div style="clear:both"></div>
@@ -96,14 +106,13 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<div style="display:inline-block;width:75%; ">
 			<?php 
 				// 列表示切替機能
-				$this->CrudBase->divCsh();
+				$cbh->divCsh();
 				
 				// CSVエクスポート機能
 	 			$csv_dl_url =  'user_mng/csv_download';
-	 			$this->CrudBase->makeCsvBtns($csv_dl_url);
+	 			$cbh->makeCsvBtns($csv_dl_url);
 			?>
-			<button id="crud_base_bulk_add_btn" type="button" class="btn btn-secondary btn-sm" onclick="crudBase.crudBaseBulkAdd.showForm()" >一括追加</button>
-		</div>
+	</div>
 		<div style="display:inline-block;text-align:right;width:24%;">
 			<button type="button" class="btn btn-secondary btn-sm" onclick="jQuery('#detail_div').toggle(300);">閉じる</button>
 		</div>
@@ -113,12 +122,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<!-- CrudBase設定 -->
 		<div id="crud_base_config" style="display:inline-block"></div>
 		
-		<button id="calendar_view_k_btn" type="button" class="btn btn-secondary btn-sm" onclick="calendarViewKShow()" >カレンダーモード</button>
-		
 		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
-	
-		<button id="table_transform_tbl_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(0)" style="display:none">一覧の変形・テーブルモード</button>	
-		<button id="table_transform_div_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(1)" >一覧の変形・スマホモード</button>
 		
 	</div><!-- sub_tools -->
 </div><!-- detail_div -->
@@ -129,7 +133,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 
 <div id="new_inp_form_point"></div><!-- 新規入力フォーム表示地点 -->
 
-<?php $this->CrudBase->divPagenation(); // ページネーション ?>
+<?php $cbh->divPagenation(); // ページネーション ?>
 
 <div id="calendar_view_k"></div>
 
@@ -159,35 +163,45 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <?php
 
 // td要素出力を列並モードに対応させる
-$this->CrudBase->startClmSortMode();
+$cbh->startClmSortMode();
 
 foreach($data as $i=>&$ent){
 
 	echo "<tr id='ent{$ent['id']}' >";
 	// CBBXS-2005
-	$this->CrudBase->tdId($ent,'id', ['checkbox_name'=>'pwms']);
-	$this->CrudBase->tdStr($ent, 'name');
-	$this->CrudBase->tdStr($ent, 'email');
-	$this->CrudBase->tdList($ent, 'role', $roleList);
-	$this->CrudBase->tdPlain($ent, 'sort_no');
-	$this->CrudBase->tdDeleteFlg($ent, 'delete_flg');
+	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
+	$cbh->tdStr($ent, 'name');
+	$cbh->tdStr($ent, 'email');
+	$cbh->tdPlain($ent, 'email_verified_at');
+	$cbh->tdStr($ent, 'nickname');
+	$cbh->tdStr($ent, 'password');
+	$cbh->tdStr($ent, 'remember_token');
+	$cbh->tdList($ent, 'role', $roleList);
+	$cbh->tdStr($ent, 'temp_hash');
+	$cbh->tdPlain($ent, 'temp_datetime');
+	$cbh->tdPlain($ent, 'sort_no');
+	$cbh->tdDeleteFlg($ent, 'delete_flg');
+	$cbh->tdStr($ent, 'update_user');
+	$cbh->tdStr($ent, 'ip_addr');
+	$cbh->tdPlain($ent, 'created');
+	$cbh->tdPlain($ent, 'modified');
 
 	// CBBXE
 	
-	$this->CrudBase->tdsEchoForClmSort();// 列並に合わせてTD要素群を出力する
+	$cbh->tdsEchoForClmSort();// 列並に合わせてTD要素群を出力する
 	
 	// 行のボタン類
 	echo "<td><div style='display:inline-block'>";
 	$id = $ent['id'];
 	echo  "<input type='button' value='↑↓' onclick='rowExchangeShowForm(this)' class='row_exc_btn btn btn-info btn-sm' />";
-	$this->CrudBase->rowEditBtn($id);
-	$this->CrudBase->rowCopyBtn($id);
+	$cbh->rowEditBtn($id);
+	$cbh->rowCopyBtn($id);
 	echo "</div>&nbsp;";
 	echo "<div style='display:inline-block'>";
-	$this->CrudBase->rowDeleteBtn($ent); // 削除ボタン
-	$this->CrudBase->rowEnabledBtn($ent); // 有効ボタン
+	$cbh->rowDeleteBtn($ent); // 削除ボタン
+	$cbh->rowEnabledBtn($ent); // 有効ボタン
 	echo "&nbsp;";
-	$this->CrudBase->rowEliminateBtn($ent);// 抹消ボタン
+	$cbh->rowEliminateBtn($ent);// 抹消ボタン
 	echo "</div>";
 	echo "</td>";
 	echo "</tr>";
@@ -197,12 +211,12 @@ foreach($data as $i=>&$ent){
 </tbody>
 </table>
 
-<?php $this->CrudBase->divPagenationB(); ?>
+<?php $cbh->divPagenationB(); ?>
 <br>
 	
-<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_bottom');">新規追加</span></button>	
+<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');">新規追加</span></button>	
 
-<?php $this->CrudBase->divPwms(); // 複数有効/削除の区分を表示する ?>
+<?php $cbh->divPwms(); // 複数有効/削除の区分を表示する ?>
 
 
 <table id="crud_base_forms">
@@ -225,33 +239,42 @@ foreach($data as $i=>&$ent){
 		<div class="err text-danger"></div>
 		
 		<div style="display:none">
-	    	<input type="hidden" name="form_type">
-	    	<input type="hidden" name="row_index">
-	    	<input type="hidden" name="sort_no">
+			<input type="hidden" name="form_type">
+			<input type="hidden" name="row_index">
+			<input type="hidden" name="sort_no">
 		</div>
 	
 	
 		<!-- CBBXS-1006 -->
+		
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >name: </div>
+			<div class='cbf_inp' >メールアドレス: </div>
 			<div class='cbf_input'>
-				<input type="text" name="name" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-				<label class="text-danger" for="name"></label>
+				<input type="email" name="email" class="valid " value="" required maxlength="256" title="メールアドレスの形式で入力してください（例：yamada_taro@example.com)" style="width:400px" />
+				<label class="text-danger" for="email"></label>
+			</div>
+		</div>
+		
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp' >表示名: </div>
+			<div class='cbf_input'>
+				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください"  style="width:300px" placeholder="（例）山田太郎" />
+				<label class="text-danger" for="nickname"></label>
 			</div>
 		</div>
 
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >email: </div>
+			<div class='cbf_inp' >パスワード: </div>
 			<div class='cbf_input'>
-				<input type="text" name="email" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-				<label class="text-danger" for="email"></label>
+				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
+				<label class="text-danger" for="password"></label>
 			</div>
 		</div>
 
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >権限: </div>
 			<div class='cbf_input'>
-				<?php $this->CrudBase->selectX('role',null,$roleList,null);?>
+				<?php $cbh->selectX('role',null,$roleList,null);?>
 				<label class="text-danger" for="role"></label>
 			</div>
 		</div>
@@ -292,20 +315,22 @@ foreach($data as $i=>&$ent){
 					<span class="id"></span>
 				</div>
 			</div>
+
+		
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >name: </div>
+			<div class='cbf_inp' >表示名: </div>
 			<div class='cbf_input'>
-				<input type="text" name="name" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-				<label class="text-danger" for="name"></label>
+				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
+				<label class="text-danger" for="nickname"></label>
 			</div>
 		</div>
 
 
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >email: </div>
+			<div class='cbf_inp' >パスワード: </div>
 			<div class='cbf_input'>
-				<input type="text" name="email" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-				<label class="text-danger" for="email"></label>
+				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
+				<label class="text-danger" for="password"></label>
 			</div>
 		</div>
 
@@ -313,7 +338,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >権限: </div>
 			<div class='cbf_input'>
-				<?php $this->CrudBase->selectX('role',null,$roleList,null);?>
+				<?php $cbh->selectX('role',null,$roleList,null);?>
 				<label class="text-danger" for="role"></label>
 			</div>
 		</div>
@@ -454,6 +479,8 @@ foreach($data as $i=>&$ent){
 	</div><!-- panel-body -->
 </div><br>
 
+
+@include('layouts.common_footer')
 
 
 </div></body>

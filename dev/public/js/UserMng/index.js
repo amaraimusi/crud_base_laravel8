@@ -131,19 +131,35 @@ function _getValidMethods(){
 				}
 				return err;
 			},
-			kj_name:(cbv, value)=>{
+			kj_username:(cbv, value)=>{
 				let err = '';
 				// 文字数バリデーション
-				if(!cbv.isMaxLength(value, 255)){
-					err = '255文字以内で入力してくだい。';
+				if(!cbv.isMaxLength(value, 50)){
+					err = '50文字以内で入力してくだい。';
 				}
 				return err;
 			},
-			kj_email:(cbv, value)=>{
+			kj_password:(cbv, value)=>{
 				let err = '';
 				// 文字数バリデーション
-				if(!cbv.isMaxLength(value, 255)){
-					err = '255文字以内で入力してくだい。';
+				if(!cbv.isMaxLength(value, 50)){
+					err = '50文字以内で入力してくだい。';
+				}
+				return err;
+			},
+			kj_update_user:(cbv, value)=>{
+				let err = '';
+				// 文字数バリデーション
+				if(!cbv.isMaxLength(value, 50)){
+					err = '50文字以内で入力してくだい。';
+				}
+				return err;
+			},
+			kj_ip_addr:(cbv, value)=>{
+				let err = '';
+				// 文字数バリデーション
+				if(!cbv.isMaxLength(value, 40)){
+					err = '40文字以内で入力してくだい。';
 				}
 				return err;
 			},

@@ -12,7 +12,7 @@ class UserMngController extends AppController
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
 	public $this_page_version = '1.0.0';
 	
-	private $review_mode = true; // レビューモード（見本モード）
+	private $review_mode = false; // レビューモード（見本モード）
 	
 	private $cb; // CrudBase制御クラス
 	private $md; // モデル
@@ -22,6 +22,10 @@ class UserMngController extends AppController
 	 */
 	public function index(){
 
+	    if(\Auth::id() == null ){
+	        return redirect('home');
+	    }
+	    
 		$this->init();
 
  		// CrudBase共通処理（前）
@@ -91,7 +95,7 @@ class UserMngController extends AppController
 		$form_type = $regParam['form_type']; // フォーム種別 new_inp,edit,delete,eliminate
 
 		// CBBXS-2024
-
+		$ent['password'] = \Hash::make($ent['password']); // パスワードをハッシュ化する。
 		// CBBXE
 		
 
@@ -222,9 +226,19 @@ class UserMngController extends AppController
 				['name'=>'kj_id', 'def'=>null],
 				['name'=>'kj_name', 'def'=>null],
 				['name'=>'kj_email', 'def'=>null],
+				['name'=>'kj_email_verified_at', 'def'=>null],
+				['name'=>'kj_nickname', 'def'=>null],
+				['name'=>'kj_password', 'def'=>null],
+				['name'=>'kj_remember_token', 'def'=>null],
 				['name'=>'kj_role', 'def'=>null],
+				['name'=>'kj_temp_hash', 'def'=>null],
+				['name'=>'kj_temp_datetime', 'def'=>null],
 				['name'=>'kj_sort_no', 'def'=>null],
 				['name'=>'kj_delete_flg', 'def'=>0],
+				['name'=>'kj_update_user', 'def'=>null],
+				['name'=>'kj_ip_addr', 'def'=>null],
+				['name'=>'kj_created', 'def'=>null],
+				['name'=>'kj_modified', 'def'=>null],
 
 				// CBBXE
 				
@@ -252,10 +266,40 @@ class UserMngController extends AppController
 					'row_order'=>'UserMng.email',
 					'clm_show'=>1,
 			],
+			'email_verified_at'=>[
+					'name'=>'email_verified_at',
+					'row_order'=>'UserMng.email_verified_at',
+					'clm_show'=>0,
+			],
+			'nickname'=>[
+					'name'=>'名前',
+					'row_order'=>'UserMng.nickname',
+					'clm_show'=>1,
+			],
+			'password'=>[
+					'name'=>'password',
+					'row_order'=>'UserMng.password',
+					'clm_show'=>0,
+			],
+			'remember_token'=>[
+					'name'=>'remember_token',
+					'row_order'=>'UserMng.remember_token',
+					'clm_show'=>0,
+			],
 			'role'=>[
 					'name'=>'権限',
 					'row_order'=>'UserMng.role',
 					'clm_show'=>1,
+			],
+			'temp_hash'=>[
+					'name'=>'仮登録ハッシュコード',
+					'row_order'=>'UserMng.temp_hash',
+					'clm_show'=>0,
+			],
+			'temp_datetime'=>[
+					'name'=>'仮登録制限時刻',
+					'row_order'=>'UserMng.temp_datetime',
+					'clm_show'=>0,
 			],
 			'sort_no'=>[
 					'name'=>'順番',
@@ -265,6 +309,26 @@ class UserMngController extends AppController
 			'delete_flg'=>[
 					'name'=>'削除フラグ',
 					'row_order'=>'UserMng.delete_flg',
+					'clm_show'=>0,
+			],
+			'update_user'=>[
+					'name'=>'更新ユーザー',
+					'row_order'=>'UserMng.update_user',
+					'clm_show'=>0,
+			],
+			'ip_addr'=>[
+					'name'=>'更新IPアドレス',
+					'row_order'=>'UserMng.ip_addr',
+					'clm_show'=>0,
+			],
+			'created'=>[
+					'name'=>'生成日時',
+					'row_order'=>'UserMng.created',
+					'clm_show'=>0,
+			],
+			'modified'=>[
+					'name'=>'更新日時',
+					'row_order'=>'UserMng.modified',
 					'clm_show'=>0,
 			],
 
@@ -326,6 +390,11 @@ class UserMngController extends AppController
 	 * 一覧画面のCSVダウンロードボタンを押したとき、一覧データをCSVファイルとしてダウンロードします。
 	 */
 	public function csv_download(){
+		
+		if(\Auth::id() == null ){
+			return 'Error:ログイン認証が必要です。 Login is needed';
+		}
+		
 		$this->init();
 		
 		//ダウンロード用のデータを取得する。
@@ -380,14 +449,20 @@ class UserMngController extends AppController
 		$sort_field = $pages['sort_field'];
 		$sort_desc = $pages['sort_desc'];
 		
-		$crudBaseData = [
-				'kjs' => $kjs,
-				'pages' => $pages,
-				'page_no' => $page_no,
-				'row_limit' => $row_limit,
-				'sort_field' => $sort_field,
-				'sort_desc' => $sort_desc,
-		];
+		$pages['page_no'] = $page_no;
+		$pages['row_limit'] = $row_limit;
+		$pages['sort_field'] = $sort_field;
+		$pages['sort_desc'] = $sort_desc;
+		
+		$crudBaseData = $this->init();
+		$crudBaseData['kjs'] = $kjs;
+		$crudBaseData['pages'] = $pages;
+		
+		// CBBXS-2019
+		// 許可権限リストを作成(扱える下位権限のリスト）
+		$crudBaseData['kjs']['permRoles'] = $this->cb->makePermRoles();
+		
+		// CBBXE
 		
 		
 		//DBからデータ取得

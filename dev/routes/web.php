@@ -37,13 +37,13 @@ Route::get('neko/csv_download', 'App\Http\Controllers\NekoController@csv_downloa
 Route::post('neko/bulk_reg', 'App\Http\Controllers\NekoController@bulk_reg');
 
 // UserMng
-Route::get('user_mng', 'UserMngController@index');
-Route::post('user_mng/ajax_reg', 'UserMngController@ajax_reg');
-Route::post('user_mng/ajax_delete', 'UserMngController@ajax_delete');
-Route::post('user_mng/auto_save', 'UserMngController@auto_save');
-Route::post('user_mng/ajax_pwms', 'UserMngController@ajax_pwms');
-Route::get('user_mng/csv_download', 'UserMngController@csv_download');
-Route::post('user_mng/bulk_reg', 'UserMngController@bulk_reg');
+Route::get('user_mng', 'App\Http\Controllers\UserMngController@index');
+Route::post('user_mng/ajax_reg', 'App\Http\Controllers\UserMngController@ajax_reg');
+Route::post('user_mng/ajax_delete', 'App\Http\Controllers\UserMngController@ajax_delete');
+Route::post('user_mng/auto_save', 'App\Http\Controllers\UserMngController@auto_save');
+Route::post('user_mng/ajax_pwms', 'App\Http\Controllers\UserMngController@ajax_pwms');
+Route::get('user_mng/csv_download', 'App\Http\Controllers\UserMngController@csv_download');
+Route::post('user_mng/bulk_reg', 'App\Http\Controllers\UserMngController@bulk_reg');
 
 Auth::routes();
 
