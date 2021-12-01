@@ -300,7 +300,7 @@ foreach($data as $i=>&$ent){
 
 	<!-- 編集フォーム -->
 	<tr id="ajax_crud_edit_form" class="crud_base_form" style="display:none"><td colspan='5'>
-		<div  style='width:100%'>
+		<div  style='width:100%;'>
 	
 			<div>
 				<div style="color:#3174af;float:left">編集</div>
@@ -325,31 +325,42 @@ foreach($data as $i=>&$ent){
 			</div>
 
 		
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >表示名: </div>
-			<div class='cbf_input'>
-				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
-				<label class="text-danger" for="nickname"></label>
-			</div>
-		</div>
+    		<div class="cbf_inp_wrap">
+    			<div class='cbf_inp' >ユーザー名: </div>
+    			<div class='cbf_input'>
+    				<input type="text" name="name" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
+    				<label class="text-danger" for="nickname"></label>
+    			</div>
+    			<aside>※省略時にはEメールがユーザー名になります。</aside>
+    		</div>
 
-
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >パスワード: </div>
-			<div class='cbf_input'>
-				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
-				<label class="text-danger" for="password"></label>
-			</div>
-		</div>
-
-
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >権限: </div>
-			<div class='cbf_input'>
-				<?php $cbh->selectX('role',null,$roleList,null);?>
-				<label class="text-danger" for="role"></label>
-			</div>
-		</div>
+		
+    		<div class="cbf_inp_wrap">
+    			<div class='cbf_inp' >ニックネーム: </div>
+    			<div class='cbf_input'>
+    				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
+    				<label class="text-danger" for="nickname"></label>
+    				<aside>※省略時にはユーザー名がニックネームになります。</aside>
+    			</div>
+    		</div>
+    
+    
+    		<div class="cbf_inp_wrap">
+    			<div class='cbf_inp' >パスワード: </div>
+    			<div class='cbf_input'>
+    				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
+    				<label class="text-danger" for="password"></label>
+    			</div>
+    		</div>
+    
+    
+    		<div class="cbf_inp_wrap">
+    			<div class='cbf_inp_label' >権限: </div>
+    			<div class='cbf_input'>
+    				<?php $cbh->selectX('role',null,$roleList,null);?>
+    				<label class="text-danger" for="role"></label>
+    			</div>
+    		</div>
 
 			<div class="cbf_inp_wrap">
 				<div class='cbf_inp_label' >削除フラグ：</div>
