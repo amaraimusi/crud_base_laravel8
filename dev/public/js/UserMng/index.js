@@ -261,14 +261,39 @@ function resetKjs(exempts){
  * 新規入力フォームの登録ボタンアクション
  */
 function newInpReg(){
-	crudBase.newInpReg(null,null);
+	crudBase.newInpReg(beforeCallBack,null);
 }
 
 /**
  * 編集フォームの登録ボタンアクション
  */
 function editReg(){
-	crudBase.editReg(null,null);
+	crudBase.editReg(beforeCallBack,null);
+}
+
+// 登録アクション: Ajax送信前のコールバック
+function beforeCallBack(ent, fd){
+
+	let err = null;
+	if(ent.email == null || ent.email == ''){
+		err = 'Eメールは必須入力です。';
+	}
+	
+	// ユーザー名が空ならメールアドレスをユーザー名にする。
+	if(ent.name == null || ent.name == ''){
+		ent.name = ent.email;
+	}
+	
+	// ニックネームが空ならユーザー名をニックネームにする。
+	if(ent.nickname == null || ent.nickname == ''){
+		ent.nickname = ent.name;
+	}
+	
+	return {
+		ent:ent,
+		fd:fd,
+		err:err,
+	}
 }
 
 /**

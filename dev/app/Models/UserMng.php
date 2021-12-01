@@ -170,7 +170,7 @@ class UserMng extends AppModel
 			$cnds[]="UserMng.remember_token LIKE '%{$kjs['kj_remember_token']}%'";
 		}
 		if(!empty($kjs['kj_role']) || $kjs['kj_role'] ==='0' || $kjs['kj_role'] ===0){
-			$cnds[]="UserMng.role = {$kjs['kj_role']}";
+			$cnds[]="UserMng.role = '{$kjs['kj_role']}'";
 		}
 		if(!empty($kjs['permRoles'])){
 			$perm_roles_c = "'" . implode("','", $kjs['permRoles']) . "'";

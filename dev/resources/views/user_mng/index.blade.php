@@ -46,7 +46,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<!-- 検索条件入力フォーム -->
 	<form action="" class="form_kjs" id="user_mngIndexForm" method="post" accept-charset="utf-8">
 		
-		<?php $cbh->inputKjMain('kj_main','',null,'ユーザー管理名、備考を検索する');?>
+		<?php $cbh->inputKjMain('kj_main','',null,'ID, ユーザー名, ニックネームで検索する');?>
 		<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success btn-sm' />
 		<div class="btn-group">
 			<button type="button" class="btn btn-secondary btn-sm" title="詳細検索項目を表示する" onclick="jQuery('.cb_kj_detail').toggle(300)">詳細検索</button>
@@ -60,16 +60,11 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<?php 
 		
 		// --- CBBXS-2004
-		$cbh->inputKjId(); 
-		$cbh->inputKjText('kj_name','name');
-		$cbh->inputKjText('kj_email','email');
-		$cbh->inputKjText('kj_email_verified_at','email_verified_at');
-		$cbh->inputKjText('kj_nickname','名前');
-		$cbh->inputKjText('kj_password','password');
-		$cbh->inputKjText('kj_remember_token','remember_token');
+		$cbh->inputKjId();
+		$cbh->inputKjText('kj_email','Eメール');
+		$cbh->inputKjText('kj_name','ユーザー名');
+		$cbh->inputKjText('kj_nickname','ニックネーム');
 		$cbh->inputKjSelect('kj_role','権限', $masters['roleList']); 
-		$cbh->inputKjText('kj_temp_hash','仮登録ハッシュコード');
-		$cbh->inputKjText('kj_temp_datetime','仮登録制限時刻');
 		$cbh->inputKjHidden('kj_sort_no');
 		$cbh->inputKjDeleteFlg();
 		$cbh->inputKjText('kj_update_user','更新ユーザー');
@@ -264,10 +259,20 @@ foreach($data as $i=>&$ent){
 		</div>
 		
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >表示名: </div>
+			<div class='cbf_inp' >ユーザー名: </div>
 			<div class='cbf_input'>
-				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください"  style="width:300px" placeholder="（例）山田太郎" />
+				<input type="text" name="name" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
+				<label class="text-danger" for="name"></label>
+			</div>
+			<aside>※省略時にはEメールがユーザー名になります。</aside>
+		</div>
+	
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp' >ニックネーム: </div>
+			<div class='cbf_input'>
+				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
 				<label class="text-danger" for="nickname"></label>
+				<aside>※省略時にはユーザー名がニックネームになります。</aside>
 			</div>
 		</div>
 
@@ -328,8 +333,8 @@ foreach($data as $i=>&$ent){
     		<div class="cbf_inp_wrap">
     			<div class='cbf_inp' >ユーザー名: </div>
     			<div class='cbf_input'>
-    				<input type="text" name="name" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
-    				<label class="text-danger" for="nickname"></label>
+    				<input type="text" name="name" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
+    				<label class="text-danger" for="name"></label>
     			</div>
     			<aside>※省略時にはEメールがユーザー名になります。</aside>
     		</div>
@@ -338,7 +343,7 @@ foreach($data as $i=>&$ent){
     		<div class="cbf_inp_wrap">
     			<div class='cbf_inp' >ニックネーム: </div>
     			<div class='cbf_input'>
-    				<input type="text" name="nickname" class="valid " value="" required maxlength="50" title="50文字以内で入力してください" />
+    				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
     				<label class="text-danger" for="nickname"></label>
     				<aside>※省略時にはユーザー名がニックネームになります。</aside>
     			</div>

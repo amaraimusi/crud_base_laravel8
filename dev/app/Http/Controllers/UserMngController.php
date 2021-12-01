@@ -10,7 +10,7 @@ class UserMngController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.0.1';
+	public $this_page_version = '1.0.0';
 	
 	private $review_mode = false; // レビューモード（見本モード）
 	
