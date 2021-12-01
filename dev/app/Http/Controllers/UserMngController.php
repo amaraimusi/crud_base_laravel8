@@ -60,6 +60,7 @@ class UserMngController extends AppController
 		// CBBXE
 
 		$crudBaseData['masters'] = $masters;
+		
 
 		$crud_base_json = json_encode($crudBaseData,JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
 		return view('user_mng.index', compact('data', 'crudBaseData', 'crud_base_json'));
@@ -93,11 +94,21 @@ class UserMngController extends AppController
 		$reg_param_json = $_POST['reg_param_json'];
 		$regParam = json_decode($reg_param_json,true);
 		$form_type = $regParam['form_type']; // フォーム種別 new_inp,edit,delete,eliminate
+		
+
 
 		// CBBXS-2024
+		// 新規入力である場合、メールの重複チェックを行う。
+		if($form_type == 'new_inp'){
+		    
+		    if($this->md->checkEMailDuplication($ent['email']) == false){
+		        $ent['err'] = "エラー：すでに登録済みのメールアドレスです。";
+		        $json_str = json_encode($ent, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS); // JSONに変換
+		        return $json_str;
+		    }
+		}
 		$ent['password'] = \Hash::make($ent['password']); // パスワードをハッシュ化する。
 		// CBBXE
-		
 
 		$ent = $this->md->saveEntity($ent, $regParam);
 		

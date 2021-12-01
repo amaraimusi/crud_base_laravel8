@@ -30,6 +30,14 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 @include('layouts.common_header')
 
 <div class="container-fluid">
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url('/') }}">ホーム</a></li>
+    <li class="breadcrumb-item active" aria-current="page">ネコ管理画面</li>
+  </ol>
+</nav>
+
 <div class="cb_func_line">
 
 

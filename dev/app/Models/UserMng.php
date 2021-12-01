@@ -321,6 +321,24 @@ class UserMng extends AppModel
 		
 	}
 	
+	// CBBXS-2022
+	/**
+	 * メールの重複チェック
+	 * @param string $email メールアドレス
+	 * @return bool true:無問題, false:重複あり
+	 */
+	public function checkEMailDuplication($email){
+	    
+	    $email = $this->sqlSanitizeW($email);
+	    $sql = "SELECT id,email FROM users WHERE email='{$email}';";
+	    
+	    $res = $this->cb->selectValue($sql);
+  
+	    if(!empty($res)) return false;
+	    return true;
+	    
+	}
+	// CBBXE
 	
 	
 }
