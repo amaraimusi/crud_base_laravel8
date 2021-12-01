@@ -110,6 +110,7 @@ class UserMngController extends AppController
 		$ent['password'] = \Hash::make($ent['password']); // パスワードをハッシュ化する。
 		// CBBXE
 
+		$ent = $this->setCommonToEntity($ent);
 		$ent = $this->md->saveEntity($ent, $regParam);
 		
 		// CBBXS-2025

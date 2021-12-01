@@ -298,12 +298,8 @@ class Neko extends AppModel
 	 * @return [] エンティティ(insertされた場合、新idがセットされている）
 	 */
 	public function saveEntity(&$ent, &$regParam){
-		
-		//■■■□□□■■■□□□
-	    if(empty($ent['neko_dt'])) $ent['neko_dt'] = '2021-01-01 12:12:12';
 	    
 		return $this->cb->saveEntity($ent, $regParam);
-		
 
 	}
 	
