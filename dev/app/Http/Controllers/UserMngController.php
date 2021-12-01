@@ -10,7 +10,7 @@ class UserMngController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.0.0';
+	public $this_page_version = '1.0.1';
 	
 	private $review_mode = false; // レビューモード（見本モード）
 	
@@ -267,25 +267,25 @@ class UserMngController extends AppController
 					'row_order'=>'UserMng.id',//SQLでの並び替えコード
 					'clm_show'=>1,//デフォルト列表示 0:非表示 1:表示
 			],
+		    'email'=>[
+		        'name'=>'Eメール',
+		        'row_order'=>'UserMng.email',
+		        'clm_show'=>1,
+		    ],
 			'name'=>[
-					'name'=>'name',
+					'name'=>'ユーザー名',
 					'row_order'=>'UserMng.name',
 					'clm_show'=>1,
 			],
-			'email'=>[
-					'name'=>'email',
-					'row_order'=>'UserMng.email',
-					'clm_show'=>1,
-			],
+		    'nickname'=>[
+		        'name'=>'ニックネーム',
+		        'row_order'=>'UserMng.nickname',
+		        'clm_show'=>1,
+		    ],
 			'email_verified_at'=>[
 					'name'=>'email_verified_at',
 					'row_order'=>'UserMng.email_verified_at',
 					'clm_show'=>0,
-			],
-			'nickname'=>[
-					'name'=>'名前',
-					'row_order'=>'UserMng.nickname',
-					'clm_show'=>1,
 			],
 			'password'=>[
 					'name'=>'password',
