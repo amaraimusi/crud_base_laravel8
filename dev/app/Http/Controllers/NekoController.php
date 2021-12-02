@@ -477,6 +477,7 @@ class NekoController extends AppController
 		$crud_base_path = CRUD_BASE_PATH;
 		require_once $crud_base_path . 'BulkReg.php';
 		
+		
 		// 更新ユーザーを取得
 		$update_user = 'none';
 		if(\Auth::id()){// idは未ログインである場合、nullになる。
