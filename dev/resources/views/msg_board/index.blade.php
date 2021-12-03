@@ -15,11 +15,11 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>ネコ管理画面</title>
+	<title>メッセージボード管理画面</title>
 	
 	<script src="{{ asset('/js/app.js') }}" defer></script>
 	<script src="{{ $crud_base_js . $ver_str }}" defer></script>
-	<script src="{{ asset('/js/Neko/index.js')  . $ver_str }}" defer></script>
+	<script src="{{ asset('/js/MsgBoard/index.js')  . $ver_str }}" defer></script>
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/js/font/css/open-iconic.min.css') }}" rel="stylesheet">
 	<link href="{{ $crud_base_css . $ver_str }}" rel="stylesheet">
@@ -34,7 +34,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{{ url('/') }}">ホーム</a></li>
-    <li class="breadcrumb-item active" aria-current="page">ネコ管理画面</li>
+    <li class="breadcrumb-item active" aria-current="page">メッセージボード管理画面</li>
   </ol>
 </nav>
 
@@ -44,9 +44,9 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<div id="ajax_login_with_cake"></div><!-- ログイン or ログアウト 　AjaxLoginWithCake.js　-->
 	<div class="cb_kj_main">
 	<!-- 検索条件入力フォーム -->
-	<form action="" class="form_kjs" id="nekoIndexForm" method="post" accept-charset="utf-8">
+	<form action="" class="form_kjs" id="msg_boardIndexForm" method="post" accept-charset="utf-8">
 		
-		<?php $cbh->inputKjMain('kj_main','',null,'ネコ名、備考を検索する');?>
+		<?php $cbh->inputKjMain('kj_main','',null,'メッセージボード名、備考を検索する');?>
 		<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success btn-sm' />
 		<div class="btn-group">
 			<button type="button" class="btn btn-secondary btn-sm" title="詳細検索項目を表示する" onclick="jQuery('.cb_kj_detail').toggle(300)">詳細検索</button>
@@ -60,22 +60,19 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<?php 
 		
 		// --- CBBXS-2004
-		$cbh->inputKjText('kj_neko_name','ネコ名前');
-		$cbh->inputKjMoDateRng('kj_neko_date','ネコ日付');
-		$cbh->inputKjNumRange('neko_val','ネコ数値'); 
-		$cbh->inputKjSelect('kj_neko_group','ネコ種別', $masters['nekoGroupList']); 
-		$cbh->inputKjText('kj_neko_dt','ネコ日時',150);
-		$cbh->inputKjFlg('kj_neko_flg','ネコフラグ');
-		$cbh->inputKjText('kj_img_fn','画像ファイル名',200);
-		$cbh->inputKjText('kj_note','備考',200,'部分一致検索');
 		$cbh->inputKjId(); 
+		$cbh->inputKjId(); 
+		$cbh->inputKjOuterId('kj_user_id','ユーザーID'); 
+		$cbh->inputKjSelect('kj_user_type','ユーザータイプ', $masters['userTypeList']); 
+		$cbh->inputKjText('kj_message','メッセージ');
+		$cbh->inputKjText('kj_attach_fn','添付ファイル');
 		$cbh->inputKjHidden('kj_sort_no');
 		$cbh->inputKjDeleteFlg();
-		$cbh->inputKjText('kj_update_user','更新者',150);
-		$cbh->inputKjText('kj_ip_addr','更新IPアドレス',200);
+		$cbh->inputKjText('kj_update_user','更新者');
+		$cbh->inputKjText('kj_ip_addr','IPアドレス');
 		$cbh->inputKjCreated();
 		$cbh->inputKjModified();
-		
+
 		// --- CBBXE
 		
 		$cbh->inputKjLimit();
@@ -116,7 +113,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 				$cbh->divCsh();
 				
 				// CSVエクスポート機能
-	 			$csv_dl_url =  'neko/csv_download';
+	 			$csv_dl_url =  'msg_board/csv_download';
 	 			$cbh->makeCsvBtns($csv_dl_url);
 			?>
 			<button id="crud_base_bulk_add_btn" type="button" class="btn btn-secondary btn-sm" onclick="crudBase.crudBaseBulkAdd.showForm()" >一括追加</button>
@@ -159,7 +156,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 
 
 <!-- 一覧テーブル -->
-<table id="neko_tbl" class="table table-striped table-bordered table-condensed" style="display:none;margin-bottom:0px">
+<table id="msg_board_tbl" class="table table-striped table-bordered table-condensed" style="display:none;margin-bottom:0px">
 
 <thead>
 <tr>
@@ -183,20 +180,18 @@ foreach($data as $i=>&$ent){
 	echo "<tr id='ent{$ent['id']}' >";
 	// CBBXS-2005
 	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
-	$cbh->tdMoney($ent, 'neko_val');
-	$cbh->tdStr($ent, 'neko_name');
-	$cbh->tdList($ent, 'neko_group',$nekoGroupList);
-	$cbh->tdPlain($ent, 'neko_date');
-	$cbh->tdPlain($ent, 'neko_dt');
-	$cbh->tdFlg($ent, 'neko_flg');
-	$cbh->tdImage($ent, 'img_fn');
-	$cbh->tdNote($ent, 'note',50);
+	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
+	$cbh->tdOuterName($ent, 'user_id', 'user_name');
+	$cbh->tdList($ent, 'user_type', $userTypeList);
+	$cbh->tdStr($ent, 'message');
+	$cbh->tdImage($ent, 'attach_fn');
 	$cbh->tdPlain($ent, 'sort_no');
 	$cbh->tdDeleteFlg($ent, 'delete_flg');
-	$cbh->tdPlain($ent, 'update_user');
-	$cbh->tdPlain($ent, 'ip_addr');
+	$cbh->tdStr($ent, 'update_user');
+	$cbh->tdStr($ent, 'ip_addr');
 	$cbh->tdPlain($ent, 'created');
 	$cbh->tdPlain($ent, 'modified');
+
 	// CBBXE
 	
 	$cbh->tdsEchoForClmSort();// 列並に合わせてTD要素群を出力する
@@ -257,72 +252,36 @@ foreach($data as $i=>&$ent){
 	
 	
 		<!-- CBBXS-2006 -->
-		
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザーID: </div>
+			<?php $cbh->formOuterName('user_id', 'ユーザーID', 'ni'); ?>
+		</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザータイプ: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('user_type',null,$userTypeList,null);?>
+				<label class="text-danger" for="user_type"></label>
+			</div>
+		</div>
+
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp' >メッセージ: </div>
+			<div class='cbf_input'>
+				<input type="text" name="message" class="valid " value=""  maxlength="2000" title="2000文字以内で入力してください" />
+				<label class="text-danger" for="message"></label>
+			</div>
+		</div>
+
 		<div class="cbf_inp_wrap" style="float:left">
-			<div class='cbf_inp_label_long' >画像ファイル名: </div>
-			<div class='cbf_input' style="width:240px;height:auto;">
-				<label for="img_fn_n" class="fuk_label">
-					<input type="file" id="img_fn_n" class="img_fn" style="display:none" accept="image/*" title="画像ファイルをドラッグ＆ドロップ(複数可)"  data-inp-ex='image_fuk' data-fp='' />
+			<div class='cbf_inp_label_long' >添付ファイル: </div>
+			<div class='cbf_input' style="width:180px;height:auto;">
+				<label for="attach_fn_n" class="fuk_label" >
+					<input type="file" id="attach_fn_n" class="attach_fn" style="display:none" accept="image/*" title="画像ファイルをドラッグ＆ドロップ(複数可)"  data-inp-ex='image_fuk' data-fp='' />
 					<span class='fuk_msg' style="padding:20%">画像ファイルをドラッグ＆ドロップ(複数可)</span>
 				</label>
 			</div>
 		</div>
-	
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >ネコ名: </div>
-			<div class='cbf_input'>
-				<input type="text" name="neko_name" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-				<label class="text-danger" for="neko_name"></label>
-			</div>
-		</div>
-	
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >ネコ数値: </div>
-			<div class='cbf_input'>
-				<input type="text" name="neko_val" class="valid" value="" pattern="^[0-9]+$" maxlength="11" title="数値を入力してください" />
-				<label class="text-danger" for="neko_val" ></label>
-			</div>
-		</div>
-		
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >ネコ日付: </div>
-			<div class='cbf_input'>
-				<input type="text" name="neko_date" class="valid datepicker" value=""  pattern="([0-9]{4})(\/|-)([0-9]{1,2})(\/|-)([0-9]{1,2})" title="日付形式（Y-m-d）で入力してください(例：2012-12-12)" />
-				<label class="text-danger" for="neko_date"></label>
-			</div>
-		</div>
-		
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >ネコ種別: </div>
-			<div class='cbf_input'>
-				<?php $cbh->selectX('neko_group',null,$nekoGroupList,null);?>
-				<label class="text-danger" for="neko_group"></label>
-			</div>
-		</div>
-	
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >ネコ日時: </div>
-			<div class='cbf_input'>
-				<input type="text" name="neko_dt" class="valid " value=""  pattern="([0-9]{4})(\/|-)([0-9]{1,2})(\/|-)([0-9]{1,2}) \d{2}:\d{2}:\d{2}" title="日時形式（Y-m-d H:i:s）で入力してください(例：2012-12-12 12:12:12)" />
-				<label class="text-danger" for="neko_dt"></label>
-			</div>
-		</div>
-		
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp_label' >ネコフラグ: </div>
-			<div class='cbf_input'>
-				<input type="checkbox" name="neko_flg" class="valid"/>
-				<label class="text-danger" for="neko_flg" ></label>
-			</div>
-		</div>
-		
-		<div class="cbf_inp_wrap_long">
-			<div class='cbf_inp_label' >備考： </div>
-			<div class='cbf_input'>
-				<textarea name="note" maxlength="1000" title="1000文字以内で入力してください" style="height:100px;width:100%"></textarea>
-				<label class="text-danger" for="note"></label>
-			</div>
-		</div>
+
 		<!-- CBBXE -->
 		
 		<div style="clear:both"></div>
@@ -352,91 +311,55 @@ foreach($data as $i=>&$ent){
 			<div class="err text-danger"></div>
 			
 			<!-- CBBXS-2007 -->
-			
-			<div style="display:none">
-				<input type="hidden" name="sort_no">
-			</div>
-			
 			<div class="cbf_inp_wrap">
 				<div class='cbf_inp' >ID: </div>
 				<div class='cbf_input'>
 					<span class="id"></span>
 				</div>
 			</div>
-			
-			<div class="cbf_inp_wrap_long">
-				<div class='cbf_inp' >ネコ名: </div>
-				<div class='cbf_input'>
-					<input type="text" name="neko_name" class="valid " value=""  maxlength="255" title="255文字以内で入力してください" />
-					<label class="text-danger" for="neko_name"></label>
-				</div>
-			</div>
-			
-			<div class="cbf_inp_wrap" style="float:left">
-				<div class='cbf_inp_label_long' >画像ファイル名: </div>
-				<div class='cbf_input' style="width:180px;height:auto;">
-					<label for="img_fn_e" class="fuk_label" >
-						<input type="file" id="img_fn_e" class="img_fn" style="display:none" accept="image/*" title="画像ファイルをドラッグ＆ドロップ(複数可)" data-inp-ex='image_fuk' data-fp='' />
-						<span class='fuk_msg' style="padding:20%">画像ファイルをドラッグ＆ドロップ(複数可)</span>
-					</label>
-				</div>
-			</div>
-		
 			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >ネコ数値: </div>
+				<div class='cbf_inp' >ID: </div>
 				<div class='cbf_input'>
-					<input type="text" name="neko_val" class="valid" value="" pattern="^[0-9]+$" maxlength="11" title="数値を入力してください" />
-					<label class="text-danger" for="neko_val" ></label>
+					<span class="id"></span>
 				</div>
 			</div>
-			
-			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >ネコ日付: </div>
-				<div class='cbf_input'>
-					<input type="text" name="neko_date" class="valid datepicker" value=""  pattern="([0-9]{4})(\/|-)([0-9]{1,2})(\/|-)([0-9]{1,2})" title="日付形式（Y-m-d）で入力してください(例：2012-12-12)" />
-					<label class="text-danger" for="neko_date"></label>
-				</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザーID: </div>
+			<?php $cbh->formOuterName('user_id', 'ユーザーID', 'edit'); ?>
+		</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザータイプ: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('user_type',null,$userTypeList,null);?>
+				<label class="text-danger" for="user_type"></label>
 			</div>
-			
-			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >ネコ種別: </div>
-				<div class='cbf_input'>
-					<?php $cbh->selectX('neko_group',null,$nekoGroupList,null);?>
-					<label class="text-danger" for="neko_group"></label>
-				</div>
-			</div>
+		</div>
 
-			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >ネコ日時: </div>
-				<div class='cbf_input'>
-					<input type="text" name="neko_dt" class="valid " value=""  pattern="([0-9]{4})(\/|-)([0-9]{1,2})(\/|-)([0-9]{1,2}) \d{2}:\d{2}:\d{2}" title="日時形式（Y-m-d H:i:s）で入力してください(例：2012-12-12 12:12:12)" />
-					<label class="text-danger" for="neko_dt"></label>
-				</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp' >メッセージ: </div>
+			<div class='cbf_input'>
+				<input type="text" name="message" class="valid " value=""  maxlength="2000" title="2000文字以内で入力してください" />
+				<label class="text-danger" for="message"></label>
 			</div>
-			
-			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >ネコフラグ: </div>
-				<div class='cbf_input'>
-					<input type="checkbox" name="neko_flg" class="valid"/>
-					<label class="text-danger" for="neko_flg" ></label>
-				</div>
+		</div>
+
+
+		<div class="cbf_inp_wrap" style="float:left">
+			<div class='cbf_inp_label_long' >添付ファイル: </div>
+			<div class='cbf_input' style="width:180px;height:auto;">
+				<label for="attach_fn_e" class="fuk_label" >
+					<input type="file" id="attach_fn_e" class="attach_fn" style="display:none" accept="image/*" title="画像ファイルをドラッグ＆ドロップ(複数可)"  data-inp-ex='image_fuk' data-fp='' />
+					<span class='fuk_msg' style="padding:20%">画像ファイルをドラッグ＆ドロップ(複数可)</span>
+				</label>
 			</div>
-			
+		</div>
 			<div class="cbf_inp_wrap">
-				<div class='cbf_inp_label' >削除：</div>
+				<div class='cbf_inp_label' >無効フラグ：</div>
 				<div class='cbf_input'>
 					<input type="checkbox" name="delete_flg" class="valid"  />
 				</div>
 			</div>
-			
-			<div class="cbf_inp_wrap_long">
-				<div class='cbf_inp_label' >備考： </div>
-				<div class='cbf_input'>
-					<textarea name="note" maxlength="1000" title="1000文字以内で入力してください" data-folding-ta="40" style="height:100px;width:100%"></textarea>
-					<label class="text-danger" for="note"></label>
-				</div>
-			</div>
-			
+
 			<!-- CBBXE -->
 			
 			<div style="clear:both"></div>
@@ -483,8 +406,8 @@ foreach($data as $i=>&$ent){
 		</td></tr>
 		
 
-		<tr><td>ネコ名: </td><td>
-			<span class="neko_name"></span>
+		<tr><td>メッセージボード名: </td><td>
+			<span class="msg_board_name"></span>
 		</td></tr>
 		
 		<tr><td>画像ファイル: </td><td>
@@ -538,8 +461,8 @@ foreach($data as $i=>&$ent){
 		</td></tr>
 		
 
-		<tr><td>ネコ名: </td><td>
-			<span class="neko_name"></span>
+		<tr><td>メッセージボード名: </td><td>
+			<span class="msg_board_name"></span>
 		</td></tr>
 
 
