@@ -1,26 +1,26 @@
 <?php
 require_once CRUD_BASE_PATH . 'MsgBoardEx.php'; // メッセージボード・拡張サポートクラス
-App::uses('Model', 'Model');
-App::uses('CrudBase', 'Model');
+require_once CRUD_BASE_ROOT . 'model/AppModel.php';
 
 /**
- * メッセージボードのCakePHPモデルクラス
+ * メッセージボードのモデルクラス
  *
- * @since 2021-6-11
+ * @since 2021-12-5
  * @version 1.0.0
  *
  */
 class MsgBoard extends AppModel {
 
-	public $name='MsgBoard';
+    //■■■□□□■■■□□□
+// 	public $name='MsgBoard';
 	
-	// 関連付けるテーブル CBBXS-1040
-	public $useTable = 'msg_boards';
+// 	// 関連付けるテーブル CBBXS-1040
+// 	public $useTable = 'msg_boards';
 
-	// CBBXE
+// 	// CBBXE
 
-	/// バリデーションはコントローラクラスで定義
-	public $validate = null;
+// 	/// バリデーションはコントローラクラスで定義
+// 	public $validate = null;
 	
 	// ホワイトリスト（DB保存時にこのホワイトリストでフィルタリングが施される）
 	public $fillable = [
