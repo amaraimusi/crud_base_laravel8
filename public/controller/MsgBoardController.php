@@ -1,5 +1,7 @@
 <?php
-
+require_once 'AppController.php';
+require_once 'vendor/CrudBase/CrudBaseController.php';
+require_once 'model/MsgBoard.php';
 
 /**
  * メッセージボード画面
@@ -10,30 +12,40 @@
 class MsgBoardController extends AppController {
 
 	private $cb; // CrudBase制御クラス
+	private $md;
 	
-	/// 名称コード
-	public $name = 'MsgBoard';
 	
-	/// 使用しているモデル[CakePHPの機能]
-	public $uses = ['MsgBoard'];
+	// ■■■□□□■■■□□□
+// 	/// 名称コード
+// 	public $name = 'MsgBoard';
 	
-	public $login_flg = 0; // ログインフラグ 0:ログイン不要, 1:ログイン必須
+// 	/// 使用しているモデル[CakePHPの機能]
+// 	public $uses = ['MsgBoard'];
+	
+// 	public $login_flg = 0; // ログインフラグ 0:ログイン不要, 1:ログイン必須
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '4.0.0';
+	public $this_page_version = '1.0.0';
 
-	
-	
-	public function beforeFilter() {
-
-		// 未ログイン中である場合、未認証モードの扱いでページ表示する。
-		if($this->login_flg == 0 && empty($this->Auth->user())){
-			$this->Auth->allow(); // 未認証モードとしてページ表示を許可する。
-		}
-		
-		parent::beforeFilter();
-
+	/**
+	 * コンストラクタ
+	 * @param [] $param
+	 */
+	public function __construct(&$param = []){
+	    $this->md = new MsgBoard();
 	}
+	
+	//■■■□□□■■■□□□
+// 	public function beforeFilter() {
+
+// 		// 未ログイン中である場合、未認証モードの扱いでページ表示する。
+// 		if($this->login_flg == 0 && empty($this->Auth->user())){
+// 			$this->Auth->allow(); // 未認証モードとしてページ表示を許可する。
+// 		}
+		
+// 		parent::beforeFilter();
+
+// 	}
 
 	/**
 	 * indexページのアクション

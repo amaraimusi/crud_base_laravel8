@@ -28,11 +28,12 @@ define('CRUD_BASE_VERSION', '1.0.0');
 // プロジェクトディレクトリの絶対ルートパス。 例→"C:\Users\user\git\CrudBase\laravel7\dev\"
 $crud_base_root = dirname(__FILE__) . DIRECTORY_SEPARATOR; 
 define('CRUD_BASE_ROOT', $crud_base_root);
-var_dump($crud_base_root);//■■■□□□■■■□□□($crud_base_root);//■■■□□□■■■□□□)
 
-// appディレクトリへの絶対パス。 例→
-$crud_base_app_path = $crud_base_root . 'app' . DIRECTORY_SEPARATOR;
-define('CRUD_BASE_APP_PATH', $crud_base_app_path);
+//■■■□□□■■■□□□
+// // appディレクトリへの絶対パス。 例→
+// $crud_base_app_path = $crud_base_root . 'app' . DIRECTORY_SEPARATOR;
+// define('CRUD_BASE_APP_PATH', $crud_base_app_path);
+// var_dump($crud_base_root);//■■■□□□■■■□□□
 
 
 $crud_base_path = dirname(__FILE__) . '/vendor/CrudBase/';
@@ -56,7 +57,7 @@ $crudBaseConfig = [
 	'env'=>'localhost', // 環境種別 localhost, amaraimusi, product
 	
 	'crud_base_root'=>CRUD_BASE_ROOT, // プロジェクトのルートパス（絶対パス）
-	'crud_base_app_path'=>CRUD_BASE_APP_PATH, // appディレクトリの絶対パス
+	//'crud_base_app_path'=>CRUD_BASE_APP_PATH, // appディレクトリの絶対パス■■■□□□■■■□□□
 	'crud_base_project_path'=>CRUD_BASE_PROJECT_PATH, // プロジェクト名もしくはプロジェクトの相対パス→（例: animal_park/public)
 	'crud_base_path'=>CRUD_BASE_PATH, // Vendor側のCrudBaseライブラリへの絶対パス
 	'crud_base_js'=>CRUD_BASE_JS, // jsのCrudBaseライブラリパス（相対パス）
@@ -134,4 +135,21 @@ function logB($val){
 		error_log($val, 3, 'log_b.log');
 	}
 	error_log("\n", 3, 'log_b.log');
+}
+
+
+function cbShortcode($short_code, $param = []){
+    switch ($short_code) {
+        case 'MsgBoard': // メッセージボード
+            require_once CRUD_BASE_ROOT . 'controller\MsgBoardController.php';
+            $msgBoardController = new MsgBoardController($param);
+            $msgBoardController->index();
+            
+        ;
+        break;
+        
+        default:
+            throw new Exception("'{$short_code}' is unown!");
+        break;
+    }
 }

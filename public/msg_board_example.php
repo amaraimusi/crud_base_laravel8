@@ -15,12 +15,15 @@ require_once 'crud_base_index.php';
 	
 	<link href="/note_prg/css/bootstrap-4.3.1-dist/bootstrap.min.css" rel="stylesheet">
 	<link href="/note_prg/css/common2.css" rel="stylesheet">
+	<link href="<?php echo CRUD_BASE_CSS; ?>" rel="stylesheet">
 	<script src="/note_prg/js/jquery3.js"></script>	<!-- jquery-3.3.1.min.js -->
 	<script src="/note_prg/js/popper.js"></script><!-- ポップアップ機能およびBootstrapの補助ライブラリ -->
 	<script src="/note_prg/js/bootstrap-4.3.1-dist/bootstrap.min.js"></script>
 	<script src="/note_prg/js/vue.min.js"></script>
 	<script src="/note_prg/js/livipage.js"></script>
 	<script src="/note_prg/js/ImgCompactK.js"></script>
+	<script src="<?php echo CRUD_BASE_JS; ?>"></script>
+	
 
 </head>
 <body>
@@ -29,6 +32,7 @@ require_once 'crud_base_index.php';
 
 
 <h2>デモ</h2>
+<?php echo cbShortcode('MsgBoard'); ?>
 
 <div class="yohaku"></div>
 <ol class="breadcrumb">
