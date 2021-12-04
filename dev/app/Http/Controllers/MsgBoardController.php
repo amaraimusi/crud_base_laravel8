@@ -10,7 +10,7 @@ class MsgBoardController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.0.1';
+	public $this_page_version = '1.0.0';
 	
 	private $cb; // CrudBase制御クラス
 	private $md; // モデル
@@ -263,10 +263,10 @@ class MsgBoardController extends AppController
 					'row_order'=>'MsgBoard.id',//SQLでの並び替えコード
 					'clm_show'=>1,//デフォルト列表示 0:非表示 1:表示
 			],
-			'id'=>[
-					'name'=>'ID',//HTMLテーブルの列名
-					'row_order'=>'MsgBoard.id',//SQLでの並び替えコード
-					'clm_show'=>1,//デフォルト列表示 0:非表示 1:表示
+			'other_id'=>[
+					'name'=>'外部ID',
+					'row_order'=>'MsgBoard.other_id',
+					'clm_show'=>1,
 			],
 			'user_id'=>[
 					'name'=>'ユーザーID',

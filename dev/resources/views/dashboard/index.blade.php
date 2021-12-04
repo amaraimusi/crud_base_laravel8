@@ -26,7 +26,7 @@
 	<div class="row" style="margin-top:20px;">
 	
 		<!-- カード -->
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<div class="card border-primary ">
 				<div class="card-body" >
 					<h5 class="card-title text-primary" style="font-weight:bold">見本管理画面</h5>
@@ -39,7 +39,7 @@
 		</div>
 	
 		<!-- カード -->
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 			<div class="card border-primary ">
 				<div class="card-body" >
 					<h5 class="card-title text-primary" style="font-weight:bold">ユーザー管理</h5>
@@ -47,6 +47,32 @@
 						<p class="card-text" style="height:80px">ユーザー管理画面の見本</p>
 					</div>
 					<a href="{{url('/user_mng')}}" class="btn btn-primary">ページへ移動</a>
+				</div>
+			</div>
+		</div>
+	
+		<!-- カード -->
+		<div class="col-sm-3">
+			<div class="card border-success ">
+				<div class="card-body" >
+					<h5 class="card-title text-success" style="font-weight:bold">見本メッセージボード</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">メッセージボードのデモ</p>
+					</div>
+					<a href="/crud_base_laravel8/public/msg_board_example.php" class="btn btn-success">ページへ移動</a>
+				</div>
+			</div>
+		</div>
+	
+		<!-- カード -->
+		<div class="col-sm-3">
+			<div class="card border-primary ">
+				<div class="card-body" >
+					<h5 class="card-title text-primary" style="font-weight:bold">メッセージボード管理</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">メッセージボード管理画面の見本</p>
+					</div>
+					<a href="{{url('msg_board')}}" class="btn btn-primary">ページへ移動</a>
 				</div>
 			</div>
 		</div>

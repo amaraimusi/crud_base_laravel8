@@ -61,9 +61,9 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		
 		// --- CBBXS-2004
 		$cbh->inputKjId(); 
-		$cbh->inputKjId(); 
+		$cbh->inputKjText('kj_other_id','外部ID');
 		$cbh->inputKjOuterId('kj_user_id','ユーザーID'); 
-		$cbh->inputKjSelect('kj_user_type','ユーザータイプ', $masters['userTypeList']); 
+		$cbh->CrudBase->inputKjSelect('kj_user_type','ユーザータイプ', $masters['userTypeList']); 
 		$cbh->inputKjText('kj_message','メッセージ');
 		$cbh->inputKjText('kj_attach_fn','添付ファイル');
 		$cbh->inputKjHidden('kj_sort_no');
@@ -180,10 +180,10 @@ foreach($data as $i=>&$ent){
 	echo "<tr id='ent{$ent['id']}' >";
 	// CBBXS-2005
 	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
-	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
+	$cbh->tdPlain($ent, 'other_id');
 	$cbh->tdOuterName($ent, 'user_id', 'user_name');
 	$cbh->tdList($ent, 'user_type', $userTypeList);
-	$cbh->tdStr($ent, 'message');
+	$cbh->tdNote($ent, 'message');
 	$cbh->tdImage($ent, 'attach_fn');
 	$cbh->tdPlain($ent, 'sort_no');
 	$cbh->tdDeleteFlg($ent, 'delete_flg');
@@ -253,6 +253,14 @@ foreach($data as $i=>&$ent){
 	
 		<!-- CBBXS-2006 -->
 		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >外部ID: </div>
+			<div class='cbf_input'>
+				<input type="text" name="other_id" class="valid" value="" pattern="^[0-9]+$" maxlength="11" title="数値（自然数）を入力してください" />
+				<label class="text-danger" for="other_id" ></label>
+			</div>
+		</div>
+
+		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザーID: </div>
 			<?php $cbh->formOuterName('user_id', 'ユーザーID', 'ni'); ?>
 		</div>
@@ -264,14 +272,13 @@ foreach($data as $i=>&$ent){
 			</div>
 		</div>
 
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >メッセージ: </div>
+		<div class="cbf_inp_wrap_long">
+			<div class='cbf_inp_label' >メッセージ： </div>
 			<div class='cbf_input'>
-				<input type="text" name="message" class="valid " value=""  maxlength="2000" title="2000文字以内で入力してください" />
+				<textarea name="message" maxlength="1000" title="1000文字以内で入力してください" style="height:100px;width:100%"></textarea>
 				<label class="text-danger" for="message"></label>
 			</div>
 		</div>
-
 		<div class="cbf_inp_wrap" style="float:left">
 			<div class='cbf_inp_label_long' >添付ファイル: </div>
 			<div class='cbf_input' style="width:180px;height:auto;">
@@ -317,15 +324,17 @@ foreach($data as $i=>&$ent){
 					<span class="id"></span>
 				</div>
 			</div>
-			<div class="cbf_inp_wrap">
-				<div class='cbf_inp' >ID: </div>
-				<div class='cbf_input'>
-					<span class="id"></span>
-				</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >外部ID: </div>
+			<div class='cbf_input'>
+				<input type="text" name="other_id" class="valid" value="" pattern="^[0-9]+$" maxlength="11" title="数値（自然数）を入力してください" />
+				<label class="text-danger" for="other_id" ></label>
 			</div>
+		</div>
+
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザーID: </div>
-			<?php $cbh->formOuterName('user_id', 'ユーザーID', 'edit'); ?>
+			<?php $this->CrudBase->formOuterName('user_id', 'ユーザーID', 'edit'); ?>
 		</div>
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザータイプ: </div>
@@ -335,14 +344,13 @@ foreach($data as $i=>&$ent){
 			</div>
 		</div>
 
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >メッセージ: </div>
+		<div class="cbf_inp_wrap_long">
+			<div class='cbf_inp_label' >メッセージ： </div>
 			<div class='cbf_input'>
-				<input type="text" name="message" class="valid " value=""  maxlength="2000" title="2000文字以内で入力してください" />
+				<textarea name="message" maxlength="1000" title="1000文字以内で入力してください" data-folding-ta="40" style="height:100px;width:100%"></textarea>
 				<label class="text-danger" for="message"></label>
 			</div>
 		</div>
-
 
 		<div class="cbf_inp_wrap" style="float:left">
 			<div class='cbf_inp_label_long' >添付ファイル: </div>
