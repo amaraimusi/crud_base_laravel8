@@ -66,7 +66,7 @@ class MsgBoardController extends AppController {
 		// Ajaxセキュリティ:CSRFトークンの取得
 		$crudBaseData['csrf_token'] = CrudBaseU::getCsrfToken('msg_board');
 		
-		$res = $this->MsgBoard->getData($crudBaseData);
+		$res = $this->md->getData($crudBaseData);
 		$data = $res['data'];
 		$non_limit_count = $res['non_limit_count']; // LIMIT制限なし・データ件数
 		
@@ -85,13 +85,13 @@ class MsgBoardController extends AppController {
 		
 		
 		// 当画面のユーザータイプによる変更ボタン、削除ボタンの表示、非表示情報をセットする
-		$data = $this->MsgBoard->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
+		$data = $this->md->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
 		
 		$crudBaseData['user_type'] = $user_type;
 		
 		// メール通知機能の初期化
-		$otherUserIds = $this->MsgBoard->getOtherUserIds();// その他関係者ユーザーID配列をセミナー受講者テーブルから取得する	
-		$sendMailInfo = $this->MsgBoard->initSendMailInfo($this, $data, $user_type, $userInfo, $otherUserIds);
+		$otherUserIds = $this->md->getOtherUserIds();// その他関係者ユーザーID配列をセミナー受講者テーブルから取得する	
+		$sendMailInfo = $this->md->initSendMailInfo($this, $data, $user_type, $userInfo, $otherUserIds);
 		$crudBaseData['sendMailInfo'] = $sendMailInfo;
 		
 		$crud_base_json = json_encode($crudBaseData,JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
@@ -147,7 +147,7 @@ class MsgBoardController extends AppController {
 		// メール送信
 		$send_mail_info_json = $_POST['send_mail_info_json'];
 		$sendMailInfo = json_decode($send_mail_info_json, true);
-		$sendMailInfo = $this->MsgBoard->sendMail($this, $ent, $sendMailInfo, $userInfo);
+		$sendMailInfo = $this->md->sendMail($this, $ent, $sendMailInfo, $userInfo);
 		
 		$res = ['ent'=>$ent, 'sendMailInfo'=>$sendMailInfo];
 		$json_str = json_encode($res, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS); // JSONに変換
@@ -244,7 +244,7 @@ class MsgBoardController extends AppController {
 		
 		// 削除対象のメッセージボードエンティティを取得する
 		$sql = "SELECT * FROM msg_boards WHERE id={$id}";
-		$ent = $this->MsgBoard->query($sql);
+		$ent = $this->md->query($sql);
 
 		if(empty($ent)) return '不正なアクション 210511A';
 		$ent = $ent[0]['msg_boards'];
@@ -326,13 +326,13 @@ class MsgBoardController extends AppController {
 			$ent['update_user'] = $userInfo['update_user'];
 			$ent['ip_addr'] = $userInfo['ip_addr'];
 			$ent['delete_flg'] = 1;
-			$this->MsgBoard->save($ent, ['validate'=>false]);
+			$this->md->save($ent, ['validate'=>false]);
 			
 		}
 		
 		// 抹消
 		elseif($my_del_flg == 2){
-			$this->MsgBoard->delete($ent['id']);
+			$this->md->delete($ent['id']);
 		}
 		
 		else{
@@ -465,7 +465,7 @@ class MsgBoardController extends AppController {
 		
 		require_once CRUD_BASE_PATH . 'CrudBaseController.php';
 
-		$model = $this->MsgBoard; // モデルクラス
+		$model = $this->md; // モデルクラス
 		
 		$crudBaseData = [
 			'fw_type' => 'cake',

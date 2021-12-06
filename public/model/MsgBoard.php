@@ -51,10 +51,13 @@ class MsgBoard extends AppModel {
 	
 	
 	public function __construct() {
-		parent::__construct();
+	    
+	    parent::__construct();
+	    
+	    //■■■□□□■■■□□□
+// 		// CrudBaseロジッククラスの生成
+// 		if(empty($this->CrudBase)) $this->CrudBase = new CrudBase();
 		
-		// CrudBaseロジッククラスの生成
-		if(empty($this->CrudBase)) $this->CrudBase = new CrudBase();
 	}
 	
 	
@@ -179,7 +182,7 @@ class MsgBoard extends AppModel {
 
 		$cnds=null;
 		
-		$this->CrudBase->sql_sanitize($kjs); // SQLサニタイズ
+		$kjs = $this->cb->xssSanitizeW($kjs); // SQLサニタイズ
 		
 		if(!empty($kjs['kj_main'])){
 			$cnds[]="CONCAT( IFNULL(MsgBoard.msg_board_name, '') ,IFNULL(MsgBoard.note, '')) LIKE '%{$kjs['kj_main']}%'";
@@ -255,9 +258,9 @@ class MsgBoard extends AppModel {
 		// 新規入力であるなら新しい順番をエンティティにセットする。
 		if($option['form_type']=='new_inp' ){
 			if(empty($option['ni_tr_place'])){
-				$ent['sort_no'] = $this->CrudBase->getLastSortNo($this); // 末尾順番を取得する
+				$ent['sort_no'] = $this->getLastSortNo($this); // 末尾順番を取得する
 			}else{
-				$ent['sort_no'] = $this->CrudBase->getFirstSortNo($this); // 先頭順番を取得する
+				$ent['sort_no'] = $this->getFirstSortNo($this); // 先頭順番を取得する
 			}
 		}
 		

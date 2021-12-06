@@ -20,7 +20,6 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::uses('Model', 'Model');
 
 /**
  * CakePHPが用意しているモデルの基本クラス
@@ -34,9 +33,11 @@ App::uses('Model', 'Model');
  *
  * @package       app.Model
  */
-class AppModel extends Model {
+class AppModel {
 
-	
+    public function __construct() {
+        
+    }
 	
 	// 更新ユーザーなど共通フィールドをデータにセットする。
 	protected function setCommonToData($data,$update_user){

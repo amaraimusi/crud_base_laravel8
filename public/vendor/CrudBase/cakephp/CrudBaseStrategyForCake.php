@@ -4,8 +4,8 @@ App::uses('AppController', 'Controller');
 
 /**
  * Cake2.x用ストラテジークラス
- * @version 1.0.6
- * @since 2020-6-10 | 2021-10-26
+ * @version 1.0.7
+ * @since 2020-6-10 | 2021-12-5
  * @license MIT
  */
 class CrudBaseStrategyForCake extends AppController implements ICrudBaseStrategy{
@@ -258,6 +258,35 @@ class CrudBaseStrategyForCake extends AppController implements ICrudBaseStrategy
 		App::uses('AuthComponent', 'Controller/Component');
 		$pw_hash = AuthComponent::password($pw);
 		return $pw_hash;
+	}
+	
+	/**
+	 * ログインする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::login()
+	 */
+	public function login($option=[]){
+	    throw new Exception('loginメソッドは未実装です。');
+	}
+	
+	/**
+	 * ログアウトする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::logout()
+	 */
+	public function logout($option = []){
+	    $this->redirect($this->ctrl->Auth->logout());
+	}
+	
+	/*
+	 *  ログインチェック
+	 *  @return true:ログイン状態, false:未ログイン
+	 */
+	public function loginCheck(){
+	    if(empty($this->ctrl->Auth->user())){
+	        return false;
+	    }
+	    return true;
 	}
 	
 }

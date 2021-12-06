@@ -23,4 +23,8 @@ interface ICrudBaseStrategy{
 	public function validForKj($data,$validate); // 検索条件のバリデーション
 	public function getCsrfToken(); // CSRFトークン ※Ajaxのセキュリティ
 	public function passwordToHash($pw); // パスワードをハッシュ化する。
+	public function login($option=[]); // ログインする
+	public function logout($option = []); // ログアウトする
+	public function loginCheck(); // ログインチェック
+	public function getAuth(); // ユーザー情報
 }

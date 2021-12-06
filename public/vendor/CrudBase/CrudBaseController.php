@@ -203,6 +203,10 @@ class CrudBaseController {
 			require_once 'laravel7/CrudBaseStrategyForLaravel7.php';
 			$strategy= new CrudBaseStrategyForLaravel7();
 			
+		}else if($fw_type == 'plain' ){
+		    require_once 'plain/CrudBaseStrategyForPlain.php';
+		    $strategy= new CrudBaseStrategyForPlain();
+		    
 		}else{
 			throw new Exception('$fw_type is empty! 210614A');
 		}

@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * Laravel7用ストラテジークラス
- * @version 1.1.1
- * @since 2020-6-10 | 2021-10-26
+ * @version 1.1.2
+ * @since 2020-6-10 | 2021-12-5
  * @license MIT
  */
 class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
@@ -305,6 +305,37 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 	
 	public function passwordToHash($pw){
 		throw new Error('passwordToHashメソッドは未実装です。');// ■■■□□□■■■□□□
+	}
+	
+	/**
+	 * ログインする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::login()
+	 */
+	public function login($option=[]){
+	    throw new Exception('loginメソッドは未実装です。');
+	}
+	
+	/**
+	 * ログアウトする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::logout()
+	 */
+	public function logout($option = []){
+	    if(!empty(\Auth::id())){
+	        \Auth::logout();
+	    }
+	}
+	
+	/*
+	 *  ログインチェック
+	 *  @return true:ログイン状態, false:未ログイン
+	 */
+	public function loginCheck(){
+	    if(empty(\Auth::id())){
+	        return false;
+	    }
+	    return true;
 	}
 	
 }

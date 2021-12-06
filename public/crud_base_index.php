@@ -53,7 +53,7 @@ define('CRUD_BASE_CSS', $crud_base_css);
 
 // CrudBase設定データ
 $crudBaseConfig = [
-	'fw_type'=>'laravel8',
+	'fw_type'=>'plain',
 	'env'=>'localhost', // 環境種別 localhost, amaraimusi, product
 	
 	'crud_base_root'=>CRUD_BASE_ROOT, // プロジェクトのルートパス（絶対パス）
