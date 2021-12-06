@@ -289,4 +289,9 @@ class CrudBaseStrategyForCake extends AppController implements ICrudBaseStrategy
 	    return true;
 	}
 	
+	public function getAuth()
+	{
+	    return $this->getUserInfo();
+	}
+	
 }

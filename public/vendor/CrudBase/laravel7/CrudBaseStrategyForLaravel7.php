@@ -247,7 +247,7 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 	/**
 	 * SQLを実行して単一の値を取得する
 	 * @param string $sql
-	 * @return mixied 単一の値
+	 * @return mixed 単一の値
 	 */
 	public function selectValue($sql){
 		$res = \DB::select($sql);
@@ -336,6 +336,11 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 	        return false;
 	    }
 	    return true;
+	}
+	
+	public function getAuth()
+	{
+	    return $this->getUserInfo();
 	}
 	
 }

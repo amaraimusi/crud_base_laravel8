@@ -1,6 +1,7 @@
 <?php
 
 require_once CRUD_BASE_PATH . 'PdoDao.php';
+require_once CRUD_BASE_PATH . 'SaveData.php';
 
 /**
  * プレーン版ストラテジークラス
@@ -16,6 +17,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	private $crudBaseData;
 	private $dao; // PDO DAO
 	private $users; // ユーザーエンティティ
+	private $saveData; // データ保存クラス
 	
 	public function __construct(){
 	    
@@ -23,6 +25,8 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    global $crudBaseConfig;
 	    $dbConfig = $crudBaseConfig['dbConfig'];
 	    $this->dao = new PdoDao($dbConfig);
+	    
+	    $this->saveData = new SaveData();
 	    
 	    // セッションを開始
 	    session_start();
@@ -115,50 +119,6 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	} 
 	
 	
-// 	/**■■■□□□■■■□□□
-// 	 * ユーザー情報を取得する
-// 	 * 
-// 	 * @return
-// 	 *  - update_user 更新ユーザー
-// 	 *  - ip_addr IPアドレス
-// 	 *  - user_agent ユーザーエージェント
-// 	 *  - role 権限
-// 	 *  - authority 権限データ
-// 	 */
-// 	public function getUserInfo(){
-		
-// 		$userInfo =[
-// 				'update_user' => '',
-// 				'user_name' => '',
-// 				'user_id' => '',
-// 				'user_email' => '',
-// 				'ip_addr' => $_SERVER["REMOTE_ADDR"], // IPアドレス,
-// 				'user_agent' => $_SERVER['HTTP_USER_AGENT'], // ユーザーエージェント,
-// 				'role' => 'none',
-// 		];
-		
-// 		if(\Auth::id()){// idは未ログインである場合、nullになる。
-// 			$user_id = \Auth::id(); // ユーザーID（番号）
-// 			$user_name = \Auth::user()->name; // ユーザー名
-// 			$user_email = \Auth::user()->email; // メールアドレス
-// 			$role = \Auth::user()->role; // 権限
-			
-// 			$userInfo['update_user'] = $user_name;
-// 			$userInfo['user_name'] = $user_name;
-// 			$userInfo['user_id'] = $user_id;
-// 			$userInfo['user_email'] = $user_email;
-// 			$userInfo['role'] = $role;
-			
-// 			// 権限が空であるならオペレータ扱いにする
-// 			if(empty($userInfo['role'])){
-// 				$userInfo['role'] = 'oparator';
-// 			}
-			
-// 		}
-		
-// 		return $userInfo;
-// 	}
-	
 	/**
 	 * ユーザー情報を取得する
 	 * @param [] $param
@@ -200,38 +160,61 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    // ユーザーエンティティを取得
 	    $users = $this->getUsers();
 	    
-	    if(\Auth::id()){// idは未ログインである場合、nullになる。
-	        $userInfo['id'] = \Auth::id(); // ユーザーID
-	        $userInfo['user_id'] = $userInfo['id'];
-	        $userInfo['username'] = \Auth::user()->name; // ユーザー名
-	        $userInfo['user_name'] = $userInfo['username'];
-	        $userInfo['update_user'] = $userInfo['username'];
-	        $userInfo['email'] = \Auth::user()->email; // メールアドレス
-	        $userInfo['role'] = \Auth::user()->role; // メールアドレス
+	    if($this->loginCheck()){// idは未ログインである場合、nullになる。
+	        
+	        $user_id = 0;
+	        $user_name = '';
+	        $nickname = '';
+	        
+	        if(!empty($users['id'])) $user_id = $users['id'];
+	        
+	        if(!empty($users['name'])) $user_name = $users['name'];
+	        if(!empty($users['user_name'])) $user_name = $users['user_name'];
+	        if(!empty($users['nickname'])) $nickname = $users['nickname'];
+	        if(empty($nickname))  $nickname = $user_name;
+	        
+	        $role = 'oparator';
+	        if(!empty($userInfo['role'])) $role = $userInfo['role'];
+	        
+	        $userInfo['id'] = $user_id;
+	        $userInfo['user_id'] = $user_id;
+	        $userInfo['username'] = $user_name;
+	        $userInfo['user_name'] = $user_name;
+	        $userInfo['update_user'] = $user_name;
+	        $userInfo['email'] = $users['email']; // メールアドレス
+	        $userInfo['role'] = $role; // 権限
+	        $userInfo['delete_flg'] = $users['delete_flg']; // 権限
 	    }
 	    
 	    $userInfo['ip_addr'] = $_SERVER["REMOTE_ADDR"];// IPアドレス
 	    $userInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // ユーザーエージェント
-	    
-	    if(!empty($userInfo['id'])){
-	        $users = \DB::select("SELECT * FROM users WHERE id={$userInfo['id']}");
-	        $users = $users[0];
-	        $userInfo['role'] = $users->role;
-	        $userInfo['delete_flg'] = $users->delete_flg;
-	        
-	    }
-	    
-	    
-	    // 権限が空であるならオペレータ扱いにする
-	    if(empty($userInfo['role'])){
-	        $userInfo['role'] = 'oparator';
-	    }
-	    
-	    $role = $userInfo['role'];
 	    $userInfo['authority'] = $this->getAuthority($role);
 	    
 	    return $userInfo;
 	}
+	
+	
+	/**
+	 * 権限に紐づく権限エンティティを取得する
+	 * @param string $role 権限
+	 * @return array 権限エンティティ
+	 */
+	private function getAuthority($role){
+	    
+	    // 権限データを取得する
+	    global $crudBaseAuthorityData; // 権限データ
+	    
+	    // 権限データを取得する
+	    $authorityData = $crudBaseAuthorityData;
+	    
+	    $authority = [];
+	    if(!empty($authorityData[$role])){
+	        $authority = $authorityData[$role];
+	    }
+	    
+	    return $authority;
+	}
+	
 	
 	/**
 	 * ユーザーエンティティを取得
@@ -328,19 +311,23 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 */
 	public function saveEntity(&$ent, &$option=[]){
 		
+	    $tbl_name = $this->crudBaseData['tbl_name'];
 
 		$ent = array_intersect_key($ent, array_flip($this->whiteList)); // ホワイトリストによるフィルタリング
 		
+		$this->saveData->save($tbl_name, $ent); // DB保存
 		
-		if(empty($ent['id'])){
-			// ▽ idが空であればINSERTをする。
-			$id = $this->model->insertGetId($ent); // INSERT
-			$ent['id'] = $id;
-		}else{
+		//　■■■□□□■■■□□□
+		// ■■■□□□■■■□□□
+// 		if(empty($ent['id'])){
+// 			// ▽ idが空であればINSERTをする。
+// 			$id = $this->model->insertGetId($ent); // INSERT
+// 			$ent['id'] = $id;
+// 		}else{
 
-			// ▽ idが空でなければUPDATEする。
-			$this->model->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
-		}
+// 			// ▽ idが空でなければUPDATEする。
+// 			$this->model->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
+// 		}
 		
 		return $ent;
 	}
@@ -350,8 +337,12 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @param int $id
 	 */
 	public function delete($id){
-		$rs=$this->model->destroy($id); // idに紐づくレコードをDB削除
-		return $rs;
+	    
+	    $tbl_name = $this->crudBaseData['tbl_name'];
+	    $sql = "DELETE FROM {$tbl_name} WHERE id='{$id}';";
+	    $res = $this->sqlExe($sql);
+	    
+		return $res;
 	}
 	
 	/**
@@ -365,34 +356,34 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return string 正常な場合、nullを返す。異常値がある場合、エラーメッセージを返す。
 	 */
 	public function validForKj($data,$validate){
-		// ■■■□□□■■■□□□
-		return '';
+		throw new Exception("'validForKj'は未実装です。");
 	}
 	
 	/**
 	 * CSRFトークンを取得する ※Ajaxのセキュリティ
-	 * @return mixid CSRFトークン
+	 * @return mixed CSRFトークン
 	 */
 	public function getCsrfToken(){
-		return csrf_token(); // ← Laravelの関数
+	    
+	    throw new Exception("ストラテジーの'getCsrfToken'メソッドは廃止しました。");
+	    // 移譲→ CrudBaseU::getCsrfToken
+		
 	}
 	
 	
 	/**
 	 * SQLを実行して単一の値を取得する
 	 * @param string $sql
-	 * @return mixied 単一の値
+	 * @return mixed 単一の値
 	 */
 	public function selectValue($sql){
-		$res = \DB::select($sql);
-		
-		$value = null;
-		if(!empty($res)){
-			$ent = current($res);
-			$value = current($ent);
-		}
-		
-		return $value;
+	    $res = $this->selectEntity($sql);
+	    
+	    if(empty($res)) return null;
+	    
+	    $value = current($res);
+	    return $value;
+
 	}
 	
 	
@@ -402,15 +393,13 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return [] エンティティ
 	 */
 	public function selectEntity($sql){
-		$res = \DB::select($sql);
+	    $res = $this->sqlExe($sql);
 		
-		$ent = [];
-		if(!empty($res)){
-			$ent = current($res);
-			$ent = (array)$ent;
-		}
-		
+	    if(empty($res)) return [];
+
+		$ent = $res[0];
 		return $ent;
+
 	}
 	
 	
@@ -420,16 +409,9 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return [] データ（エンティティの配列）
 	 */
 	public function selectData($sql){
-		$data = \DB::select($sql);
-		
-		$data2 = [];
-		if(!empty($data)){
-			foreach($data as $ent){
-				$data2[] = (array)$ent;
-			}
-		}
-		
-		return $data2;
+	    $res = $this->sqlExe($sql);
+	    return $res;
+
 	}
 	
 	public function setCrudBaseData(&$crudBaseData)
@@ -438,7 +420,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	}
 	
 	public function passwordToHash($pw){
-		throw new Error('passwordToHashメソッドは未実装です。');// ■■■□□□■■■□□□
+		throw new Error('passwordToHashメソッドは未実装です。');
 	}
 	
 	/**
@@ -535,6 +517,12 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    }
 	    return true;
 	}
+	
+    public function getAuth()
+    {
+        return $this->getUserInfo();
+    }
+
 	
 	
 	
