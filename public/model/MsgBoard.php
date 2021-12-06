@@ -113,24 +113,25 @@ class MsgBoard extends AppModel {
 				LIMIT {$offset}, {$row_limit}
 			";
 		
-		$data = $this->query($sql);
+		$data = $this->cb->query($sql);
 		
-		//データ構造を変換（2次元配列化）
-		$data2 = [];
-		if(!empty($data)) $data2 = Hash::extract($data, '{n}.MsgBoard');
+		// ■■■□□□■■■□□□
+// 		//データ構造を変換（2次元配列化）
+// 		$data2 = [];
+// 		if(!empty($data)) $data2 = Hash::extract($data, '{n}.MsgBoard');
 		
 		// LIMIT制限なし・データ件数
 		$non_limit_count = 0;
-		$res = $this->query('SELECT FOUND_ROWS()');
+		$res = $this->cb->query('SELECT FOUND_ROWS()');
 		if(!empty($res)){
 			$res = reset($res[0]);
 			$non_limit_count= reset($res);
 		}
 		
 		// ユーザー名を取得してデータにセットする。
-		$data2 = $this->getNickName($data2);
+		$data = $this->getNickName($data);
 		
-		return ['data' => $data2, 'non_limit_count' => $non_limit_count];
+		return ['data' => $data, 'non_limit_count' => $non_limit_count];
 		
 	}
 
@@ -141,6 +142,8 @@ class MsgBoard extends AppModel {
 	 * @return [] ユーザー名セット後の$data
 	 */
 	private function getNickName(&$data){
+	    
+	    if(empty($data)) return [];
 		
 		// ユーザー名のデフォルトをセット
 		foreach($data as &$ent){

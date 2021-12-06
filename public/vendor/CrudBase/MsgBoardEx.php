@@ -9,7 +9,8 @@
  */
 class MsgBoardEx{
 	
-	var $strategy;
+	private $strategy; // ストラテジー
+	private $cb; // CrudBaseControllerクラス
 	
 	/**
 	 * コンストラクタ
@@ -18,20 +19,25 @@ class MsgBoardEx{
 	 */
 	public function __construct($ctrl, $model){
 		global $crudBaseConfig; // crud_base_config.phpで定義しているデータ
-		$fw_type = $crudBaseConfig['fw_type'];
 		
-		if($fw_type == 'cake_php' || $fw_type == 'cakephp' ){
-			require_once CRUD_BASE_PATH . 'cakephp/CrudBaseStrategyForCake.php';
-			$this->strategy = new CrudBaseStrategyForCake();
+		$this->cb = $ctrl->getCb();
+		$this->strategy = $this->cb->getStrategy();
+		
+		//■■■□□□■■■□□□
+// 		$fw_type = $crudBaseConfig['fw_type'];
+		
+// 		if($fw_type == 'cake_php' || $fw_type == 'cakephp' ){
+// 			require_once CRUD_BASE_PATH . 'cakephp/CrudBaseStrategyForCake.php';
+// 			$this->strategy = new CrudBaseStrategyForCake();
 			
-		}
+// 		}
 		
-		else if($fw_type == 'laravel' || $fw_type == 'laravel7'){
-			require_once CRUD_BASE_PATH . 'laravel7/CrudBaseStrategyForLaravel7.php';
-			$this->strategy = new CrudBaseStrategyForLaravel7();
-		}else{
-			throw new Error('$fw_type is noting!');
-		}
+// 		else if($fw_type == 'laravel' || $fw_type == 'laravel7'){
+// 			require_once CRUD_BASE_PATH . 'laravel7/CrudBaseStrategyForLaravel7.php';
+// 			$this->strategy = new CrudBaseStrategyForLaravel7();
+// 		}else{
+// 			throw new Error('$fw_type is noting!');
+// 		}
 		
 		$this->strategy->setCtrl($ctrl);
 		$this->strategy->setModel($model);

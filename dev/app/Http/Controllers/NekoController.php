@@ -502,6 +502,14 @@ class NekoController extends AppController
 		return $str_json;
 	}
 	
+	public function getCb(){
+	    return $this->cb;
+	}
+	
+	public function getMd(){
+	    return $this->md;
+	}
+	
 	
 }
 

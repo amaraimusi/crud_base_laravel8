@@ -11,7 +11,7 @@ require_once 'model/MsgBoard.php';
  */
 class MsgBoardController extends AppController {
 
-	private $cb; // CrudBase制御クラス
+    private $cb; // CrudBase制御クラス
 	private $md;
 	
 	
@@ -486,6 +486,14 @@ class MsgBoardController extends AppController {
 
 		return $crudBaseData;
 		
+	}
+	
+	public function getCb(){
+	    return $this->cb;
+	}
+	
+	public function getMd(){
+	    return $this->md;
 	}
 
 

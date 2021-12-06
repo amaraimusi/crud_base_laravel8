@@ -25,6 +25,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    global $crudBaseConfig;
 	    $dbConfig = $crudBaseConfig['dbConfig'];
 	    $this->dao = new PdoDao($dbConfig);
+	    $this->dao->getDao($dbConfig);
 	    
 	    $this->saveData = new SaveData();
 	    
@@ -106,6 +107,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return mixed 
 	 */
 	public function sessionRead($key){
+	    if(empty($_SESSION[$key])) return null;
 	    return $_SESSION[$key];
 	}
 	
@@ -184,11 +186,12 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	        $userInfo['email'] = $users['email']; // メールアドレス
 	        $userInfo['role'] = $role; // 権限
 	        $userInfo['delete_flg'] = $users['delete_flg']; // 権限
+	        $userInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // ユーザーエージェント
+	        $userInfo['authority'] = $this->getAuthority($role);
 	    }
 	    
 	    $userInfo['ip_addr'] = $_SERVER["REMOTE_ADDR"];// IPアドレス
-	    $userInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // ユーザーエージェント
-	    $userInfo['authority'] = $this->getAuthority($role);
+
 	    
 	    return $userInfo;
 	}
@@ -356,7 +359,8 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return string 正常な場合、nullを返す。異常値がある場合、エラーメッセージを返す。
 	 */
 	public function validForKj($data,$validate){
-		throw new Exception("'validForKj'は未実装です。");
+		//throw new Exception("'validForKj'は未実装です。");
+		return '';
 	}
 	
 	/**
@@ -364,9 +368,10 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return mixed CSRFトークン
 	 */
 	public function getCsrfToken(){
-	    
-	    throw new Exception("ストラテジーの'getCsrfToken'メソッドは廃止しました。");
-	    // 移譲→ CrudBaseU::getCsrfToken
+
+	   $key = $this->crudBaseData['model_name_s'];
+	   return CrudBaseU::getCsrfToken($key);
+
 		
 	}
 	

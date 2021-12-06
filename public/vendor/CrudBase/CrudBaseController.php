@@ -14,7 +14,7 @@ require_once 'PagenationForCake.php';
 class CrudBaseController {
 
 	///バージョン
-	public $version = "3.4.2";
+	public $version = "3.4.3";
 	
 	public $crudBaseData = [];
 
@@ -2118,6 +2118,15 @@ class CrudBaseController {
 		}
 	
 		return $ent;
+	}
+	
+	/**
+	 * SQLを実行する
+	 * @param string $sql
+	 * @return mixed
+	 */
+	public function query($sql){
+	    return $this->strategy->query($sql);
 	}
 
 }
