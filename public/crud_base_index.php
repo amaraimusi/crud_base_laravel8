@@ -143,7 +143,7 @@ function cbShortcode($short_code, $param = []){
         case 'MsgBoard': // メッセージボード
             require_once CRUD_BASE_ROOT . 'controller\MsgBoardController.php';
             $msgBoardController = new MsgBoardController($param);
-            $msgBoardController->index();
+            return $msgBoardController->index();
             
         ;
         break;

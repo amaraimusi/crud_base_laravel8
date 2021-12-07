@@ -4,8 +4,8 @@ require_once 'IDao.php';
 /**
  * PDOのDAO（データベースアクセスオブジェクト）
  * 
- * @date 2019-10-26 | 2021-7-28
- * @version 1.2.1
+ * @date 2019-10-26 | 2021-12-7
+ * @version 1.3.0
  * @license MIT
  * @author Kenji Uehara
  *
@@ -13,7 +13,24 @@ require_once 'IDao.php';
 class PdoDao implements IDao
 {
 	
-	var $dao;
+    private $dao;
+    
+    public function __construct(){
+        global $crudBaseConfig;
+        $dbConf = $crudBaseConfig['dbConfig'];
+        
+        try {
+            $this->dao = new PDO("mysql:host={$dbConf['host']};dbname={$dbConf['db_name']};charset=utf8",$dbConf['user'],$dbConf['pw'],
+            array(PDO::ATTR_EMULATE_PREPARES => false));
+
+        } catch (PDOException $e) {
+            exit('データベース接続失敗。'.$e->getMessage());
+            die;
+        }
+
+    }
+	
+	
 	
 	/**
 	 * DAO(データベースアクセスオブジェクト）を取得する
@@ -26,25 +43,29 @@ class PdoDao implements IDao
 	 */
 	public function getDao($dbConf=[]){
 		
-		if($this->dao) return $this->dao;
+	    //■■■□□□■■■□□□
+// 		if($this->dao) return $this->dao;
 		
-		if(empty($dbConf)){
-			global $crudBaseConfig;
-			$dbConf = $crudBaseConfig['dbConfig'];
-		}
+// 		if(empty($dbConf)){
+// 			global $crudBaseConfig;
+// 			$dbConf = $crudBaseConfig['dbConfig'];
+// 		}
 
-		try {
-			$dao = new PDO("mysql:host={$dbConf['host']};dbname={$dbConf['db_name']};charset=utf8",$dbConf['user'],$dbConf['pw'],
-				array(PDO::ATTR_EMULATE_PREPARES => false));
+// 		try {
+// 			$dao = new PDO("mysql:host={$dbConf['host']};dbname={$dbConf['db_name']};charset=utf8",$dbConf['user'],$dbConf['pw'],
+// 				array(PDO::ATTR_EMULATE_PREPARES => false));
 
-		} catch (PDOException $e) {
-			exit('データベース接続失敗。'.$e->getMessage());
-			die;
-		}
+// 		} catch (PDOException $e) {
+// 			exit('データベース接続失敗。'.$e->getMessage());
+// 			die;
+// 		}
 		
-		$this->dao = $dao;
+// 		$this->dao = $dao;
 
-		return $dao;
+// 		return $dao;
+
+	    
+        return $this->dao;
 	}
 	
 	/**
@@ -74,26 +95,27 @@ class PdoDao implements IDao
 	}
 	
 	/**
-	 * 単純なクエリー実行（SELECT用ではない）
+	 * SQLを実行
 	 * @param string $sql
 	 * {@inheritDoc}
 	 * @see IDao::sqlExe()
+	 * @return [][] 2次元構造データ
 	 */
 	public function sqlExe($sql){
-		return $this->dao->query($sql);
+	    return $this->query($sql);
 	}
 	
 	/**
-	 * 単純なクエリー実行（SELECT用ではない）
+	 * SQLを実行
 	 * @param string $sql
 	 * @return string エラーメッセージ
 	 */
 	public function query($sql){
-		$err_msg = '';
-		$res = $this->dao->query($sql);
-		if($res === false){
-			$errInfo = $this->dao->errorInfo();
-			$err_msg = "
+	    $stmt = $this->dao->query($sql);
+	    $data = $stmt->fetchAll();
+	    if($data === false){
+	        $errInfo = $this->dao->errorInfo();
+	        $err_msg = "
 				<pre>
 					SQLエラー→{$sql}
 					$errInfo[0]
@@ -102,8 +124,9 @@ class PdoDao implements IDao
 				</pre>
 			";
 			var_dump($err_msg);
-		}
-		return $err_msg;
+	    }
+	    return $data;
+
 	}
 	
 	

@@ -13,6 +13,7 @@ class MsgBoardController extends AppController {
 
     private $cb; // CrudBase制御クラス
 	private $md;
+	private $paramSets;
 	
 	
 	// ■■■□□□■■■□□□
@@ -102,9 +103,28 @@ class MsgBoardController extends AppController {
 			'crudBaseData'=> $crudBaseData,
 			'crud_base_json'=> $crud_base_json,
 		]);
+		
+		return $this->render();
 
 
 	}
+	
+	public function set($param){
+	    $this->paramSets = $param;
+	}
+	
+	public function render(){
+	    
+	    extract($this->paramSets);
+	    ob_start();
+	    
+	    include CRUD_BASE_ROOT . "view/MsgBoard/index.php";
+	    $html = ob_get_contents();
+	    ob_end_clean();
+	    
+	    return $html;
+	}
+	
 
 	
 	/**

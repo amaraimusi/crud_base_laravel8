@@ -127,7 +127,7 @@ class MsgBoardEx{
 	 */
 	private function getPartyUserIds($data, $otherUserIds, $my_user_id){
 		// メッセージボードデータからuser_idの配列であるpartyUserIdsを取得する
-		$userIds = Hash::extract($data, '{n}.user_id');
+	    $userIds = HashCustom::extract($data, '{n}.user_id');
 		
 		// partyUserIdsにその他関係者ユーザーID配列をマージする。
 		$userIds = array_merge($userIds, $otherUserIds);
@@ -336,14 +336,14 @@ class MsgBoardEx{
 		
 		// 設定テーブルから仮登録メール用の「件名」、「メール文」、「有効時間」等を取得する
 		$sql = "SELECT config_key, config_value FROM config_xs WHERE group_key = '{$group_key}'";
-		$resData = $this->sqlExe($sql);
 		
+		$resData = $this->sqlExe($sql);
 		if(empty($resData)) throw new Error('システムエラー 210515A');
 		
 		$configs = [];
 		foreach($resData as $confEnt){
-			$config_key = $confEnt['configs']['config_key'];
-			$config_value = $confEnt['configs']['config_value'];
+			$config_key = $confEnt['config_key'];
+			$config_value = $confEnt['config_value'];
 			$configs[$config_key] = $config_value;
 		}
 		

@@ -114,18 +114,13 @@ class MsgBoard extends AppModel {
 			";
 		
 		$data = $this->cb->query($sql);
-		
-		// ■■■□□□■■■□□□
-// 		//データ構造を変換（2次元配列化）
-// 		$data2 = [];
-// 		if(!empty($data)) $data2 = Hash::extract($data, '{n}.MsgBoard');
-		
+
 		// LIMIT制限なし・データ件数
 		$non_limit_count = 0;
-		$res = $this->cb->query('SELECT FOUND_ROWS()');
+		$res = $this->cb->selectValue('SELECT FOUND_ROWS()');
+
 		if(!empty($res)){
-			$res = reset($res[0]);
-			$non_limit_count= reset($res);
+		    $non_limit_count= $res;
 		}
 		
 		// ユーザー名を取得してデータにセットする。
@@ -151,17 +146,17 @@ class MsgBoard extends AppModel {
 		}
 		unset($ent);
 		
-		$ids = Hash::extract($data, '{n}.user_id');
+		$ids = HashCustom::extract($data, '{n}.user_id');
 		$ids = array_unique($ids);
 		
 		$ids_str = "'".implode("','",$ids)."'";
 		
 		$sql = "SELECT id, nickname FROM users WHERE id IN ({$ids_str})";
-		$users = $this->query($sql);
+		$users = $this->cb->query($sql);
 		
 		if(empty($users)) return $data;
 		
-		$userHm = Hash::combine($users, '{n}.users.id','{n}.users');
+		$userHm = HashCustom::combine($users, '{n}.id','{n}');
 
 		foreach($data as &$ent){
 			$user_id = $ent['user_id'];

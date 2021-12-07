@@ -25,7 +25,6 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    global $crudBaseConfig;
 	    $dbConfig = $crudBaseConfig['dbConfig'];
 	    $this->dao = new PdoDao($dbConfig);
-	    $this->dao->getDao($dbConfig);
 	    
 	    $this->saveData = new SaveData();
 	    
