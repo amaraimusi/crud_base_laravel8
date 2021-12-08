@@ -8,8 +8,8 @@
  * 検索条件入力フォームや、一覧テーブルのプロパティのラッパーを提供する
  * 2.0.0よりCakeからの依存から離脱
  * 
- * @version 2.2.1
- * @since 2016-7-27 | 2021-9-30
+ * @version 2.2.2
+ * @since 2016-7-27 | 2021-12-8
  * @author k-uehara
  * @license MIT
  */
@@ -2476,8 +2476,8 @@ class CrudBaseHelper {
 		
 		// ファイルパスにパスを付加する。
 		if(!empty($fp)){
-			$fp = CRUD_BASE_PROJECT_PATH . '/' . $fp;
-			$fp2 = CRUD_BASE_PROJECT_PATH . '/' . $fp2;
+		    $fp = CRUD_BASE_STORAGE_URL . '/' . $fp;
+		    $fp2 = CRUD_BASE_STORAGE_URL . '/' . $fp2;
 		}
 
 		$html = 

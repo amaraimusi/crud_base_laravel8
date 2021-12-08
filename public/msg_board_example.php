@@ -1,6 +1,6 @@
 <?php 
 
-require_once 'crud_base_index.php';
+require_once 'index.php';
 ?>
 
 <!DOCTYPE html>
