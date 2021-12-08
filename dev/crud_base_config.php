@@ -43,6 +43,9 @@ define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推�
 $crud_base_url_base = $crud_base_project_path . '/';
 define('CRUD_BASE_URL_BASE', $crud_base_url_base); // 基本URL
 
+$crud_base_storage_url = '/crud_base_laravel8/dev/public/'; // ストレージ基本URL（添付ファイルの置き場所） 例→「/crud_base_laravel8/dev/public/」
+define('CRUD_BASE_STORAGE_URL', $crud_base_storage_url);
+
 $crud_base_js = $crud_base_project_path . "/js/CrudBase/dist/CrudBase.min.js?v=" . CRUD_BASE_VERSION;
 define('CRUD_BASE_JS', $crud_base_js);
 
@@ -60,7 +63,8 @@ $crudBaseConfig = [
 	'crud_base_path'=>CRUD_BASE_PATH, // Vendor側のCrudBaseライブラリへの絶対パス
 	'crud_base_js'=>CRUD_BASE_JS, // jsのCrudBaseライブラリパス（相対パス）
 	'crud_base_css'=>CRUD_BASE_CSS, // cssのCrudBaseライブラリパス（相対パス）
-	'crud_base_url_base'=>CRUD_BASE_URL_BASE, // 基本URL
+    'crud_base_url_base'=>CRUD_BASE_URL_BASE, // 基本URL
+    'crud_base_storage_url'=>CRUD_BASE_STORAGE_URL, // ストレージ基本URL
 	
 	//'crud_base_webroot_abs_path'=>$crud_base_webroot_abs_path,■■■□□□■■■□□□
 ];

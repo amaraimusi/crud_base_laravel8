@@ -39,11 +39,14 @@ define('CRUD_BASE_ROOT', $crud_base_root);
 $crud_base_path = dirname(__FILE__) . '/vendor/CrudBase/';
 define('CRUD_BASE_PATH', $crud_base_path);
 
-$crud_base_project_path = '/crud_base_laravel8/dev/public'; // 例：「/animal/mng」
+$crud_base_project_path = '/crud_base_laravel8/public'; // 例：「/animal/mng」
 define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推奨）
 
 $crud_base_url_base = $crud_base_project_path . '/';
 define('CRUD_BASE_URL_BASE', $crud_base_url_base); // 基本URL
+
+$crud_base_storage_url = '/crud_base_laravel8/dev/public/'; // ストレージ基本URL（添付ファイルの置き場所） 例→「/crud_base_laravel8/dev/public/」
+define('CRUD_BASE_STORAGE_URL', $crud_base_storage_url);
 
 $crud_base_js = $crud_base_project_path . "/js/CrudBase/dist/CrudBase.min.js?v=" . CRUD_BASE_VERSION;
 define('CRUD_BASE_JS', $crud_base_js);
@@ -62,7 +65,8 @@ $crudBaseConfig = [
 	'crud_base_path'=>CRUD_BASE_PATH, // Vendor側のCrudBaseライブラリへの絶対パス
 	'crud_base_js'=>CRUD_BASE_JS, // jsのCrudBaseライブラリパス（相対パス）
 	'crud_base_css'=>CRUD_BASE_CSS, // cssのCrudBaseライブラリパス（相対パス）
-	'crud_base_url_base'=>CRUD_BASE_URL_BASE, // 基本URL
+    'crud_base_url_base'=>CRUD_BASE_URL_BASE, // 基本URL
+    'crud_base_storage_url'=>CRUD_BASE_STORAGE_URL, // ストレージ基本URL
 	
 	//'crud_base_webroot_abs_path'=>$crud_base_webroot_abs_path,■■■□□□■■■□□□
 ];
@@ -144,12 +148,50 @@ function cbShortcode($short_code, $param = []){
             require_once CRUD_BASE_ROOT . 'controller\MsgBoardController.php';
             $msgBoardController = new MsgBoardController($param);
             return $msgBoardController->index();
-            
-        ;
-        break;
-        
+            break;
+
         default:
             throw new Exception("'{$short_code}' is unown!");
         break;
     }
+}
+
+function crudBaseJs($code){
+    global $crud_base_js;
+    global $crud_base_url_base;
+    
+    $script_js = "<script src='{$crud_base_js}'></script>";
+   
+    switch ($code) {
+        case 'MsgBoard': // メッセージボード
+            $script_js .= "<script src='{$crud_base_url_base}js/MsgBoard/MsgBoard.js?v=1.0.0'></script>";
+            $script_js .= "<script src='{$crud_base_url_base}js/MsgBoard/index.js?v=1.0.0'></script>";
+            break;
+            
+        default:
+            throw new Exception("crudBaseJs→ '{$code}' is unown!");
+            break;
+    }
+    
+    return $script_js;
+}
+
+function crudBaseCss($code){
+    global $crud_base_css;
+    global $crud_base_url_base;
+    
+    //<link href='/note_prg/css/common2.css' rel="stylesheet">
+    $script_js = "<link href='{$crud_base_css}' rel='stylesheet'>";
+    
+    switch ($code) {
+        case 'MsgBoard': // メッセージボード
+            $script_js .= "<link href='{$crud_base_url_base}css/MsgBoard/index.css?v=1.0.0' rel='stylesheet'>";
+            break;
+            
+        default:
+            throw new Exception("crudBaseCss→ '{$code}' is unown!");
+            break;
+    }
+    
+    return $script_js;
 }
