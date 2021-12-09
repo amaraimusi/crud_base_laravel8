@@ -1,7 +1,7 @@
 <?php
 require_once 'AppController.php';
-require_once 'vendor/CrudBase/CrudBaseController.php';
-require_once 'model/MsgBoard.php';
+require_once CRUD_BASE_PATH . 'CrudBaseController.php';
+require_once CRUD_BASE_ROOT . 'model/MsgBoard.php';
 
 /**
  * メッセージボード画面

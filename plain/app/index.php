@@ -1,9 +1,12 @@
 <?php
-echo 'index.php テスト２';
 require_once 'crud_base_config.php';
 
 $class_name = $_GET['c'] ?? null; // クラス名を取得する
 $action_name = $_GET['a'] ?? 'index'; // アクション名を取得する
+$place_str = cbStringRight($_SERVER["REQUEST_URI"], CRUD_BASE_URL_BASE);
+$places =explode("/",$place_str);
+$class_name = $places[0];
+$action_name = $places[1] ?? 'index'; // アクション名を取得する
 
 if(!empty($class_name)){
     $class_name = cbCamelize($class_name) . 'Controller'; // クラス名に変換する。
@@ -15,6 +18,8 @@ if(!empty($class_name)){
 
 
 function cbShortcode($short_code, $param = []){
+    
+    
     switch ($short_code) {
         case 'MsgBoard': // メッセージボード
             require_once CRUD_BASE_ROOT . 'controller\MsgBoardController.php';
@@ -70,16 +75,36 @@ function crudBaseCss($code){
 }
 
 
-	/**
-	 * キャメルケースにスネークケースから変換する
-	 * 
-	 * 先頭も大文字になる。
-	 * 
-	 * @param string $str スネークケースの文字列
-	 * @return string キャメルケースの文字列
-	 */
-	function cbCamelize($str) {
-		$str = strtr($str, '_', ' ');
-		$str = ucwords($str);
-		return str_replace(' ', '', $str);
-	}
+/**
+ * キャメルケースにスネークケースから変換する
+ * 
+ * 先頭も大文字になる。
+ * 
+ * @param string $str スネークケースの文字列
+ * @return string キャメルケースの文字列
+ */
+function cbCamelize($str) {
+	$str = strtr($str, '_', ' ');
+	$str = ucwords($str);
+	return str_replace(' ', '', $str);
+}
+
+
+/**
+ * 文字列を左側から印文字を検索し、右側の文字を切り出す。
+ * @param string $s 対象文字列
+ * @param string $mark 印文字
+ * @return string 印文字から右側の文字列
+ */
+function cbStringRight($s,$mark){
+    if ($s==null || $s==""){
+        return $s;
+    }
+    
+    $a=strpos($s,$mark);
+    if($a==null && $a!==0){
+        return "";
+    }
+    $s2=substr($s,$a + strlen($mark),strlen($s));
+    return $s2;
+}
