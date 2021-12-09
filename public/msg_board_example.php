@@ -17,8 +17,7 @@ require_once 'index.php';
 	<link href="/note_prg/css/common2.css" rel="stylesheet">
 	<?php echo crudBaseCss('MsgBoard') ?>
 	<script src="/note_prg/js/jquery3.js"></script>	<!-- jquery-3.3.1.min.js -->
-	<script src="/note_prg/js/popper.min.js></script><!-- ポップアップ機能およびBootstrapの補助ライブラリ -->
-	<script src="/note_prg/js/bootstrap-4.3.1-dist/bootstrap.min.js"></script>
+	<script src="/note_prg/js/bootstrap-4.3.1-dist/bootstrap.bundle.min.js"></script>
 	<script src="/note_prg/js/vue.min.js"></script>
 	<script src="/note_prg/js/livipage.js"></script>
 	<script src="/note_prg/js/ImgCompactK.js"></script>
