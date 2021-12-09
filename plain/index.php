@@ -1,4 +1,5 @@
 <?php
+echo 'index.php テスト２';
 require_once 'crud_base_config.php';
 
 $class_name = $_GET['c'] ?? null; // クラス名を取得する
