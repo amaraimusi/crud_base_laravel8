@@ -63,7 +63,7 @@ class CrudBaseU{
 		if($csrf_token == null){
 			if(!empty($_GET['csrf_token'])) $csrf_token = $_GET['csrf_token'];
 		}
-		
+
 		if($csrf_token == null) return false;
 		
 		// セッションキーを組み立て

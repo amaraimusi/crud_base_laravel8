@@ -66,7 +66,7 @@ class MsgBoardController extends AppController {
 		
 		// Ajaxセキュリティ:CSRFトークンの取得
 		$crudBaseData['csrf_token'] = CrudBaseU::getCsrfToken('msg_board');
-		
+
 		$res = $this->md->getData($crudBaseData);
 		$data = $res['data'];
 		$non_limit_count = $res['non_limit_count']; // LIMIT制限なし・データ件数
@@ -132,9 +132,9 @@ class MsgBoardController extends AppController {
 	 *
 	 */
 	public function ajax_new_reg(){
-		
-		$this->autoRender = false;//ビュー(ctp)を使わない。
-		
+	    
+	    $this->init();
+
 		// CSRFトークンによるセキュリティチェック
 		if(CrudBaseU::checkCsrfToken('msg_board') == false){
 			return '不正なアクションを検出しました。';
@@ -496,7 +496,6 @@ class MsgBoardController extends AppController {
 		];
 
 		$crudBaseCon = new CrudBaseController($this, $model, $crudBaseData);
-
 		$model->init($crudBaseCon);
 		
 		$this->md = $model;

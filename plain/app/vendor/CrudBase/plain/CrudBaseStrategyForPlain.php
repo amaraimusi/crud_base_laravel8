@@ -30,7 +30,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    
 	    // セッションを開始
 	    session_start();
-	    
+
 	}
 	
 	/**
@@ -318,18 +318,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 		$ent = array_intersect_key($ent, array_flip($this->whiteList)); // ホワイトリストによるフィルタリング
 		
 		$this->saveData->save($tbl_name, $ent); // DB保存
-		
-		//　■■■□□□■■■□□□
-		// ■■■□□□■■■□□□
-// 		if(empty($ent['id'])){
-// 			// ▽ idが空であればINSERTをする。
-// 			$id = $this->model->insertGetId($ent); // INSERT
-// 			$ent['id'] = $id;
-// 		}else{
 
-// 			// ▽ idが空でなければUPDATEする。
-// 			$this->model->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
-// 		}
 		
 		return $ent;
 	}
@@ -367,10 +356,8 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 * @return mixed CSRFトークン
 	 */
 	public function getCsrfToken(){
-
-	   $key = $this->crudBaseData['model_name_s'];
-	   return CrudBaseU::getCsrfToken($key);
-
+        // 非推奨
+        return null;
 		
 	}
 	

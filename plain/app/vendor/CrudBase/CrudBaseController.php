@@ -142,6 +142,7 @@ class CrudBaseController {
 		
 		$this->crudBaseData['paths'] = $this->getPaths(); // パス情報
 		
+		// ※非推奨
 		$this->crudBaseData['csrf_token'] = $this->strategy->getCsrfToken(); // CSRFトークン ※Ajaxのセキュリティ 
 		
 		$this->this_page_version = $clientCtrl->this_page_version;
