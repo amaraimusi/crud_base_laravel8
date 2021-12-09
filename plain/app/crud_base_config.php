@@ -39,13 +39,13 @@ define('CRUD_BASE_ROOT', $crud_base_root);
 $crud_base_path = dirname(__FILE__) . '/vendor/CrudBase/';
 define('CRUD_BASE_PATH', $crud_base_path);
 
-$crud_base_project_path = '/crud_base_laravel8/public'; // 例：「/animal/mng」
+$crud_base_project_path = '/crud_base_laravel8/plain/app'; // 例：「/animal/mng」
 define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推奨）
 
 $crud_base_url_base = $crud_base_project_path . '/';
 define('CRUD_BASE_URL_BASE', $crud_base_url_base); // 基本URL
 
-$crud_base_storage_url = '/crud_base_laravel8/dev/public/'; // ストレージ基本URL（添付ファイルの置き場所） 例→「/crud_base_laravel8/dev/public/」
+$crud_base_storage_url = '/crud_base_laravel8/dev/public/'; // ストレージ基本URL（添付ファイルの置き場所） 例→「/crud_base_laravel8/dev/plain/」
 define('CRUD_BASE_STORAGE_URL', $crud_base_storage_url);
 
 $crud_base_js = $crud_base_project_path . "/js/CrudBase/dist/CrudBase.min.js?v=" . CRUD_BASE_VERSION;
@@ -61,14 +61,13 @@ $crudBaseConfig = [
 	
 	'crud_base_root'=>CRUD_BASE_ROOT, // プロジェクトのルートパス（絶対パス）
 	//'crud_base_app_path'=>CRUD_BASE_APP_PATH, // appディレクトリの絶対パス■■■□□□■■■□□□
-	'crud_base_project_path'=>CRUD_BASE_PROJECT_PATH, // プロジェクト名もしくはプロジェクトの相対パス→（例: animal_park/public)
+	'crud_base_project_path'=>CRUD_BASE_PROJECT_PATH, // プロジェクト名もしくはプロジェクトの相対パス→（例: animal_park/plain)
 	'crud_base_path'=>CRUD_BASE_PATH, // Vendor側のCrudBaseライブラリへの絶対パス
 	'crud_base_js'=>CRUD_BASE_JS, // jsのCrudBaseライブラリパス（相対パス）
 	'crud_base_css'=>CRUD_BASE_CSS, // cssのCrudBaseライブラリパス（相対パス）
     'crud_base_url_base'=>CRUD_BASE_URL_BASE, // 基本URL
     'crud_base_storage_url'=>CRUD_BASE_STORAGE_URL, // ストレージ基本URL
 	
-	//'crud_base_webroot_abs_path'=>$crud_base_webroot_abs_path,■■■□□□■■■□□□
 ];
 
 // DB設定情報を取得する
