@@ -11,17 +11,6 @@ require_once CRUD_BASE_ROOT . 'model/AppModel.php';
  */
 class MsgBoard extends AppModel {
 
-    //■■■□□□■■■□□□
-// 	public $name='MsgBoard';
-	
-// 	// 関連付けるテーブル CBBXS-1040
-// 	public $useTable = 'msg_boards';
-
-// 	// CBBXE
-
-// 	/// バリデーションはコントローラクラスで定義
-// 	public $validate = null;
-	
 	// ホワイトリスト（DB保存時にこのホワイトリストでフィルタリングが施される）
 	public $fillable = [
 		// CBBXS-2009
@@ -53,11 +42,7 @@ class MsgBoard extends AppModel {
 	public function __construct() {
 	    
 	    parent::__construct();
-	    
-	    //■■■□□□■■■□□□
-// 		// CrudBaseロジッククラスの生成
-// 		if(empty($this->CrudBase)) $this->CrudBase = new CrudBase();
-		
+
 	}
 	
 	
@@ -251,27 +236,20 @@ class MsgBoard extends AppModel {
 	 *  - ni_tr_place 新規入力追加場所フラグ 0:末尾 , 1:先頭
 	 * @return array メッセージボードエンティティ（saveメソッドのレスポンス）
 	 */
-	public function saveEntity($ent,$option=array()){
+	public function saveEntity($ent,$option=[]){
 
 		// 新規入力であるなら新しい順番をエンティティにセットする。
 		if($option['form_type']=='new_inp' ){
 			if(empty($option['ni_tr_place'])){
-				$ent['sort_no'] = $this->getLastSortNo($this); // 末尾順番を取得する
+			    $ent['sort_no'] = $this->cb->selectValue("SELECT MAX(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
 			}else{
-				$ent['sort_no'] = $this->getFirstSortNo($this); // 先頭順番を取得する
+			    $ent['sort_no'] = $this->cb->selectValue("SELECT MIN(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
 			}
 		}
 		
-		//DBに登録('atomic' => false　トランザクションなし。saveでSQLサニタイズされる）
-		$ent = $this->save($ent, array('atomic' => false,'validate'=>false));
+		//DBに登録
+		$ent = $this->cb->saveEntity($ent, $option);
 
-		//DBからエンティティを取得
-		$ent = $this->find('first',
-				array(
-						'conditions' => "id={$ent['MsgBoard']['id']}"
-				));
-
-		$ent=$ent['MsgBoard'];
 		if(empty($ent['delete_flg'])) $ent['delete_flg'] = 0;
 
 		return $ent;

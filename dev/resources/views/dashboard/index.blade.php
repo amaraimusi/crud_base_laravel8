@@ -59,7 +59,7 @@
 					<div class="card_msg">
 						<p class="card-text" style="height:80px">メッセージボードのデモ</p>
 					</div>
-					<a href="/crud_base_laravel8/public/msg_board_example.php" class="btn btn-success">ページへ移動</a>
+					<a href="/crud_base_laravel8/outer/msg_board_example.php" class="btn btn-success">ページへ移動</a>
 				</div>
 			</div>
 		</div>

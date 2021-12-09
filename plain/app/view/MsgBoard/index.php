@@ -6,20 +6,6 @@ require_once CRUD_BASE_PATH . 'CrudBaseHelper.php';
 $cbh = new CrudBaseHelper($crudBaseData);
 
 
-//$ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバージョン文字列
-
-//■■■□□□■■■□□□
-// // CSSファイルのインクルード
-// $cssList = CrudBaseU::getCssList();
-// $cssList[] = 'MsgBoard/index.css' . $ver_str; // 当画面専用CSS
-// $this->assign('css', $this->Html->css($cssList));
-
-// // JSファイルのインクルード
-// $jsList = CrudBaseU::getJsList();
-// $jsList[] = 'MsgBoard/MsgBoard.js' . $ver_str; // メッセージボードクラス
-// $jsList[] = 'MsgBoard/index.js' . $ver_str; // 当画面専用JavaScript
-// $this->assign('script', $this->Html->script($jsList,['charset'=>'utf-8']));
-
 ?>
 
 <div class="container-fluid">

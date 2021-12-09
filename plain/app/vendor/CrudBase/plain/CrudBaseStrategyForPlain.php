@@ -317,8 +317,8 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 
 		$ent = array_intersect_key($ent, array_flip($this->whiteList)); // ホワイトリストによるフィルタリング
 		
-		$this->saveData->save($tbl_name, $ent); // DB保存
-
+		$res = $this->saveData->save($tbl_name, $ent); // DB保存
+		$ent = $res['ent'];
 		
 		return $ent;
 	}

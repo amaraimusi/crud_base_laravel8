@@ -15,16 +15,6 @@ class MsgBoardController extends AppController {
 	private $md;
 	private $paramSets;
 	
-	
-	// ■■■□□□■■■□□□
-// 	/// 名称コード
-// 	public $name = 'MsgBoard';
-	
-// 	/// 使用しているモデル[CakePHPの機能]
-// 	public $uses = ['MsgBoard'];
-	
-// 	public $login_flg = 0; // ログインフラグ 0:ログイン不要, 1:ログイン必須
-	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
 	public $this_page_version = '1.0.0';
 
@@ -35,18 +25,7 @@ class MsgBoardController extends AppController {
 	public function __construct(&$param = []){
 	    $this->md = new MsgBoard();
 	}
-	
-	//■■■□□□■■■□□□
-// 	public function beforeFilter() {
 
-// 		// 未ログイン中である場合、未認証モードの扱いでページ表示する。
-// 		if($this->login_flg == 0 && empty($this->Auth->user())){
-// 			$this->Auth->allow(); // 未認証モードとしてページ表示を許可する。
-// 		}
-		
-// 		parent::beforeFilter();
-
-// 	}
 
 	/**
 	 * indexページのアクション
@@ -76,7 +55,6 @@ class MsgBoardController extends AppController {
 		
 		$userInfo = $crudBaseData['userInfo'];
 		
-		//■■■□□□■■■□□□
 		if(empty($userInfo['id'])){
 			$userInfo['id'] = -1;
 		}
@@ -140,9 +118,8 @@ class MsgBoardController extends AppController {
 			return '不正なアクションを検出しました。';
 		}
 		
-		$userInfo = $this->Auth->user(); // ログインユーザー情報を取得する
+		$userInfo = $this->cb->getUserInfo();
 		
-		$this->init();
 		
 		// JSON文字列をパースしてエンティティを取得する
 		$json=$_POST['key1'];
@@ -151,17 +128,19 @@ class MsgBoardController extends AppController {
 		// 登録パラメータ
 		$reg_param_json = $_POST['reg_param_json'];
 		$regParam = json_decode($reg_param_json,true);
+		if(empty($regParam['ni_tr_place'])) $regParam['ni_tr_place'] = 0; // 
 
 		$ent = $this->setCommonToEntity($ent);
+		
 		// CBBXE
 		$ent = $this->md->saveEntity($ent, $regParam);
 		
 		// ファイルアップロードとファイル名のDB保存
 		if(!empty($_FILES)){
-			$ent['attach_fn'] = $this->cb->makeFilePath($_FILES, "storage/msg_board/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'attach_fn');
+			$ent['attach_fn'] = $this->cb->makeFilePath($_FILES, "/crud_base_laravel8/dev/storage/msg_board/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'attach_fn');
 			$fileUploadK = $this->factoryFileUploadK();
 			$fileUploadK->putFile1($_FILES, 'attach_fn', $ent['attach_fn']);
-			$this->md->save($ent, ['validate'=>false]);
+			$this->md->saveEntity($ent, $regParam);
 		}
 
 		// メール送信
