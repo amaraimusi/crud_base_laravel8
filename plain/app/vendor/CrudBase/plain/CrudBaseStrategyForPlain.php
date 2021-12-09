@@ -5,8 +5,8 @@ require_once CRUD_BASE_PATH . 'SaveData.php';
 
 /**
  * プレーン版ストラテジークラス
- * @version 1.0.0
- * @since 2021-12-5
+ * @version 1.0.1
+ * @since 2021-12-9
  * @license MIT
  */
 class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
@@ -166,7 +166,6 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	        $user_id = 0;
 	        $user_name = '';
 	        $nickname = '';
-	        
 	        if(!empty($users['id'])) $user_id = $users['id'];
 	        
 	        if(!empty($users['name'])) $user_name = $users['name'];
@@ -175,13 +174,14 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	        if(empty($nickname))  $nickname = $user_name;
 	        
 	        $role = 'oparator';
-	        if(!empty($userInfo['role'])) $role = $userInfo['role'];
+	        if(!empty($users['role'])) $role = $users['role'];
 	        
 	        $userInfo['id'] = $user_id;
 	        $userInfo['user_id'] = $user_id;
 	        $userInfo['username'] = $user_name;
 	        $userInfo['user_name'] = $user_name;
 	        $userInfo['update_user'] = $user_name;
+	        $userInfo['nickname'] = $nickname;
 	        $userInfo['email'] = $users['email']; // メールアドレス
 	        $userInfo['role'] = $role; // 権限
 	        $userInfo['delete_flg'] = $users['delete_flg']; // 権限
@@ -229,8 +229,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    
 	    $user_id = $_SESSION['uid'];
         $sql = "SELECT * FROM users WHERE id='{$user_id}'";
-        $users = $this.selectEntity($sql);
-
+        $users = $this->selectEntity($sql);
 	    $this->users = $users;
 	    return $users;
 	}

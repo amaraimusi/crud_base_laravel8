@@ -5,6 +5,8 @@
  *
  */
 class AppController {
+    
+    protected $cb; // CrudBase制御クラス
 	
 	// 更新ユーザーなど共通フィールドをデータにセットする。
 	protected function setCommonToData($data){
@@ -122,63 +124,66 @@ class AppController {
 	 */
 	public function getUserInfo($param=[]){
 		
-		// ユーザー情報の構造
-		$userInfo = [
-			'id'=> 0,
-			'user_id'=> 0,
-			'update_user' => '',
-			'username' => '',
-			'user_name' => '',
-			'ip_addr' => '',
-			'user_agent' => '',
-			'email'=>'',
-			'role' => 'oparator',
-			'delete_flg' => 0,
-			'authority' => [
-				'name' => '',
-				'wamei' => '',
-				'level' => 0,
-			],
-			'nickname' => ''
-		];
+	    return $this->cb->getUserInfo($param);
+	    
+	    // ■■■□□□■■■□□□
+// 		// ユーザー情報の構造
+// 		$userInfo = [
+// 			'id'=> 0,
+// 			'user_id'=> 0,
+// 			'update_user' => '',
+// 			'username' => '',
+// 			'user_name' => '',
+// 			'ip_addr' => '',
+// 			'user_agent' => '',
+// 			'email'=>'',
+// 			'role' => 'oparator',
+// 			'delete_flg' => 0,
+// 			'authority' => [
+// 				'name' => '',
+// 				'wamei' => '',
+// 				'level' => 0,
+// 			],
+// 			'nickname' => ''
+// 		];
 		
-		if(!empty($param['review_mode'])){
-			return $this->getUserInfoForReviewMode($userInfo); // レビューモード用ユーザー情報を取得
-		}
-		
-		// ■■■□□□■■■□□□後で作成
-// 		if(\Auth::id()){// idは未ログインである場合、nullになる。
-// 			$userInfo['id'] = \Auth::id(); // ユーザーID
-// 			$userInfo['user_id'] = $userInfo['id'];
-// 			$userInfo['username'] = \Auth::user()->name; // ユーザー名
-// 			$userInfo['user_name'] = $userInfo['username'];
-// 			$userInfo['update_user'] = $userInfo['username'];
-// 			$userInfo['email'] = \Auth::user()->email; // メールアドレス
-// 			$userInfo['role'] = \Auth::user()->role; // メールアドレス
+// 		if(!empty($param['review_mode'])){
+// 			return $this->getUserInfoForReviewMode($userInfo); // レビューモード用ユーザー情報を取得
 // 		}
 		
-		$userInfo['ip_addr'] = $_SERVER["REMOTE_ADDR"];// IPアドレス
-		$userInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // ユーザーエージェント
+// 		// ■■■□□□■■■□□□後で作成
+// // 		if(\Auth::id()){// idは未ログインである場合、nullになる。
+// // 			$userInfo['id'] = \Auth::id(); // ユーザーID
+// // 			$userInfo['user_id'] = $userInfo['id'];
+// // 			$userInfo['username'] = \Auth::user()->name; // ユーザー名
+// // 			$userInfo['user_name'] = $userInfo['username'];
+// // 			$userInfo['update_user'] = $userInfo['username'];
+// // 			$userInfo['email'] = \Auth::user()->email; // メールアドレス
+// // 			$userInfo['role'] = \Auth::user()->role; // メールアドレス
+// // 		}
 		
-		// ■■■□□□■■■□□□ DBの処理を先に作成する
-// 		if(!empty($userInfo['id'])){
-// 			$users = \DB::select("SELECT * FROM users WHERE id={$userInfo['id']}");
-// 			$users = $users[0];
-// 			$userInfo['role'] = $users->role;
-// 			$userInfo['delete_flg'] = $users->delete_flg;
+// 		$userInfo['ip_addr'] = $_SERVER["REMOTE_ADDR"];// IPアドレス
+// 		$userInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // ユーザーエージェント
+		
+// 		// ■■■□□□■■■□□□ DBの処理を先に作成する
+// // 		if(!empty($userInfo['id'])){
+// // 			$users = \DB::select("SELECT * FROM users WHERE id={$userInfo['id']}");
+// // 			$users = $users[0];
+// // 			$userInfo['role'] = $users->role;
+// // 			$userInfo['delete_flg'] = $users->delete_flg;
 			
+// // 		}
+		
+		
+// 		// 権限が空であるならオペレータ扱いにする
+// 		if(empty($userInfo['role'])){
+// 			$userInfo['role'] = 'oparator';
 // 		}
 		
-		
-		// 権限が空であるならオペレータ扱いにする
-		if(empty($userInfo['role'])){
-			$userInfo['role'] = 'oparator';
-		}
-		
- 		$role = $userInfo['role'];
- 		$userInfo['authority'] = $this->getAuthority($role);
+//  		$role = $userInfo['role'];
+//  		$userInfo['authority'] = $this->getAuthority($role);
 
-		return $userInfo;
+// 		return $userInfo;
 	}
 	
 	

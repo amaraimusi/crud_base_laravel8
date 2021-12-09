@@ -11,7 +11,7 @@ require_once CRUD_BASE_ROOT . 'model/MsgBoard.php';
  */
 class MsgBoardController extends AppController {
 
-    private $cb; // CrudBase制御クラス
+    protected $cb; // CrudBase制御クラス
 	private $md;
 	private $paramSets;
 	
@@ -23,6 +23,7 @@ class MsgBoardController extends AppController {
 	 * @param [] $param
 	 */
 	public function __construct(&$param = []){
+
 	    $this->md = new MsgBoard();
 	}
 
@@ -35,14 +36,13 @@ class MsgBoardController extends AppController {
 	 * ページネーション、列名ソート、列表示切替、CSVダウンロード機能を備えます。
 	 */
 	public function index() {
-		
-		
+
 		$this->init();
 		
 		// CrudBase共通処理（前）
 		$crudBaseData = $this->cb->indexBefore();//indexアクションの共通先処理(CrudBaseController)
 		$crudBaseData['pages']['sort_desc'] = 1;
-		
+
 		// Ajaxセキュリティ:CSRFトークンの取得
 		$crudBaseData['csrf_token'] = CrudBaseU::getCsrfToken('msg_board');
 
@@ -52,6 +52,10 @@ class MsgBoardController extends AppController {
 		
 		// CrudBase共通処理（後）
 		$crudBaseData = $this->cb->indexAfter($crudBaseData, ['non_limit_count'=>$non_limit_count]);
+
+		//■■■□□□■■■□□□仮ログイン
+		$_SESSION['uid'] = 1;
+		$crudBaseData['userInfo'] = $this->cb->getUserInfo();
 		
 		$userInfo = $crudBaseData['userInfo'];
 		
@@ -60,8 +64,7 @@ class MsgBoardController extends AppController {
 		}
 		
 		// 当画面のユーザータイプを取得 master:マスター型, login_user:一般ログインユーザー, guest:未ログインユーザー
-		$user_type = $this->getThisUserType();
-		
+		$user_type = $this->getThisUserType($userInfo);
 		
 		// 当画面のユーザータイプによる変更ボタン、削除ボタンの表示、非表示情報をセットする
 		$data = $this->md->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
@@ -162,7 +165,7 @@ class MsgBoardController extends AppController {
 	 */
 	public function ajax_edit_reg(){
 		
-		$this->autoRender = false;//ビュー(ctp)を使わない。
+	    $this->init();
 		
 		// CSRFトークンによるセキュリティチェック
 		if(CrudBaseU::checkCsrfToken('msg_board') == false){
@@ -170,10 +173,9 @@ class MsgBoardController extends AppController {
 		}
 		
 			
-		$userInfo = $this->getUserInfo();
+		$userInfo = $this->cb->getUserInfo();
 		if(empty($userInfo['id'])) throw new Exception('システムエラー 210512A');
 		
-		$this->init();
 		
 		// JSON文字列をパースしてエンティティを取得する
 		$json=$_POST['key1'];
