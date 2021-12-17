@@ -2,8 +2,8 @@
 /**
  * メッセージボードクラス
  *
- * @since 2021-5-7
- * @version 1.0.0
+ * @since 2021-5-7 | 2021-12-9
+ * @version 1.0.1
  * @license MIT
  * @auther Kenji Uehara
  */
@@ -183,7 +183,8 @@ class MsgBoard{
 		if(nickname=='') nickname = 'none';
 		newEntDiv.find('.nickname').html(nickname);
 
-		newEntDiv.find('.message_div').html(ent.message);
+		let message_xss = this._xss_sanitize(ent.message);
+		newEntDiv.find('.message_div').html(message_xss);
 		newEntDiv.find('.message_edit_ta').html(ent.message);
 		newEntDiv.find('.nickname').html(this.nickname);
 		newEntDiv.find('.edit_btn').show();
@@ -557,7 +558,7 @@ class MsgBoard{
 				return;
 			}
 			
-			res = this._escapeAjaxSendData(res); // XSS対策
+			res = this._xss_sanitize(res); // XSS対策
 			parElm.find('.message_div').html(res.message);
 			
 			// 編集区分を閉じる
