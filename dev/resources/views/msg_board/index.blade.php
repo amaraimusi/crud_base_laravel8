@@ -63,7 +63,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		$cbh->inputKjId(); 
 		$cbh->inputKjText('kj_other_id','外部ID');
 		$cbh->inputKjOuterId('kj_user_id','ユーザーID'); 
-		$cbh->CrudBase->inputKjSelect('kj_user_type','ユーザータイプ', $masters['userTypeList']); 
+		$cbh->inputKjSelect('kj_user_type','ユーザータイプ', $masters['userTypeList']); 
 		$cbh->inputKjText('kj_message','メッセージ');
 		$cbh->inputKjText('kj_attach_fn','添付ファイル');
 		$cbh->inputKjHidden('kj_sort_no');
@@ -334,7 +334,7 @@ foreach($data as $i=>&$ent){
 
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザーID: </div>
-			<?php $this->CrudBase->formOuterName('user_id', 'ユーザーID', 'edit'); ?>
+			<?php $cbh->formOuterName('user_id', 'ユーザーID', 'edit'); ?>
 		</div>
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザータイプ: </div>
