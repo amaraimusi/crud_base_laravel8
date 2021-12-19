@@ -2,10 +2,9 @@
 
 /**
  * データ保存クラス
- * @version 2.0.0
- * @date 2019-11-6 | 2020-3-31
+ * @version 2.0.1
  * @author kenji uehara
- * @since 2020-3-31
+ * @since 2019-11-6 | 2021-12-9
  * @license MIT
  *
  */
@@ -122,12 +121,13 @@ class SaveData{
 			}else{
 				$rEnt['id'] = $id;
 				$rEnt['exe_type'] = 'insert';
+				$ent['id'] = $id;
 			}
 		}else{
 			$this->rollback();
 		}
 		
-		$res = ['rEnt'=>$rEnt, 'err_msg'=>$err_msg];
+		$res = ['ent'=>$ent, 'rEnt'=>$rEnt, 'err_msg'=>$err_msg];
 		return $res;
 	}
 	

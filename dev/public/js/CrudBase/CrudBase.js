@@ -58,6 +58,7 @@ class CrudBase{
 		
 		// パラメータに空プロパティがあれば、デフォルト値をセットする
 		this.param = this._setParamIfEmpty(param);
+		console.log(this.param);//■■■□□□■■■□□□
 		
 		this.crudBaseData = param;
 

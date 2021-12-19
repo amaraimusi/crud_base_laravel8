@@ -14,7 +14,7 @@ require_once 'PagenationForCake.php';
 class CrudBaseController {
 
 	///バージョン
-	public $version = "3.4.2";
+	public $version = "3.4.3";
 	
 	public $crudBaseData = [];
 
@@ -142,6 +142,7 @@ class CrudBaseController {
 		
 		$this->crudBaseData['paths'] = $this->getPaths(); // パス情報
 		
+		// ※非推奨
 		$this->crudBaseData['csrf_token'] = $this->strategy->getCsrfToken(); // CSRFトークン ※Ajaxのセキュリティ 
 		
 		$this->this_page_version = $clientCtrl->this_page_version;
@@ -203,6 +204,10 @@ class CrudBaseController {
 			require_once 'laravel7/CrudBaseStrategyForLaravel7.php';
 			$strategy= new CrudBaseStrategyForLaravel7();
 			
+		}else if($fw_type == 'plain' ){
+		    require_once 'plain/CrudBaseStrategyForPlain.php';
+		    $strategy= new CrudBaseStrategyForPlain();
+		    
 		}else{
 			throw new Exception('$fw_type is empty! 210614A');
 		}
@@ -1997,9 +2002,7 @@ class CrudBaseController {
 			$ni_tr_place = $regParam['ni_tr_place'];
 			$ent['sort_no'] = $this->crudBaseModel->getSortNo($tbl_name, $ni_tr_place); // 順番を取得する
 		}
-		
-		
-		
+
 		return $this->crudBaseModel->saveEntity($ent, $whiteList); // エンティティをDB保存
 	}
 	
@@ -2116,6 +2119,15 @@ class CrudBaseController {
 		}
 	
 		return $ent;
+	}
+	
+	/**
+	 * SQLを実行する
+	 * @param string $sql
+	 * @return mixed
+	 */
+	public function query($sql){
+	    return $this->strategy->query($sql);
 	}
 
 }

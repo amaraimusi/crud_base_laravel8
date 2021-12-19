@@ -9,7 +9,8 @@
  */
 class MsgBoardEx{
 	
-	var $strategy;
+	private $strategy; // ストラテジー
+	private $cb; // CrudBaseControllerクラス
 	
 	/**
 	 * コンストラクタ
@@ -18,20 +19,9 @@ class MsgBoardEx{
 	 */
 	public function __construct($ctrl, $model){
 		global $crudBaseConfig; // crud_base_config.phpで定義しているデータ
-		$fw_type = $crudBaseConfig['fw_type'];
 		
-		if($fw_type == 'cake_php' || $fw_type == 'cakephp' ){
-			require_once CRUD_BASE_PATH . 'cakephp/CrudBaseStrategyForCake.php';
-			$this->strategy = new CrudBaseStrategyForCake();
-			
-		}
-		
-		else if($fw_type == 'laravel' || $fw_type == 'laravel7'){
-			require_once CRUD_BASE_PATH . 'laravel7/CrudBaseStrategyForLaravel7.php';
-			$this->strategy = new CrudBaseStrategyForLaravel7();
-		}else{
-			throw new Error('$fw_type is noting!');
-		}
+		$this->cb = $ctrl->getCb();
+		$this->strategy = $this->cb->getStrategy();
 		
 		$this->strategy->setCtrl($ctrl);
 		$this->strategy->setModel($model);
@@ -121,7 +111,7 @@ class MsgBoardEx{
 	 */
 	private function getPartyUserIds($data, $otherUserIds, $my_user_id){
 		// メッセージボードデータからuser_idの配列であるpartyUserIdsを取得する
-		$userIds = Hash::extract($data, '{n}.user_id');
+	    $userIds = HashCustom::extract($data, '{n}.user_id');
 		
 		// partyUserIdsにその他関係者ユーザーID配列をマージする。
 		$userIds = array_merge($userIds, $otherUserIds);
@@ -330,14 +320,14 @@ class MsgBoardEx{
 		
 		// 設定テーブルから仮登録メール用の「件名」、「メール文」、「有効時間」等を取得する
 		$sql = "SELECT config_key, config_value FROM config_xs WHERE group_key = '{$group_key}'";
-		$resData = $this->sqlExe($sql);
 		
+		$resData = $this->sqlExe($sql);
 		if(empty($resData)) throw new Error('システムエラー 210515A');
 		
 		$configs = [];
 		foreach($resData as $confEnt){
-			$config_key = $confEnt['configs']['config_key'];
-			$config_value = $confEnt['configs']['config_value'];
+			$config_key = $confEnt['config_key'];
+			$config_value = $confEnt['config_value'];
 			$configs[$config_key] = $config_value;
 		}
 		

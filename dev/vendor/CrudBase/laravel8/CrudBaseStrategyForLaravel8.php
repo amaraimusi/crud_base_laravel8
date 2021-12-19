@@ -4,9 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 /**
- * Laravel7用ストラテジークラス
- * @version 1.0.0
- * @since 2021-11-23
+ * Laravel8用ストラテジークラス
+ * @version 1.0.1
+ * @since 2021-12-1 | 2021-12-5
  * @license MIT
  */
 class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
@@ -231,7 +231,6 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 	 * @return string 正常な場合、nullを返す。異常値がある場合、エラーメッセージを返す。
 	 */
 	public function validForKj($data,$validate){
-		// ■■■□□□■■■□□□
 		return '';
 	}
 	
@@ -247,7 +246,7 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 	/**
 	 * SQLを実行して単一の値を取得する
 	 * @param string $sql
-	 * @return mixied 単一の値
+	 * @return mixed 単一の値
 	 */
 	public function selectValue($sql){
 		$res = \DB::select($sql);
@@ -304,7 +303,44 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 	}
 	
 	public function passwordToHash($pw){
-		throw new Error('passwordToHashメソッドは未実装です。');// ■■■□□□■■■□□□
+		throw new Error('passwordToHashメソッドは未実装です。');
 	}
+	
+	/**
+	 * ログインする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::login()
+	 */
+	public function login($option=[]){
+	    throw new Exception('loginメソッドは未実装です。');
+	}
+	
+	/**
+	 * ログアウトする
+	 * {@inheritDoc}
+	 * @see ICrudBaseStrategy::logout()
+	 */
+	public function logout($option = []){
+	    if(!empty(\Auth::id())){
+	        \Auth::logout();
+	    }
+	}
+	
+	/*
+	 *  ログインチェック
+	 *  @return true:ログイン状態, false:未ログイン
+	 */
+	public function loginCheck(){
+	    if(empty(\Auth::id())){
+	        return false;
+	    }
+	    return true;
+	}
+	
+    public function getAuth()
+    {
+        return $this->getUserInfo();
+    }
+
 	
 }
