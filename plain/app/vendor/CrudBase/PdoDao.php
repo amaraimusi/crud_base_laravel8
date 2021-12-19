@@ -42,29 +42,7 @@ class PdoDao implements IDao
 	 * @return object Dao
 	 */
 	public function getDao($dbConf=[]){
-		
-	    //■■■□□□■■■□□□
-// 		if($this->dao) return $this->dao;
-		
-// 		if(empty($dbConf)){
-// 			global $crudBaseConfig;
-// 			$dbConf = $crudBaseConfig['dbConfig'];
-// 		}
 
-// 		try {
-// 			$dao = new PDO("mysql:host={$dbConf['host']};dbname={$dbConf['db_name']};charset=utf8",$dbConf['user'],$dbConf['pw'],
-// 				array(PDO::ATTR_EMULATE_PREPARES => false));
-
-// 		} catch (PDOException $e) {
-// 			exit('データベース接続失敗。'.$e->getMessage());
-// 			die;
-// 		}
-		
-// 		$this->dao = $dao;
-
-// 		return $dao;
-
-	    
         return $this->dao;
 	}
 	
@@ -112,8 +90,8 @@ class PdoDao implements IDao
 	 */
 	public function query($sql){
 	    $stmt = $this->dao->query($sql);
-	    $data = $stmt->fetchAll();
-	    if($data === false){
+
+	    if($stmt === false){
 	        $errInfo = $this->dao->errorInfo();
 	        $err_msg = "
 				<pre>
@@ -125,6 +103,21 @@ class PdoDao implements IDao
 			";
 			var_dump($err_msg);
 	    }
+	    
+	    $data = $stmt->fetchAll();
+	    if($data === false){
+	        $errInfo = $this->dao->errorInfo();
+	        $err_msg = "
+				<pre>
+					SQLエラー→{$sql}
+					$errInfo[0]
+					$errInfo[1]
+					$errInfo[2]
+				</pre>
+			";
+					var_dump($err_msg);
+	    }
+	    
 	    return $data;
 
 	}

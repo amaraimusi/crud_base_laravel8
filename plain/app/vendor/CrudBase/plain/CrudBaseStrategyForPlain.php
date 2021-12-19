@@ -28,8 +28,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	    
 	    $this->saveData = new SaveData();
 	    
-	    // セッションを開始
-	    session_start();
+
 
 	}
 	

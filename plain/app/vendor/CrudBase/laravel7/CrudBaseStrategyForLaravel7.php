@@ -231,7 +231,6 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 	 * @return string 正常な場合、nullを返す。異常値がある場合、エラーメッセージを返す。
 	 */
 	public function validForKj($data,$validate){
-		// ■■■□□□■■■□□□
 		return '';
 	}
 	
@@ -304,7 +303,7 @@ class CrudBaseStrategyForLaravel7  implements ICrudBaseStrategy{
 	}
 	
 	public function passwordToHash($pw){
-		throw new Error('passwordToHashメソッドは未実装です。');// ■■■□□□■■■□□□
+		throw new Error('passwordToHashメソッドは未実装です。');
 	}
 	
 	/**

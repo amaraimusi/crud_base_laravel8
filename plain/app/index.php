@@ -1,4 +1,6 @@
 <?php
+session_start(); // セッションを開始。 警告が出るので、echoの前に呼び出すこと。
+
 require_once 'crud_base_config.php';
 
 // ■■■□□□■■■□□□
@@ -23,7 +25,7 @@ function cbShortcode($short_code, $param = []){
     
     switch ($short_code) {
         case 'MsgBoard': // メッセージボード
-            require_once CRUD_BASE_ROOT . 'controller\MsgBoardController.php';
+            require_once CRUD_BASE_ROOT . 'controller/MsgBoardController.php';
             $msgBoardController = new MsgBoardController($param);
             return $msgBoardController->index();
             break;
