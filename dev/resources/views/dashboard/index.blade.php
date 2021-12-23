@@ -20,7 +20,6 @@
 @include('layouts.common_header')
 
 <div class="container-fluid">
-
 <div id="org_div" style="margin-top:20px;margin-bottom:60px;">
 	<h3 class="text-primary">CrudBase 見本機能一覧</h3>
 	<div class="row" style="margin-top:20px;">
@@ -77,9 +76,27 @@
 			</div>
 		</div>
 		
-		
-	</div>
+	</div><!--  row -->
+
+	<div class="row" style="margin-top:20px;">
+	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
+		<div class="col-sm-3">
+			<div class="card border-primary ">
+				<div class="card-body" >
+					<h5 class="card-title text-primary" style="font-weight:bold">テーブル情報ツール</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">データベースのテーブル情報を表示/マスタ権限用</p>
+					</div>
+					<a href="/crud_base_laravel8/tool/data_info_tool.php" class="btn btn-primary">ページへ移動</a>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+	
+	
+	</div><!--  row -->
 </div>
+
 
 
 </div><!-- container-fluid -->
