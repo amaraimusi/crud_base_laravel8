@@ -212,14 +212,14 @@ class MsgBoardController extends AppController {
 	 */
 	public function ajax_delete(){
 
-		$this->autoRender = false;//ビュー(ctp)を使わない。
-		
+	    $this->init();
+	    
 		// CSRFトークンによるセキュリティチェック
 		if(CrudBaseU::checkCsrfToken('msg_board') == false){
 			return '不正なアクションなアクションです。 210510B';
 		}
 		
-		$userInfo = $this->getUserInfo();
+		$userInfo = $this->cb->getUserInfo();
 		if(empty($userInfo['id'])){
 			return '不正なアクションなアクションです。 210510C';
 		}
@@ -245,10 +245,9 @@ class MsgBoardController extends AppController {
 		
 		// 削除対象のメッセージボードエンティティを取得する
 		$sql = "SELECT * FROM msg_boards WHERE id={$id}";
-		$ent = $this->md->query($sql);
+		$ent = $this->cb->selectEntity($sql);
 
 		if(empty($ent)) return '不正なアクション 210511A';
-		$ent = $ent[0]['msg_boards'];
 
 		$my_msg_flg = 0; // 自分のメッセージであるか？ 0:違う, 1:自分のメッセージである。
 		if($ent['user_id'] == $user_id){

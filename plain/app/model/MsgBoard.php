@@ -239,13 +239,16 @@ class MsgBoard extends AppModel {
 	public function saveEntity($ent,$option=[]){
 
 		// 新規入力であるなら新しい順番をエンティティにセットする。
-		if($option['form_type']=='new_inp' ){
-			if(empty($option['ni_tr_place'])){
-			    $ent['sort_no'] = $this->cb->selectValue("SELECT MAX(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
-			}else{
-			    $ent['sort_no'] = $this->cb->selectValue("SELECT MIN(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
-			}
-		}
+	    if(!empty($option['form_type'])){
+	        
+	        if($option['form_type']=='new_inp' ){
+	            if(empty($option['ni_tr_place'])){
+	                $ent['sort_no'] = $this->cb->selectValue("SELECT MAX(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
+	            }else{
+	                $ent['sort_no'] = $this->cb->selectValue("SELECT MIN(sort_no) as max_sort_no FROM msg_boards WHERE delete_flg=0");
+	            }
+	        }
+	    }
 		
 		//DBに登録
 		$ent = $this->cb->saveEntity($ent, $option);
@@ -253,6 +256,25 @@ class MsgBoard extends AppModel {
 		if(empty($ent['delete_flg'])) $ent['delete_flg'] = 0;
 
 		return $ent;
+	}
+	
+	/**
+	 * saveEntityのエイリアス
+	 * @param [] $ent
+	 * @param [] $option
+	 */
+	public function save($ent,$option=[]){
+	    return $this->saveEntity($ent,$option);
+	}
+	
+	/**
+	 * レコードを削除
+	 * @param int $id
+	 */
+	public function delete($id){
+	    if(!is_numeric($id)) throw Exception('20211223A idは数値ではありません');
+	    $sql = "DELETE FROM msg_boards WHERE id={$id}";
+	    $this->cb->query($sql);
 	}
 
 

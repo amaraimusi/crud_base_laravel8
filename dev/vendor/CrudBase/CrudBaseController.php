@@ -14,7 +14,7 @@ require_once 'PagenationForCake.php';
 class CrudBaseController {
 
 	///バージョン
-	public $version = "3.4.3";
+	public $version = "3.4.4";
 	
 	public $crudBaseData = [];
 
@@ -1995,8 +1995,8 @@ class CrudBaseController {
 		$whiteList = $this->crudBaseData['fields'];
 		
 		$tbl_name = $this->crudBaseData['tbl_name'];
-		$form_type = $regParam['form_type'];
-		
+
+		$form_type = $regParam['form_type'] ?? '';
 		// idが空、つまり新規入力時のみ順番を取得してセットする。
 		if($form_type == 'new_inp'){
 			$ni_tr_place = $regParam['ni_tr_place'];
