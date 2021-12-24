@@ -1,7 +1,7 @@
 /**
  * ボタンサイズ変更【CrudBase用】
- * @version 1.2.2
- * @date 2018-10-27 | 2020-9-17
+ * @version 1.2.3
+ * @since 2018-10-27 | 2021-12-24
  */
 class CbBtnSizeChanger{
 	
@@ -112,10 +112,10 @@ class CbBtnSizeChanger{
 		// ラジオボタンデータ
 		if(param['radioData'] == null){
 			param['radioData'] = [
-				{'value':'btn-sm', 'wamei':' 極小'},
-				{'value':'btn-sm', 'wamei':' 小　'},
-				{'value':'', 'wamei':' 普通'},
-				{'value':'btn-lg', 'wamei':' 大　'},
+				{'value':'btn-sm', 'wamei':' 極小', 'show_flg':false},
+				{'value':'btn-sm', 'wamei':' 小　', 'show_flg':true},
+				{'value':'', 'wamei':' 普通', 'show_flg':true},
+				{'value':'btn-lg', 'wamei':' 大　', 'show_flg':true},
 				]
 		}
 		
@@ -222,9 +222,10 @@ class CbBtnSizeChanger{
 		
 		var html = ""; // ラジオボタンHTML
 		var radioData = this.param.radioData; // ラジオボタンデータ
-		
+
 		for(var i in radioData){
 			var rEnt = radioData[i];
+			if(rEnt.show_flg == false) continue;
 			
 			var checked_str = '';
 			if(rEnt.value == cnfEnt.size) checked_str = 'checked';
