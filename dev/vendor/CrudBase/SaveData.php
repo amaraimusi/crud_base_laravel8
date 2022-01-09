@@ -2,9 +2,9 @@
 
 /**
  * データ保存クラス
- * @version 2.0.1
+ * @version 2.0.2
  * @author kenji uehara
- * @since 2019-11-6 | 2021-12-9
+ * @since 2019-11-6 | 2022-1-9
  * @license MIT
  *
  */
@@ -55,8 +55,8 @@ class SaveData{
 	public function saveAll($tbl_name, &$data){
 		if(empty($data)) return 1;
 		
-		$sqls = $this->makeInsertSqlDup($tbl_name, $data);
-		
+		$sqls = $this->createInsertAndUpdate2($tbl_name, $data);
+
 		$rData = []; // 処理結果データ
 		
 		$this->begin();
@@ -64,13 +64,13 @@ class SaveData{
 			$err_msg = $this->dao->query($sql);
 			if(!empty($err_msg)) break;
 			
-			$id = $this->getValue('SELECT LAST_INSERT_ID()');
 			
 			$rEnt = [];
 			if($id == 0){
 				$rEnt['id'] = $data[$i]['id'];
 				$rEnt['exe_type'] = 'update';
 			}else{
+			    $id = $this->getValue('SELECT LAST_INSERT_ID()');
 				$rEnt['id'] = $id;
 				$rEnt['exe_type'] = 'insert';
 			}
@@ -294,15 +294,11 @@ class SaveData{
 	 * @return array|string[][]
 	 */
 	public function createInsertAndUpdate($tbl_name, $data, $id_filed='id'){
-		if(empty($data)) return array();
+		if(empty($data)) return [];
 		
-		// 列名群文字列を組み立て
-		$ent0 = current($data);
-		$keys = array_keys($ent0);
-		$clms_str = implode(',', $keys); // 列名群文字列
 		
-		$inserts = array(); // INSERT SQLリスト
-		$updates = array(); // UPDATE SQLリスト
+		$inserts = []; // INSERT SQLリスト
+		$updates = []; // UPDATE SQLリスト
 		foreach($data as &$ent){
 			
 			
@@ -323,6 +319,35 @@ class SaveData{
 			'updates' => $updates,
 		];
 		return $res;
+	}
+	
+	/**
+	 * データからINSERTとUPDATEのSQL文を生成する
+	 * @param string $tbl_name テーブル名
+	 * @param array $data エンティティ配列型のデータ
+	 * @param string $id_filed IDフィールド（主キーフィールド）
+	 * @return array|string[] SQLリスト
+	 */
+	public function createInsertAndUpdate2($tbl_name, $data, $id_filed='id'){
+	    if(empty($data)) return [];
+
+	    $sqls = []; // SQLリスト
+	    foreach($data as &$ent){
+	        
+	        
+	        // IDが空ならINSERT文を組み立て
+	        if(empty($ent[$id_filed])){
+	            $sqls[] = $this->makeInsertSql($tbl_name, $ent); // INSERT文を作成する
+	        }
+	        
+	        // IDが存在すればUPDATE文を組み立て
+	        else{
+	            $sqls[] = $this->makeUpdateSql($tbl_name, $ent); // UPDATE文を作成する
+	        }
+	    }
+	    unset($ent);
+
+	    return $sqls;
 	}
 	
 	
