@@ -108,6 +108,8 @@ $crudBaseAuthorityData = [
 ];
 
 
+require_once 'crud_base_const.php';
+
 /**
  * DB設定
  * @return string[] DB設定情報
