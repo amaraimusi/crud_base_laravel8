@@ -232,6 +232,15 @@ class AppController {
 		return $authority;
 	}
 	
-
+	/**
+	 * トークンを生成する
+	 * @param number $length トークンの桁数
+	 * @return string トークン文字列
+	 */
+	public function makeToken($length = 8)
+	{
+	    return base_convert(mt_rand(pow(36, $length - 1), pow(36, $length) - 1), 10, 36);
+	}
+	
 
 }
