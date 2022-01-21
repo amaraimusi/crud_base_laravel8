@@ -22,8 +22,10 @@ class UserMngController extends AppController
 	 */
 	public function index(){
 
-	    if(\Auth::id() == null ){
-	        return redirect('home');
+	    // すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+	    if(\Auth::id() == null){
+	        $json_str = json_encode(['err_msg'=>'logout']);
+	        return $json_str;
 	    }
 	    
 		$this->init();
@@ -82,8 +84,10 @@ class UserMngController extends AppController
 		
 		$errs = []; // エラーリスト
 		
+		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
 		if(\Auth::id() == null){
-			return 'Error:ログイン認証が必要です。 Login is needed';
+		    $json_str = json_encode(['err_msg'=>'logout']);
+		    return $json_str;
 		}
 		
 		// JSON文字列をパースしてエンティティを取得する
@@ -136,8 +140,10 @@ class UserMngController extends AppController
 
 		$this->init();
 
+		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
 		if(\Auth::id() == null){
-			return 'Error:ログイン認証が必要です。 Login is needed';
+		    $json_str = json_encode(['err_msg'=>'logout']);
+		    return $json_str;
 		}
 		
 		// JSON文字列をパースしてエンティティを取得する
@@ -186,8 +192,10 @@ class UserMngController extends AppController
 		
 		$this->init();
 		
+		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
 		if(\Auth::id() == null){
-			return 'Error:ログイン認証が必要です。 Login is needed';
+		    $json_str = json_encode(['err_msg'=>'logout']);
+		    return $json_str;
 		}
 		
 		$json=$_POST['key1'];
@@ -403,9 +411,11 @@ class UserMngController extends AppController
 	 */
 	public function csv_download(){
 		
-		if(\Auth::id() == null ){
-			return 'Error:ログイン認証が必要です。 Login is needed';
-		}
+	    // すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+	    if(\Auth::id() == null){
+	        $json_str = json_encode(['err_msg'=>'logout']);
+	        return $json_str;
+	    }
 		
 		$this->init();
 		
@@ -500,15 +510,13 @@ class UserMngController extends AppController
 		$crud_base_path = CRUD_BASE_PATH;
 		require_once $crud_base_path . 'BulkReg.php';
 		
-		// 更新ユーザーを取得
-		$update_user = 'none';
-		if(\Auth::id()){// idは未ログインである場合、nullになる。
-			$user_id = \Auth::id(); // ユーザーID（番号）
-			$update_user = \Auth::user()->name; // ユーザー名
-		}else{
-			throw new Exception('Login is needed. ログインが必要です。');
-			die();
+		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+		if(\Auth::id() == null){
+		    $json_str = json_encode(['err_msg'=>'logout']);
+		    return $json_str;
 		}
+		
+		$update_user = \Auth::user()->name; // ユーザー名
 		
 		$json_param=$_POST['key1'];
 		$param = json_decode($json_param,true);//JSON文字を配列に戻す
