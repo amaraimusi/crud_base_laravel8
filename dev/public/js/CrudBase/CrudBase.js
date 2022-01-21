@@ -8,8 +8,8 @@
  * 
  * 
  * @license MIT
- * @since 2016-9-21 | 2021-6-14
- * @version 3.1.8
+ * @since 2016-9-21 | 2022-1-21
+ * @version 3.2.0
  * @histroy
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
  * 2018-10-21 v2.8.0 ボタンサイズ変更機能にボタン表示切替機能を追加
@@ -1030,7 +1030,11 @@ class CrudBase{
 			processData: false,
 			contentType : false,
 		})
-		.done((str_json, type) =>{
+		.done((str_json, status, xhr) =>{
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
 			this._toggleRegBtn('new_inp',1);// 登録ボタンを押せるようにする
 			var ent;
 			try{
@@ -1041,6 +1045,8 @@ class CrudBase{
 				jQuery("#err").html(str_json);
 				return;
 			}
+			
+			if(res.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
 
 			if(ent['err']){
 
@@ -1074,10 +1080,14 @@ class CrudBase{
 			}
 
 		})
-		.fail((jqXHR, statusText, errorThrown) =>{
+		.fail((xhr, status, errorThrown) =>{
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
 			this._toggleRegBtn('new_inp',1);// 登録ボタンを押せるようにする
-			jQuery('#err').html(jqXHR.responseText);//詳細エラーの出力
-			alert(statusText);
+			jQuery('#err').html(xhr.responseText);//詳細エラーの出力
+			alert(status);
 		});
 
 	}
@@ -1156,8 +1166,11 @@ class CrudBase{
 			processData: false,
 			contentType: false,
 
-		}).done((str_json, type) => {
+		}).done((str_json, status, xhr) => {
 
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
 			this._toggleRegBtn('edit',1);// 登録ボタンを押せるようにする
 			
 			var ent = null;
@@ -1169,6 +1182,8 @@ class CrudBase{
 				console.log(str_json);
 				jQuery("#err").html(str_json);
 			}
+			
+			if(res.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
 			
 			// 編集中の行にエンティティを反映する。
 			if(ent){
@@ -1215,10 +1230,14 @@ class CrudBase{
 				this.closeForm('edit');// フォームを閉じる
 			}
 
-		}).fail((jqXHR, statusText, errorThrown) => {
+		}).fail((xhr, status, errorThrown) => {
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
 			this._toggleRegBtn('edit',1);// 登録ボタンを押せるようにする
-			jQuery('#err').html(jqXHR.responseText);//詳細エラーの出力
-			alert(statusText);
+			jQuery('#err').html(xhr.responseText);//詳細エラーの出力
+			alert(status);
 		});
 	}
 
@@ -1597,8 +1616,11 @@ class CrudBase{
 			processData: false,
 			contentType: false,
 
-		}).done((str_json, type) => {
-
+		}).done((str_json, status, xhr) => {
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
 			var ent;
 			try{
 				ent =jQuery.parseJSON(str_json);//パース
@@ -1607,6 +1629,8 @@ class CrudBase{
 				alert('エラー');
 				jQuery("#err").html(str_json);
 			}
+			
+			if(ent.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
 
 			if(!ent){return;}
 
@@ -1630,9 +1654,13 @@ class CrudBase{
 
 			this.closeForm(form_type);// フォームを閉じる
 
-		}).fail((jqXHR, statusText, errorThrown) => {
-			jQuery('#err').html(jqXHR.responseText);//詳細エラーの出力
-			alert(statusText);
+		}).fail((xhr, status, errorThrown) => {
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
+			jQuery('#err').html(xhr.responseText);//詳細エラーの出力
+			alert(status);
 		});
 
 	}

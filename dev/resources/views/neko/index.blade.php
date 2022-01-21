@@ -90,6 +90,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 				
 				<input id="crud_base_json" type="hidden" value='<?php echo $crud_base_json?>' />
 		</div>
+		<div id="app"></div><!-- vue.js -->
 	</form>
 	</div><!-- cb_kj_main -->
 	<div id="cb_func_btns" class="btn-group" >
