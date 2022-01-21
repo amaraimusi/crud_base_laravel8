@@ -20,6 +20,11 @@ class NekoController extends AppController
 	 */
 	public function index(){
 	    
+// 	    // ログアウトになっていたらログイン画面にリダイレクト
+//         if(\Auth::id() == null){
+//             return redirect('login');
+//         }
+    
 		$this->init();
 
  		// CrudBase共通処理（前）
@@ -68,11 +73,11 @@ class NekoController extends AppController
 		
 		$errs = []; // エラーリスト
 		
-		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
-		if(\Auth::id() == null){
-		    $json_str = json_encode(['err_msg'=>'logout']);
-		    return $json_str;
-		}
+// 		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+// 		if(\Auth::id() == null){
+// 		    $json_str = json_encode(['err_msg'=>'logout']);
+// 		    return $json_str;
+// 		}
 		
 		// JSON文字列をパースしてエンティティを取得する
 		$json=$_POST['key1'];
@@ -128,11 +133,11 @@ class NekoController extends AppController
 
 		$this->init();
 
-		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
-		if(\Auth::id() == null){
-		    $json_str = json_encode(['err_msg'=>'logout']);
-		    return $json_str;
-		}
+// 		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+// 		if(\Auth::id() == null){
+// 		    $json_str = json_encode(['err_msg'=>'logout']);
+// 		    return $json_str;
+// 		}
 		
 		// JSON文字列をパースしてエンティティを取得する
 		$json=$_POST['key1'];
@@ -180,11 +185,11 @@ class NekoController extends AppController
 		
 		$this->init();
 		
-		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
-		if(\Auth::id() == null){
-		    $json_str = json_encode(['err_msg'=>'logout']);
-		    return $json_str;
-		}
+// 		// すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
+// 		if(\Auth::id() == null){
+// 		    $json_str = json_encode(['err_msg'=>'logout']);
+// 		    return $json_str;
+// 		}
 		
 		$json=$_POST['key1'];
 		

@@ -23,6 +23,11 @@ class MsgBoardGoodController extends AppController
 	 */
 	public function index(){
 	    
+// 	    // ログアウトになっていたらログイン画面にリダイレクト
+// 	    if(\Auth::id() == null){
+// 	        return redirect('login');
+// 	    }
+	    
 		$this->init();
 
  		// CrudBase共通処理（前）

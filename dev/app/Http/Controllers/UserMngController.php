@@ -22,11 +22,10 @@ class UserMngController extends AppController
 	 */
 	public function index(){
 
-	    // すでにログアウトになったらlogoutであることをフロントエンド側に知らせる。
-	    if(\Auth::id() == null){
-	        $json_str = json_encode(['err_msg'=>'logout']);
-	        return $json_str;
-	    }
+	    // ログアウトになっていたらログイン画面にリダイレクト
+        if(\Auth::id() == null){
+            return redirect('login');
+        }
 	    
 		$this->init();
 
