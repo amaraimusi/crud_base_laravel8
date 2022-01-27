@@ -5,6 +5,13 @@
  * @version 1.0.0
  * @auther amaraimusi
  * @license MIT
+ * @note 
+ * 
+ * 注意：干渉問題あり→ Bootstrap4のcard要素と干渉してしまう。
+ *  - 原因はcardに 「position: relative;」の指定があるため。
+ *  - HTMLソース中に 「position: relative;」を持つ要素があると一緒にモーダル化してしまう。
+ *  - 「position: relative;」を持つ要素を 「style="position: static;"」に書き換えが必要になる。
+ * 
  */
 class ModalCat{
 	
