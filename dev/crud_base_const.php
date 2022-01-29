@@ -1,10 +1,10 @@
 <?php 
 
-global $g_CoralPaintConst;
-$g_CoralPaintConst = [];
+global $g_CommonConst;
+$g_CommonConst = [];
 
 // 料金タイプリスト
-$g_CoralPaintConst['demoList'] = [
+$g_CommonConst['demoList'] = [
     1 => '計算タイプA',
     2 => '計算タイプB',
 ];
