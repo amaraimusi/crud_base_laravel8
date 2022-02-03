@@ -1464,7 +1464,7 @@ class CrudBaseHelper {
 		
 		$v2 = '';
 		if(!empty($v)){
-			$v2 = date('h:i',strtotime($v));
+			$v2 = date('H:i',strtotime($v));
 		}
 		
 		$td = "<td><input type='hidden' name='{$field}' value='{$v}'  /><span class='{$field}' >{$v2}</span></td>\n";
