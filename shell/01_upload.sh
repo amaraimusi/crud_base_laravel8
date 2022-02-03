@@ -10,6 +10,7 @@ rsync -auvz ../dev/routes amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_larav
 rsync -auvz ../dev/vendor/CrudBase amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_laravel8/dev/vendor
 rsync -auvz ../dev/crud_base_config_p.php amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_laravel8/dev/crud_base_config.php
 rsync -auvz ../dev/.env_p amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_laravel8/dev/.env
-
+rsync -auvz ../dev/crud_base_const.php amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_laravel8/dev/
+rsync -auvz ../tool amaraimusi@amaraimusi.sakura.ne.jp:www/crud_base_laravel8/
 echo "------------ Success"
 #cmd /k
