@@ -63,6 +63,10 @@ Route::post('msg_board_good/ajax_pwms', 'App\Http\Controllers\MsgBoardGoodContro
 Route::get('msg_board_good/csv_download', 'App\Http\Controllers\MsgBoardGoodController@csv_download');
 Route::post('msg_board_good/bulk_reg', 'App\Http\Controllers\MsgBoardGoodController@bulk_reg');
 
+// Web API
+Route::get('web_api/cors_test', 'App\Http\Controllers\WebApiController@cors_test');
+
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
