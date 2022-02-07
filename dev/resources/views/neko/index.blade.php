@@ -121,25 +121,25 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	 			$csv_dl_url =  'neko/csv_download';
 	 			$cbh->makeCsvBtns($csv_dl_url);
 			?>
+			
 			<button id="crud_base_bulk_add_btn" type="button" class="btn btn-secondary btn-sm" onclick="crudBase.crudBaseBulkAdd.showForm()" >一括追加</button>
+			
+			<!-- CrudBase設定 -->
+    		<div id="crud_base_config" style="display:inline-block"></div>
+    		
+    		<button id="calendar_view_k_btn" type="button" class="btn btn-secondary btn-sm" onclick="calendarViewKShow()" >カレンダーモード</button>
+    		
+    		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
+    	
+    		<button id="table_transform_tbl_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(0)" style="display:none">一覧の変形・テーブルモード</button>	
+    		<button id="table_transform_div_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(1)" >一覧の変形・スマホモード</button>
 		</div>
 		<div style="display:inline-block;text-align:right;width:24%;">
 			<button type="button" class="btn btn-secondary btn-sm" onclick="jQuery('#detail_div').toggle(300);">閉じる</button>
 		</div>
 	</div><!-- main_tools -->
 	
-	<div id="sub_tools">
-		<!-- CrudBase設定 -->
-		<div id="crud_base_config" style="display:inline-block"></div>
-		
-		<button id="calendar_view_k_btn" type="button" class="btn btn-secondary btn-sm" onclick="calendarViewKShow()" >カレンダーモード</button>
-		
-		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
-	
-		<button id="table_transform_tbl_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(0)" style="display:none">一覧の変形・テーブルモード</button>	
-		<button id="table_transform_div_mode" type="button" class="btn btn-secondary btn-sm" onclick="tableTransform(1)" >一覧の変形・スマホモード</button>
-		
-	</div><!-- sub_tools -->
+
 </div><!-- detail_div -->
 
 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}" >

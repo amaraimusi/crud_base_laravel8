@@ -115,19 +115,18 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	 			$csv_dl_url =  'user_mng/csv_download';
 	 			$cbh->makeCsvBtns($csv_dl_url);
 			?>
+			
+		<!-- CrudBase設定 -->
+		<div id="crud_base_config" style="display:inline-block"></div>
+		
+		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
 	</div>
 		<div style="display:inline-block;text-align:right;width:24%;">
 			<button type="button" class="btn btn-secondary btn-sm" onclick="jQuery('#detail_div').toggle(300);">閉じる</button>
 		</div>
 	</div><!-- main_tools -->
 	
-	<div id="sub_tools">
-		<!-- CrudBase設定 -->
-		<div id="crud_base_config" style="display:inline-block"></div>
 		
-		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
-		
-	</div><!-- sub_tools -->
 </div><!-- detail_div -->
 
 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}" >
@@ -144,7 +143,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <div id="crud_base_auto_save_msg" style="height:20px;" class="text-success"></div>
 
 <?php if(!empty($data)){ ?>
-	<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');">新規追加</span></button>
+	<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');"><span>新規追加</span></button>
 <?php } ?>
 
 
@@ -217,7 +216,7 @@ foreach($data as $i=>&$ent){
 <?php $cbh->divPagenationB(); ?>
 <br>
 	
-<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');">新規追加</span></button>	
+<button type="button" class="btn btn-warning btn-sm" onclick="newInpShow(this, 'add_to_top');"><span>新規追加</span></button>	
 
 <?php $cbh->divPwms(); // 複数有効/削除の区分を表示する ?>
 
