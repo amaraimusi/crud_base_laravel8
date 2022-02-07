@@ -158,6 +158,7 @@ class AppController {
 			$userInfo['update_user'] = $userInfo['username'];
 			$userInfo['email'] = \Auth::user()->email; // メールアドレス
 			$userInfo['role'] = \Auth::user()->role; // メールアドレス
+			$userInfo['nickname'] = \Auth::user()->nickname; // メールアドレス
 		}
 		
 		$userInfo['ip_addr'] = $_SERVER["REMOTE_ADDR"];// IPアドレス
