@@ -114,6 +114,8 @@ class UserMngController extends AppController
 		// CBBXE
 
 		$ent = $this->setCommonToEntity($ent);
+		unset($ent['email_verified_at']); // Laravelが用意しているdatetime系フィールドは空文字にするとエラーになるケースがあるため除去しておく。
+		unset($ent['temp_datetime']);
 		$ent = $this->md->saveEntity($ent, $regParam);
 		
 		// CBBXS-2025
