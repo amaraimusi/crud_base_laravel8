@@ -43,7 +43,6 @@ class JsQrEx{
 		video.setAttribute("autoplay","");
 		video.setAttribute("muted","");
 		video.setAttribute("playsinline","");
-		//video.onloadedmetadata = function(e){video.play();};//■■■□□□■■■□□□
 		this.jq_cvs = jQuery('#' + canvas_xid);
 		let cvs=document.getElementById(canvas_xid);
 		let cvs_ctx=cvs.getContext("2d");
