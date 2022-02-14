@@ -314,6 +314,46 @@ class Neko extends AppModel
 		return $this->cb->saveAll($data);
 	}
 	
+	/**
+	 * エンティティのDB保存
+	 * @param [] $ent エンティティ
+	 * @return [] エンティティ(insertされた場合、新idがセットされている）
+	 */
+	public function saveEntity2($ent){
+	    
+	    $ent = $this->setCommonToEntity($ent);
+	    
+	    $ent = array_intersect_key($ent, array_flip($this->fillable));
+	    
+	    // 患者テーブルへDB更新
+	    if(empty($ent['id'])){
+	        // ▽ idが空であればINSERTをする。
+	        $id = $this->insertGetId($ent); // INSERT
+	        $ent['id'] = $id;
+	    }else{
+	        
+	        // ▽ idが空でなければUPDATEする。
+	        $this->updateOrCreate(['id'=>$ent['id']], $ent); // UPDATE
+	    }
+	    
+	    return $ent;
+	    
+	}
+	
+	
+	/**
+	 * データのDB保存
+	 * @param [] $data データ←エンティティの配列
+	 */
+	public function saveData($data){
+	    $data2 = [];
+	    foreach($data as $ent){
+	        $ent2 = $this->saveEntity($ent);
+	        $data2[] = $ent2;
+	    }
+	    return $data2;
+	}
+	
 	
 	/**
 	 * 複数レコードのINSERT
