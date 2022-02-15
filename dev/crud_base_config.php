@@ -38,13 +38,13 @@ $crud_base_path = dirname(__FILE__) . '/app/CrudBase/';
 define('CRUD_BASE_PATH', $crud_base_path);
 
 //$crud_base_project_path = '/yobidashi/dev/public'; // 例：「/animal/mng」
-$crud_base_project_path = dirname($_SERVER['REQUEST_URI']);
+$crud_base_project_path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
 define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推奨）
 
 $crud_base_url_base = $crud_base_project_path . '/';
 define('CRUD_BASE_URL_BASE', $crud_base_url_base); // 基本URL
 
-$crud_base_storage_url = '/crud_base_laravel8/dev/public/'; // ストレージ基本URL（添付ファイルの置き場所） 例→「/crud_base_laravel8/dev/public/」
+$crud_base_storage_url = $crud_base_project_path; // ストレージ基本URL（添付ファイルの置き場所） 例→「/yobidashi/dev/public/」
 define('CRUD_BASE_STORAGE_URL', $crud_base_storage_url);
 
 $crud_base_js = $crud_base_project_path . "/js/CrudBase/dist/CrudBase.min.js?v=" . CRUD_BASE_VERSION;
