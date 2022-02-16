@@ -64,6 +64,24 @@ class Neko extends AppModel
 		$this->setTableName($this->table); // 親クラスにテーブル名をセット
 	}
 	
+	
+	/**
+	 * SQLを実行してエンティティを取得する
+	 * @param string $sql
+	 * @return [] エンティティ
+	 */
+	public function selectEntity2($sql){
+	    $res = \DB::select($sql);
+	    
+	    $ent = [];
+	    if(!empty($res)){
+	        $ent = current($res);
+	        $ent = (array)$ent;
+	    }
+	    
+	    return $ent;
+	}
+	
 	/**
 	 * 検索条件とページ情報を元にDBからデータを取得する
 	 * @param array $crudBaseData
