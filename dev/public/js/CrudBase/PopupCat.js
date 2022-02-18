@@ -31,7 +31,7 @@ class PopupCat{
 		if(param.direction_type==null) param.direction_type='right_bottom';
 		if(param.z_index==null) param.z_index='2';
 		if(param.fadein_time==null) param.fadein_time=1000;
-		if(param.set_timeout_time==null) param.set_timeout_time=1500;
+		if(param.set_timeout_time==null) param.set_timeout_time=3500;
 		this.popupClickCallback = param.popupClickCallback;
 
 		let css_left = '0px';
@@ -74,14 +74,10 @@ class PopupCat{
 		
 		this.popupElm.click((evt)=>{
 			let elm = $(evt.currentTarget);
-			console.log('閉じられたクリック');//■■■□□□■■■□□□
 			if(this.popupClickCallback){
 				this.popupClickCallback();
 			}
-//			if(this.afterCallback){
-//				this.afterCallback();
-//				this.aflter_cb_flg = true;
-//			} 
+
 			elm.hide();
 		});
 		
