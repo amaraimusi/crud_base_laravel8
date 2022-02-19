@@ -14,7 +14,7 @@ require_once 'PagenationForCake.php';
 class CrudBaseController {
 
 	///バージョン
-	public $version = "3.4.4";
+	public $version = "3.5.0";
 	
 	public $crudBaseData = [];
 
@@ -472,15 +472,48 @@ class CrudBaseController {
 
 	}
 
+	
 	/**
 	 * フィールドデータに関する処理
+	 *
+	 * @param array $def_fieldData コントローラで定義しているフィールドデータ
+	 * @param string $page_code ページコード（モデル名）
+	 * @return array res
+	 * - table_fields 一覧列情報
+	 */
+	private function exe_fieldData($def_fieldData,$page_code){
+	    
+	    //定義フィールドデータをフィールドデータにセットする。
+	    $fieldData=$def_fieldData;
+	    
+	    //defをactiveとして取得。
+	    $active=$fieldData['def'];
+	    
+	    //列並番号でデータを並び替える。データ構造も変換する。
+	    $active = $this->crudBaseModel->sortAndCombine($active);
+	    $fieldData['active']=$active;
+
+	    //フィールドデータから一覧列情報を作成する。
+	    $table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
+	    $res['table_fields']=$table_fields;
+	    $res['fieldData']=$fieldData;
+	    
+	    return $res;
+
+	}
+	
+	/**
+	 * フィールドデータに関する処理■■■□□□■■■□□□【後日、関連メソッドを含めて削除 2022-2】
 	 * 
 	 * @param array $def_fieldData コントローラで定義しているフィールドデータ
 	 * @param string $page_code ページコード（モデル名）
 	 * @return array res 
 	 * - table_fields 一覧列情報
 	 */
-	private function exe_fieldData($def_fieldData,$page_code){
+	private function exe_fieldData_old($def_fieldData,$page_code){
+	    
+	    //フィールドデータから一覧列情報を作成する。
+
 
 		//フィールドデータをセッションに保存する
 		$fd_ses_key=$page_code.'_sorter_fieldData';
@@ -490,6 +523,8 @@ class CrudBaseController {
 
 		//セッションキーに紐づくフィールドデータを取得する
 		$fieldData=$this->strategy->sessionRead($fd_ses_key);
+		
+		//debug($fieldData);//■■■□□□■■■□□□)
 		
 
 		$table_fields=[];//一覧列情報
@@ -1990,7 +2025,7 @@ class CrudBaseController {
 	*  - tbl_name DBテーブル名
 	* @return [] エンティティ(insertされた場合、新idがセットされている）
 	*/
-	public function saveEntity(&$ent, &$regParam){
+	public function saveEntity(&$ent, $regParam = []){
 		
 		$whiteList = $this->crudBaseData['fields'];
 		
