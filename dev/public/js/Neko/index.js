@@ -200,7 +200,12 @@ function _getValidMethods(){
  * @param btnElm ボタン要素
  */
 function newInpShow(btnElm, ni_tr_place){
-	crudBase.newInpShow(btnElm, {'ni_tr_place':ni_tr_place});
+//	crudBase.newInpShow(btnElm, {'form_mode':2,
+//				'callBack':(tr,form,ent)=>{
+//					console.log('コールバック実行テストX');//■■■□□□■■■□□□
+//				}
+//	});
+	crudBase.newInpShow(btnElm, {'ni_tr_place':ni_tr_place});//■■■□□□■■■□□□
 }
 
 /**
@@ -208,8 +213,16 @@ function newInpShow(btnElm, ni_tr_place){
  * @param btnElm ボタン要素
  */
 function editShow(btnElm){
-	var option = {};
-	crudBase.editShow(btnElm,option);
+	
+	crudBase.editShow(btnElm, 
+			{
+				'form_mode':2, // フォームモード 0:ダイアログモード , 1:アコーディオンモード(デフォルト）, 2:一覧非表示＆フォーム表示
+				'callBack':(tr,form,ent)=>{
+					console.log('コールバック実行テスト');//■■■□□□■■■□□□
+				}
+			}
+		);
+		
 }
 
 
@@ -219,7 +232,8 @@ function editShow(btnElm){
  * @param btnElm ボタン要素
  */
 function copyShow(btnElm){
-	crudBase.copyShow(btnElm);
+	//crudBase.copyShow(btnElm);
+	crudBase.copyShow(btnElm, {'form_mode':2});
 }
 
 

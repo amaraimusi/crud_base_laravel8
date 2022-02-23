@@ -313,9 +313,10 @@ class Neko extends AppModel
 	 *  - form_type フォーム種別  new_inp:新規入力 edit:編集 delete:削除
 	 *  - ni_tr_place 新規入力追加場所フラグ 0:末尾(デフォルト） , 1:先頭
 	 *  - tbl_name DBテーブル名
+	 *  - whiteList ホワイトリスト（省略可)
 	 * @return [] エンティティ(insertされた場合、新idがセットされている）
 	 */
-	public function saveEntity(&$ent, &$regParam){
+	public function saveEntity(&$ent, $regParam=[]){
 	    
 		return $this->cb->saveEntity($ent, $regParam);
 

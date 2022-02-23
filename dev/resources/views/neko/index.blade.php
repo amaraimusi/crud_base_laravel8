@@ -45,7 +45,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<div id="ajax_login_with_cake"></div><!-- ログイン or ログアウト 　AjaxLoginWithCake.js　-->
 	<div class="cb_kj_main">
 	<!-- 検索条件入力フォーム -->
-	<form action="" class="form_kjs" id="nekoIndexForm" method="post" accept-charset="utf-8">
+	<div class="form_kjs" id="nekoIndexForm" method="post" accept-charset="utf-8">
 		
 		<?php $cbh->inputKjMain('kj_main','',null,'ネコ名、備考を検索する');?>
 		<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success btn-sm' />
@@ -91,7 +91,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 				<input id="crud_base_json" type="hidden" value='<?php echo $crud_base_json?>' />
 		</div>
 		<div id="app"></div><!-- vue.js -->
-	</form>
+	</div><!-- form_kjs -->
 	</div><!-- cb_kj_main -->
 	<div id="cb_func_btns" class="btn-group" >
 		<button type="button" onclick="jQuery('#detail_div').toggle(300);" class="btn btn-secondary btn-sm">ツール</button>

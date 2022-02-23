@@ -3,8 +3,8 @@ require_once 'HashCustom.php';
 /**
  * CrudBaseのロジッククラス
  * 
- * @version 3.0.1
- * @date 2016-1-21 | 2021-7-27
+ * @version 3.0.2
+ * @date 2016-1-21 | 2022-2-23
  * @history
  * 2020-6-16 CrudBaseからCrudBaseModeに名称変更。CakePHPへの依存をはずす。
  * 2018-10-8 v2.2.0 アップロードファイル関連の大幅修正
@@ -789,7 +789,7 @@ class CrudBaseModel{
 		
 		// 更新ユーザーなど共通フィールドをセットする。
 		$ent = $this->setCommonToEntity($ent);
-		
+		$this->strategy->setWhiteList($whiteList);
 		return $this->strategy->saveEntity($ent, $whiteList);
 
 	}

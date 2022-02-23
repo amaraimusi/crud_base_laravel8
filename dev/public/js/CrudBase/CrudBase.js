@@ -8,8 +8,8 @@
  * 
  * 
  * @license MIT
- * @since 2016-9-21 | 2022-1-21
- * @version 3.2.0
+ * @since 2016-9-21 | 2022-2-21
+ * @version 3.3.0
  * @histroy
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
  * 2018-10-21 v2.8.0 ボタンサイズ変更機能にボタン表示切替機能を追加
@@ -54,6 +54,7 @@ class CrudBase{
 	 *  - その他多数...
 	 */
 	constructor(param){
+
 		// --- 初期化: CrudBaseBaseクラスのメンバを初期化する ----
 		
 		// パラメータに空プロパティがあれば、デフォルト値をセットする
@@ -618,13 +619,22 @@ class CrudBase{
 	/**
 	 * 新規入力フォームを表示
 	 * @param option オプション
-	 * - ni_tr_place 新規行の追加場所 add_to_top:一覧の上に新規行を追加 , add_to_bottom:一覧の下に新規行を追加
-	 * @param callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
+	 *     - form_mode フォームモード 0:ダイアログモード , 1:アコーディオンモード(デフォルト）, 2:一覧非表示＆フォーム表示
+	 *     - ni_tr_place 新規行の追加場所 add_to_top:一覧の上に新規行を追加 , add_to_bottom:一覧の下に新規行を追加
+	 *     - callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
 	 */
-	newInpShow(elm,option,callBack){
+	newInpShow(elm,option){
 		
 		if(option == null) option = {};
 		
+		// フォームモードの取得
+		let form_mode = 0;
+		if(option.form_mode !== undefined){
+			form_mode = option.form_mode;
+		}else if(this.param.form_mode !== undefined){
+			form_mode = this.param.form_mode;
+		}
+
 		// 新規行を上に追加するか、下に追加するかを決定する。
 		if(option['ni_tr_place'] == 'add_to_top'){
 			this.param.ni_tr_place = 1;
@@ -648,12 +658,16 @@ class CrudBase{
 		this._clearValidErr(form);
 
 		// コールバックを実行する
-		if(callBack){
+		if(option.callBack){
 			var c_param ={'form':form};
-			callBack(c_param);
+			option.callBack(c_param);
 		}
 
-		if(this.param.form_mode == 1){
+		if(form_mode == 2){
+			this.tbl.hide();
+			form.show();
+			
+		}else if(form_mode == 1){
 			
 			// フォームのcolspan属性に列数をセットする。
 			form = this._setColspanToForm(form);
@@ -706,56 +720,68 @@ class CrudBase{
 		
 	}
 
-
 	/**
 	 * 編集フォームを表示
-	 * 
+	 * @version 2.0
 	 * @param elm 編集ボタン要素
 	 * @param option オプション（省略可）
-	 * @param callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
+	 *     - form_mode フォームモード 0:ダイアログモード , 1:アコーディオンモード(デフォルト）, 2:一覧非表示＆フォーム表示
+	 *     - callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
 	 */
-	editShow(elm,option,callBack){
+	editShow(elm,option){
 
 		if(option == null) option = {};
+		
+		// フォームモードの取得
+		let form_mode = 0;
+		if(option.form_mode !== undefined){
+			form_mode = option.form_mode;
+		}else if(this.param.form_mode !== undefined){
+			form_mode = this.param.form_mode;
+		}
 
-		var tr = jQuery(elm).parents('tr'); // 先祖をさかのぼりtr要素を取得する
+		let tr = jQuery(elm).parents('tr'); // 先祖をさかのぼりtr要素を取得する
 
 		this.activeTr = tr; // アクティブTR要素にセット
 
-		var info = this.formInfo['edit'];
+		let info = this.formInfo['edit'];
 
 		info.show_flg=1; // 表示制御フラグを表示中にする
 
 		// TR要素からエンティティを取得する
-		var ent = this.getEntityByTr(tr);
+		let ent = this.getEntityByTr(tr);
 
 		// フォームに親要素内の各フィールド値をセットする。
 		this.setFieldsToForm('edit',ent,option);
 		
 		// 編集フォーム要素を取得
-		var form = this.getForm('edit');
+		let form = this.getForm('edit');
 		form.show();
 		
 		// バリデーションエラーメッセージをクリアする
 		this._clearValidErr(form);
 
 		// コールバックを実行する
-		if(callBack){
-			callBack(tr,form,ent);
+		if(option.callBack){
+			option.callBack(tr,form,ent);
 		}
 
 		
-		if(this.param.form_mode == 1){
+		if(form_mode == 2){
 			
+			this.tbl.hide();
+			
+		}else if(form_mode == 1){
 			// フォームのcolspan属性に列数をセットする。
 			form = this._setColspanToForm(form);
 			
 			// TR要素の下に編集フォームを移動する
 			form.insertAfter(tr);
-		}
-		else{
+			
+		}else{
 			// triggerElm要素の下付近に入力フォームを表示する。
-			this._showForm(form,elm,option);			
+			this._showForm(form,elm,option);
+			
 		}
 
 		
@@ -777,12 +803,21 @@ class CrudBase{
 	 * 
 	 * @param elm 複製ボタン要素
 	 * @param option オプション（省略可）
-	 *           -  upload_file_dirアップロードファイルディレクトリ
-	 * @param callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
-	 * 
+	 *    -  upload_file_dirアップロードファイルディレクトリ
+	 *    -  callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
 	 */
-	copyShow(elm,option,callBack){
+	copyShow(elm, option){
 
+		if(option == null) option = {};
+		
+		// フォームモードの取得
+		let form_mode = 0;
+		if(option.form_mode !== undefined){
+			form_mode = option.form_mode;
+		}else if(this.param.form_mode !== undefined){
+			form_mode = this.param.form_mode;
+		}
+		
 		var tr=jQuery(elm).parents('tr'); // 先祖をさかのぼりtr要素を取得する
 		this.activeTr = tr;; // アクティブTR要素にセット
 
@@ -803,18 +838,22 @@ class CrudBase{
 		this.setValueToFrom(form,'row_index',row_index);
 
 		// フォームにエンティティの値をセットする
-		this.setFieldsToForm('new_inp',ent,option);
+		this.setFieldsToForm('new_inp', ent, option);
 
 		// バリデーションエラーメッセージをクリアする
 		this._clearValidErr(form);
 
 		// コールバックを実行する
-		if(callBack){
-			callBack(tr,form,ent);
+		if(option.callBack){
+			option.callBack(tr,form,ent);
 		}
 		
-		if(this.param.form_mode == 1){
+		if(form_mode == 2){
+			this.tbl.hide();
+			form.show();
 			
+		}else if(form_mode == 1){
+		
 			// フォームのcolspan属性に列数をセットする。
 			form = this._setColspanToForm(form);
 			
@@ -1046,7 +1085,7 @@ class CrudBase{
 				return;
 			}
 			
-			if(res.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
+			if(ent.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
 
 			if(ent['err']){
 
@@ -1183,7 +1222,7 @@ class CrudBase{
 				jQuery("#err").html(str_json);
 			}
 			
-			if(res.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
+			if(ent.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
 			
 			// 編集中の行にエンティティを反映する。
 			if(ent){
@@ -1314,11 +1353,10 @@ class CrudBase{
 		
 		jQuery('#crud_base_forms').append(form);
 
-		// フォームを隠す
-		form.hide();
+		form.hide();// フォームを隠す
+		this.tbl.show();
 
 	}
-	
 	
 	/**
 	 * 行入替機能のフォームを表示
@@ -1515,7 +1553,6 @@ class CrudBase{
 	}
 
 
-
 	/**
 	 * 有効登録
 	 * 
@@ -1536,8 +1573,6 @@ class CrudBase{
 
 	}
 	
-	
-	
 
 	/**
 	 * 基本的な削除機能
@@ -1556,6 +1591,8 @@ class CrudBase{
 	 */
 	_deleteRegBase(ent, delete_flg, option){
 
+		if(option==null) option = {};
+		
 		if(!ent['id']) throw new Error('Not id');
 		
 		// 抹消フラグ
@@ -4072,7 +4109,7 @@ class CrudBase{
 		var regBtnMsgs = form.find('.reg_btn_msg');
 		if(active_flg == 0){
 			regBtns.prop('disabled',true);
-			regBtnMsgs.html('　登録中・・・');
+			regBtnMsgs.html(' 登録中・・・');
 			
 		}else{
 			regBtns.prop('disabled',false);
@@ -4617,6 +4654,88 @@ class CrudBase{
 			
 		}
 
+	}
+
+
+	/**
+	 * DB登録 シンプル版
+	 * @note データのDB登録のみ。バリデーションや要素の制御は行わない。ファイルアップロードにも未対応。
+	 * @param ent DB登録するエンティティ
+	 * @param param オプション
+	 * - beforeCallBack function Ajax送信前のコールバック 引数(ent,fd)（送信データを編集できる）
+	 * - afterCallBack function Ajax送信後のコールバック 引数(ent,fd)
+	 * 
+	 */
+	reg(ent, param){
+		if(param==null) param={};
+
+		if(this._empty(ent)) return ent;
+
+		// FDにファイルオブジェクトをセットする。
+		let fd = new FormData();
+
+		// Ajax送信前のコールバックを実行する
+		if(param.beforeCallBack){
+			let bcRes = param.beforeCallBack(ent,fd);
+			if(bcRes['err']){
+				return bcRes['err'];
+			}else if(bcRes['ent']){
+				ent = bcRes['ent'];
+				fd = bcRes['fd'];
+			}else{
+				ent = bcRes;
+			}
+		}
+
+		let regParam = {}; // 登録パラメータ
+		
+		let json = JSON.stringify(ent);//データをJSON文字列にする。
+		fd.append( "key1", json );
+		
+		// トークンの取得(Laravelなど）
+		let token = this.param.csrf_token;
+		fd.append( "_token", token );
+
+		jQuery.ajax({
+			type: "post",
+			url: this.param.edit_reg_url,
+			data: fd,
+			cache: false,
+			dataType: "text",
+			processData: false,
+			contentType: false,
+
+		}).done((str_json, status, xhr) => {
+
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+
+			let res = null;
+			try{
+				res =jQuery.parseJSON(str_json);//パース
+
+			}catch(e){
+				alert('エラー:' + str_json);
+				console.log(str_json);
+				jQuery("#err").html(str_json);
+			}
+			
+			if(res.err_msg == 'logout') location.reload(true); // すでにログアウトになっているならブラウザをリロードする。
+
+			// 登録後にコールバック関数を実行する
+			if(param.afterCallBack){
+				param.afterCallBack(res);
+			}
+				
+
+		}).fail((xhr, status, errorThrown) => {
+			
+			// 419エラーならトークンの期限切れの可能性のためリロードする（トークンの期限は2時間）
+			if(xhr.status == 419)  location.reload(true);
+			
+			jQuery('#err').html(xhr.responseText);//詳細エラーの出力
+			alert(status);
+		});
 	}
 	
 }

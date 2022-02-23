@@ -62,6 +62,7 @@ class CrudBaseController {
 	private $m_edit_defs;//編集エンティティのデフォルト値
 	private $main_model_name=null;//対応付けるモデルの名称。（例→AnimalX)
 	private $main_model_name_s=null;//モデル名のスネーク記法番(例→animal_x)
+	private $whiteList=[]; // ホワイトリスト（save用）
 	
 	
 	private $param; // CrudBaseパラメータ
@@ -71,13 +72,14 @@ class CrudBaseController {
 	public $crudBaseModel; // CrudBaseModelクラス
 	private $MainModel; // クライアントモデル
 	
+	
 	/**
 	 * 初期化
 	 * 
 	 * @param object $clientCtrl クライアントコントローラ
 	 * @param object $clientModel クライアントモデル
 	 * @param array $crudBaseData
-	 *  - fw_type フレームワークタイプ    plain:プレーン(デフォルト), cake:cakephp2.x, wp:wordpress, laravel7:Laravel7
+	 *  - fw_type フレームワークタイプ	plain:プレーン(デフォルト), cake:cakephp2.x, wp:wordpress, laravel7:Laravel7
 	 *  - model_name_c クライアントモデル名（キャメル記法）
 	 *  - crud_base_path CrudBaseライブラリへのパス
 	 *  - kensakuJoken array 検索条件情報
@@ -146,6 +148,11 @@ class CrudBaseController {
 		$this->crudBaseData['csrf_token'] = $this->strategy->getCsrfToken(); // CSRFトークン ※Ajaxのセキュリティ 
 		
 		$this->this_page_version = $clientCtrl->this_page_version;
+		
+		// ホワイトリストを取得(fillableはLaravel標準のホワイトリスト）
+		if(property_exists($this->MainModel, 'fillable')){
+		    $this->whiteList = $this->MainModel->fillable;
+		}
 	}
 	
 	
@@ -192,8 +199,8 @@ class CrudBaseController {
 	public function factoryStrategy($fw_type, &$clientCtrl, &$clientModel, &$whiteList, &$crudBaseData){
 		$strategy = null;
 		if($fw_type == 'laravel8'){
-		    require_once 'laravel8/CrudBaseStrategyForLaravel8.php';
-		    $strategy= new CrudBaseStrategyForLaravel8();
+			require_once 'laravel8/CrudBaseStrategyForLaravel8.php';
+			$strategy= new CrudBaseStrategyForLaravel8();
 		}else if($fw_type == 'cake' || $fw_type == 'cake_php'){
 			require_once 'cakephp/CrudBaseStrategyForCake.php';
 			$strategy = new CrudBaseStrategyForCake();
@@ -205,9 +212,9 @@ class CrudBaseController {
 			$strategy= new CrudBaseStrategyForLaravel7();
 			
 		}else if($fw_type == 'plain' ){
-		    require_once 'plain/CrudBaseStrategyForPlain.php';
-		    $strategy= new CrudBaseStrategyForPlain();
-		    
+			require_once 'plain/CrudBaseStrategyForPlain.php';
+			$strategy= new CrudBaseStrategyForPlain();
+			
 		}else{
 			throw new Exception('$fw_type is empty! 210614A');
 		}
@@ -482,88 +489,85 @@ class CrudBaseController {
 	 * - table_fields 一覧列情報
 	 */
 	private function exe_fieldData($def_fieldData,$page_code){
-	    
-	    //定義フィールドデータをフィールドデータにセットする。
-	    $fieldData=$def_fieldData;
-	    
-	    //defをactiveとして取得。
-	    $active=$fieldData['def'];
-	    
-	    //列並番号でデータを並び替える。データ構造も変換する。
-	    $active = $this->crudBaseModel->sortAndCombine($active);
-	    $fieldData['active']=$active;
-
-	    //フィールドデータから一覧列情報を作成する。
-	    $table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
-	    $res['table_fields']=$table_fields;
-	    $res['fieldData']=$fieldData;
-	    
-	    return $res;
-
-	}
-	
-	/**
-	 * フィールドデータに関する処理■■■□□□■■■□□□【後日、関連メソッドを含めて削除 2022-2】
-	 * 
-	 * @param array $def_fieldData コントローラで定義しているフィールドデータ
-	 * @param string $page_code ページコード（モデル名）
-	 * @return array res 
-	 * - table_fields 一覧列情報
-	 */
-	private function exe_fieldData_old($def_fieldData,$page_code){
-	    
-	    //フィールドデータから一覧列情報を作成する。
-
-
-		//フィールドデータをセッションに保存する
-		$fd_ses_key=$page_code.'_sorter_fieldData';
-
-		//一覧列情報のセッションキー
-		$tf_ses_key = $page_code.'_table_fields';
-
-		//セッションキーに紐づくフィールドデータを取得する
-		$fieldData=$this->strategy->sessionRead($fd_ses_key);
 		
-		//debug($fieldData);//■■■□□□■■■□□□)
+		//定義フィールドデータをフィールドデータにセットする。
+		$fieldData=$def_fieldData;
 		
+		//defをactiveとして取得。
+		$active=$fieldData['def'];
+		
+		//列並番号でデータを並び替える。データ構造も変換する。
+		$active = $this->crudBaseModel->sortAndCombine($active);
+		$fieldData['active']=$active;
 
-		$table_fields=[];//一覧列情報
-
-		//フィールドデータが空である場合
-		if(empty($fieldData)){
-
-			//定義フィールドデータをフィールドデータにセットする。
-			$fieldData=$def_fieldData;
-
-			//defをactiveとして取得。
-			$active=$fieldData['def'];
-
-			//列並番号でデータを並び替える。データ構造も変換する。
-			$active = $this->crudBaseModel->sortAndCombine($active);
-			$fieldData['active']=$active;
-
-			//セッションにフィールドデータを書き込む
-			$this->strategy->sessionWrite($fd_ses_key,$fieldData);
-
-			//フィールドデータから一覧列情報を作成する。
-			$table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
-
-			//セッションに一覧列情報をセットする。
-			$this->strategy->sessionWrite($tf_ses_key,$table_fields);
-
-		}
-
-		//セッションから一覧列情報を取得する。
-		if(empty($table_fields)){
-			$table_fields = $this->strategy->sessionRead($tf_ses_key);
-		}
-
+		//フィールドデータから一覧列情報を作成する。
+		$table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
 		$res['table_fields']=$table_fields;
 		$res['fieldData']=$fieldData;
-
+		
 		return $res;
 
 	}
+	
+// 	/**
+// 	 * フィールドデータに関する処理■■■□□□■■■□□□【後日、関連メソッドを含めて削除 2022-2】
+// 	 * 
+// 	 * @param array $def_fieldData コントローラで定義しているフィールドデータ
+// 	 * @param string $page_code ページコード（モデル名）
+// 	 * @return array res 
+// 	 * - table_fields 一覧列情報
+// 	 */
+// 	private function exe_fieldData_old($def_fieldData,$page_code){
+		
+// 		//フィールドデータから一覧列情報を作成する。
+
+
+// 		//フィールドデータをセッションに保存する
+// 		$fd_ses_key=$page_code.'_sorter_fieldData';
+
+// 		//一覧列情報のセッションキー
+// 		$tf_ses_key = $page_code.'_table_fields';
+
+// 		//セッションキーに紐づくフィールドデータを取得する
+// 		$fieldData=$this->strategy->sessionRead($fd_ses_key);
+
+// 		$table_fields=[];//一覧列情報
+
+// 		//フィールドデータが空である場合
+// 		if(empty($fieldData)){
+
+// 			//定義フィールドデータをフィールドデータにセットする。
+// 			$fieldData=$def_fieldData;
+
+// 			//defをactiveとして取得。
+// 			$active=$fieldData['def'];
+
+// 			//列並番号でデータを並び替える。データ構造も変換する。
+// 			$active = $this->crudBaseModel->sortAndCombine($active);
+// 			$fieldData['active']=$active;
+
+// 			//セッションにフィールドデータを書き込む
+// 			$this->strategy->sessionWrite($fd_ses_key,$fieldData);
+
+// 			//フィールドデータから一覧列情報を作成する。
+// 			$table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
+
+// 			//セッションに一覧列情報をセットする。
+// 			$this->strategy->sessionWrite($tf_ses_key,$table_fields);
+
+// 		}
+
+// 		//セッションから一覧列情報を取得する。
+// 		if(empty($table_fields)){
+// 			$table_fields = $this->strategy->sessionRead($tf_ses_key);
+// 		}
+
+// 		$res['table_fields']=$table_fields;
+// 		$res['fieldData']=$fieldData;
+
+// 		return $res;
+
+// 	}
 
 	/**
 	 * フィールドデータから列表示配列を取得
@@ -2023,12 +2027,23 @@ class CrudBaseController {
 	*  - form_type フォーム種別  new_inp:新規入力 edit:編集 delete:削除
 	*  - ni_tr_place 新規入力追加場所フラグ 0:末尾(デフォルト） , 1:先頭
 	*  - tbl_name DBテーブル名
+	*  - whiteList ホワイトリスト（省略可）
 	* @return [] エンティティ(insertされた場合、新idがセットされている）
 	*/
 	public function saveEntity(&$ent, $regParam = []){
 		
-		$whiteList = $this->crudBaseData['fields'];
-		
+	    // ホワイトリストを取得する
+	    $whiteList = [];
+	    if(!empty($regParam['whiteList'])){
+	        $whiteList = $regParam['whiteList'];
+	    }else if(!empty($this->whiteList)){
+	        $whiteList = $this->whiteList;
+	    }else if(!empty($this->crudBaseData['fields'])){
+	        $whiteList = $this->crudBaseData['fields'];
+	    }else{
+	        throw new Exception('ERR whitList i s empty!');
+	    }
+
 		$tbl_name = $this->crudBaseData['tbl_name'];
 
 		$form_type = $regParam['form_type'] ?? '';
@@ -2039,6 +2054,16 @@ class CrudBaseController {
 		}
 
 		return $this->crudBaseModel->saveEntity($ent, $whiteList); // エンティティをDB保存
+	}
+	
+	
+	/**
+    * 順番を取得する
+	 * @param int $ni_tr_place 新規入力追加場所フラグ 0:末尾(デフォルト） , 1:先頭
+	 * @return int 順番
+	 */
+	public function getSortNo($tbl_name, $ni_tr_place){
+		return $this->crudBaseModel->getSortNo($tbl_name, $ni_tr_place); // 順番を取得する
 	}
 	
 	
@@ -2162,7 +2187,7 @@ class CrudBaseController {
 	 * @return mixed
 	 */
 	public function query($sql){
-	    return $this->strategy->query($sql);
+		return $this->strategy->query($sql);
 	}
 
 }
