@@ -79,6 +79,7 @@
 	</div><!--  row -->
 
 	<div class="row" style="margin-top:20px;">
+	
 	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
 		<div class="col-sm-3">
 			<div class="card border-primary ">
@@ -88,6 +89,20 @@
 						<p class="card-text" style="height:80px">データベースのテーブル情報を表示/マスタ権限用</p>
 					</div>
 					<a href="/crud_base_laravel8/tool/data_info_tool.php" class="btn btn-primary">ページへ移動</a>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+	
+	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
+		<div class="col-sm-3">
+			<div class="card border-primary ">
+				<div class="card-body" >
+					<h5 class="card-title text-primary" style="font-weight:bold">パスワード変更画面</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">Eメールを介さないシンプルなパスワード変更画面。</p>
+					</div>
+					<a href="{{url('change_pw')}}" class="btn btn-primary">ページへ移動</a>
 				</div>
 			</div>
 		</div>
