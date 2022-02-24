@@ -10,7 +10,7 @@ class UserMngController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.0.0';
+	public $this_page_version = '1.1.0';
 	
 	private $review_mode = false; // レビューモード（見本モード）
 	
@@ -110,7 +110,12 @@ class UserMngController extends AppController
 		        return $json_str;
 		    }
 		}
-		$ent['password'] = \Hash::make($ent['password']); // パスワードをハッシュ化する。
+		
+		if(empty($ent['password'])){
+		    unset($ent['password']);
+		}else{
+		    $ent['password'] = \Hash::make($ent['password']); // パスワードをハッシュ化する。
+		}
 		// CBBXE
 
 		$ent = $this->setCommonToEntity($ent);

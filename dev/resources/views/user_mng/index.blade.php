@@ -8,6 +8,7 @@ require_once $crud_base_path . 'CrudBaseHelper.php';
 $cbh = new CrudBaseHelper($crudBaseData);
 $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン文字列
 
+$role = $userInfo['role']; // 権限
 
 ?>
 <!doctype html>
@@ -15,6 +16,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
 	<title>ユーザー管理管理画面</title>
 	
 	<script src="{{ asset('/js/app.js') }}" defer></script>
@@ -28,6 +30,8 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 <body>
 
 @include('layouts.common_header')
+
+<div id="app"></div><!-- vue.js -->
 
 <div class="container-fluid">
 
@@ -44,7 +48,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<div id="ajax_login_with_cake"></div><!-- ログイン or ログアウト 　AjaxLoginWithCake.js　-->
 	<div class="cb_kj_main">
 	<!-- 検索条件入力フォーム -->
-	<form action="" class="form_kjs" id="user_mngIndexForm" method="post" accept-charset="utf-8">
+	<div action="" class="form_kjs" id="user_mngIndexForm" method="post" accept-charset="utf-8">
 		
 		<?php $cbh->inputKjMain('kj_main','',null,'ID, ユーザー名, ニックネームで検索する');?>
 		<input type='button' value='検索' onclick='searchKjs()' class='search_kjs_btn btn btn-success btn-sm' />
@@ -85,7 +89,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 				
 				<input id="crud_base_json" type="hidden" value='<?php echo $crud_base_json?>' />
 		</div>
-	</form>
+	</div>
 	</div><!-- cb_kj_main -->
 	<div id="cb_func_btns" class="btn-group" >
 		<button type="button" onclick="jQuery('#detail_div').toggle(300);" class="btn btn-secondary btn-sm">ツール</button>
@@ -119,7 +123,6 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 		<!-- CrudBase設定 -->
 		<div id="crud_base_config" style="display:inline-block"></div>
 		
-		<button type="button" class="btn btn-secondary btn-sm" onclick="sessionClear()" >セッションクリア</button>
 	</div>
 		<div style="display:inline-block;text-align:right;width:24%;">
 			<button type="button" class="btn btn-secondary btn-sm" onclick="jQuery('#detail_div').toggle(300);">閉じる</button>
@@ -250,14 +253,6 @@ foreach($data as $i=>&$ent){
 		<!-- CBBXS-1006 -->
 		
 		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >メールアドレス: </div>
-			<div class='cbf_input'>
-				<input type="email" name="email" class="valid " value="" required maxlength="256" title="メールアドレスの形式で入力してください（例：yamada_taro@example.com)" style="width:400px" />
-				<label class="text-danger" for="email"></label>
-			</div>
-		</div>
-		
-		<div class="cbf_inp_wrap">
 			<div class='cbf_inp' >ユーザー名: </div>
 			<div class='cbf_input'>
 				<input type="text" name="name" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
@@ -269,7 +264,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp' >ニックネーム: </div>
 			<div class='cbf_input'>
-				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
+				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" placeholder="※省略可" />
 				<label class="text-danger" for="nickname"></label>
 				<aside>※省略時にはユーザー名がニックネームになります。</aside>
 			</div>
@@ -278,7 +273,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp' >パスワード: </div>
 			<div class='cbf_input'>
-				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
+				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,24}$" title="パスワードは8～24文字の半角英数字で入力してください。" />
 				<label class="text-danger" for="password"></label>
 			</div>
 		</div>
@@ -288,6 +283,14 @@ foreach($data as $i=>&$ent){
 			<div class='cbf_input'>
 				<?php $cbh->selectX('role',null,$roleList,null);?>
 				<label class="text-danger" for="role"></label>
+			</div>
+		</div>
+
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp' >メールアドレス: </div>
+			<div class='cbf_input'>
+				<input type="email" name="email"  value="" maxlength="256" title="メールアドレス（例：yamada_taro@example.com)" placeholder="※省略可" style="width:400px" />
+				<label class="text-danger" for="email"></label>
 			</div>
 		</div>
 
@@ -332,17 +335,16 @@ foreach($data as $i=>&$ent){
     		<div class="cbf_inp_wrap">
     			<div class='cbf_inp' >ユーザー名: </div>
     			<div class='cbf_input'>
-    				<input type="text" name="name" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
+				<input type="text" name="name" class="valid " value="" required pattern="^[0-9A-Za-z!-_@]{1,50}$" maxlength="50" title="50文字以内の半角英数字入力してください" />
     				<label class="text-danger" for="name"></label>
     			</div>
-    			<aside>※省略時にはEメールがユーザー名になります。</aside>
     		</div>
 
 		
     		<div class="cbf_inp_wrap">
     			<div class='cbf_inp' >ニックネーム: </div>
     			<div class='cbf_input'>
-    				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" />
+    				<input type="text" name="nickname" class="valid " value="" maxlength="50" title="50文字以内で入力してください" placeholder="※省略可" />
     				<label class="text-danger" for="nickname"></label>
     				<aside>※省略時にはユーザー名がニックネームになります。</aside>
     			</div>
@@ -352,7 +354,7 @@ foreach($data as $i=>&$ent){
     		<div class="cbf_inp_wrap">
     			<div class='cbf_inp' >パスワード: </div>
     			<div class='cbf_input'>
-    				<input type="text" name="password" class="valid " value="" required maxlength="50" pattern="^[0-9A-Za-z]{8,50}$" title="8文字以上の半角英数字で入力してください。" />
+    				<input type="text" name="password" class="valid " value="" maxlength="24" pattern="^[0-9A-Za-z]{8,24}" title="パスワードは8～24文字の半角英数字で入力してください。" />
     				<label class="text-danger" for="password"></label>
     			</div>
     		</div>
@@ -363,6 +365,14 @@ foreach($data as $i=>&$ent){
     			<div class='cbf_input'>
     				<?php $cbh->selectX('role',null,$roleList,null);?>
     				<label class="text-danger" for="role"></label>
+    			</div>
+    		</div>
+		
+    		<div class="cbf_inp_wrap">
+    			<div class='cbf_inp' >メールアドレス: </div>
+    			<div class='cbf_input'>
+    				<input type="email" name="email"  value="" maxlength="256" title="メールアドレス（例：yamada_taro@example.com)" placeholder="※省略可" style="width:400px" />
+    				<label class="text-danger" for="email"></label>
     			</div>
     		</div>
 
