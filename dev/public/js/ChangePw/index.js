@@ -14,7 +14,6 @@ var crudBase;//AjaxによるCRUD
  * 
  * @version 1.0.0
  * @since 2022-1-25
- * @author amaraimusi
  */
 function init(){
 	let csrf_token = jQuery('#csrf_token').val(); // CSRFトークンを取得（Ajaxで必要）
