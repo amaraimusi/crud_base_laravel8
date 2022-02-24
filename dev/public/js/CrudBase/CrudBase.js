@@ -727,6 +727,7 @@ class CrudBase{
 	 * @param option オプション（省略可）
 	 *     - form_mode フォームモード 0:ダイアログモード , 1:アコーディオンモード(デフォルト）, 2:一覧非表示＆フォーム表示
 	 *     - callBack フォームに一覧の行データを自動セットしたあとに呼び出されるコールバック関数(省略可）
+	 *     - callbackAfterGetEnt TR要素からエンティティを取得した直後に呼び出されるコールバック
 	 */
 	editShow(elm,option){
 
@@ -750,6 +751,10 @@ class CrudBase{
 
 		// TR要素からエンティティを取得する
 		let ent = this.getEntityByTr(tr);
+		
+		if(option.callbackAfterGetEnt){
+			ent = option.callbackAfterGetEnt(ent);
+		}
 
 		// フォームに親要素内の各フィールド値をセットする。
 		this.setFieldsToForm('edit',ent,option);
