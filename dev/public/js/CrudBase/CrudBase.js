@@ -8,8 +8,8 @@
  * 
  * 
  * @license MIT
- * @since 2016-9-21 | 2022-2-21
- * @version 3.3.0
+ * @since 2016-9-21 | 2022-2-25
+ * @version 3.3.1
  * @histroy
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
  * 2018-10-21 v2.8.0 ボタンサイズ変更機能にボタン表示切替機能を追加
@@ -187,10 +187,15 @@ class CrudBase{
 				csrf_token:this.param.csrf_token,
 		});
 		
+
+	}
 	
-		
-
-
+	/**
+	* crudBaseDataのGetter
+	* @return {} CrudBaseData
+	*/
+	getCrudBaseData(){
+		return this.param;
 	}
 	
 	/**
