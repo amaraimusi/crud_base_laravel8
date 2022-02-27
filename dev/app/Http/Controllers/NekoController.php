@@ -175,7 +175,7 @@ class NekoController extends AppController
 	
 	
 	/**
-	 * Ajax | 自動保存
+	 * Ajax | ソート後の自動保存
 	 *
 	 * @note
 	 * バリデーション機能は備えていない
@@ -195,9 +195,17 @@ class NekoController extends AppController
 		
 		$data = json_decode($json,true);//JSON文字を配列に戻す
 		
+		$data2 = [];
+		foreach($data as $ent){
+		    $data2[] = [
+		        'id' => $ent['id'],
+		        'sort_no' => $ent['sort_no'],
+		    ];
+		}
+		
 		// データ保存
 		$this->cb->begin();
-		$this->cb->saveAll($data); // まとめて保存。内部でSQLサニタイズされる。
+		$this->cb->saveAll($data2); // まとめて保存。内部でSQLサニタイズされる。
 		$this->cb->commit();
 		
 		$res = ['success'];
