@@ -6,7 +6,7 @@ extract($masters, EXTR_REFS);
 
 require_once $crud_base_path . 'CrudBaseHelper.php';
 $cbh = new CrudBaseHelper($crudBaseData);
-$ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン文字列
+$ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバージョン文字列
 
 
 ?>
