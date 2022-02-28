@@ -1,4 +1,13 @@
+<?php 
+extract($crudBaseData, EXTR_REFS);
 
+require_once $crud_base_path . 'CrudBaseHelper.php';
+$cbh = new CrudBaseHelper($crudBaseData);
+$ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバージョン文字列
+$role = $userInfo['role'];
+
+
+?>
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -8,11 +17,13 @@
 	
 	
 	<script src="{{ asset('/js/app.js') }}" defer></script>
-	<script src="{{ CRUD_BASE_JS }}" defer></script>
+	<script src="{{ $crud_base_js . $ver_str }}" defer></script>
 	<script src="{{ asset('/js/Dashboard/index.js')  . '?v=1.0.0' }}" defer></script>
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/js/font/css/open-iconic.min.css') }}" rel="stylesheet">
-	<link href="{{ CRUD_BASE_CSS }}" rel="stylesheet">
+	<link href="{{ $crud_base_css . $ver_str }}" rel="stylesheet">
+	<link href="{{ asset('/css/common.css')  . $ver_str}}" rel="stylesheet">
+	<link href="{{ asset('/css/common.css')  . $ver_str}}" rel="stylesheet">
 
 	
 </head>

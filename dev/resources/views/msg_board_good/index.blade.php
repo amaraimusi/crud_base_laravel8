@@ -23,6 +23,7 @@ $ver_str = '?v=' . $version; // キャッシュ回避のためのバージョン
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/js/font/css/open-iconic.min.css') }}" rel="stylesheet">
 	<link href="{{ $crud_base_css . $ver_str }}" rel="stylesheet">
+	<link href="{{ asset('/css/common.css')  . $ver_str}}" rel="stylesheet">
 	
 </head>
 <body>
