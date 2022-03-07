@@ -1,8 +1,8 @@
 
 /**
  * 静的テーブルをページネーション化する。ページネーションはBootstrap4に対応
- * @since 2022-1-20 | 2022-2-9
- * @version 1.0.0
+ * @since 2022-1-20 | 2022-3-3
+ * @version 1.0.2
  * @license MIT
  * @auther amaraimusi
  */
@@ -16,6 +16,8 @@ class PaginationRain{
 	 * - pn_position ページネーションの位置 top:テーブルの上, bottom:テーブルの下(デフォルト)
 	 * - search_cols_str 検索対象列番リスト文字列　’0,3,5’と入力するとテーブルの1列目、4列名、6列目が検索対象になる。
 	 * - last_page_flg 最後ページフラグ  1をセットすると初期表示または検索直後のページが末尾ページになる。
+	 * - search_box_flg 検索ボックス表示フラグ 0:非表示, 1:表示(デフォルト)
+	 * - search_box_w_xid 検索ボックスラッパーのxid
 	 */
 	constructor(xid, param){
 		
@@ -26,6 +28,8 @@ class PaginationRain{
 		if(param.pn_position == null ) param.pn_position = 'bottom'; // ページネーションの位置 top:テーブルの上、bottomテーブルの下
 		if(param.search_cols_str == null ) param.search_cols_str = '1,2'; // 検索対象列番リスト文字列
 		if(param.last_page_flg == null ) param.last_page_flg = 0; // 最後ページフラグ  0:先頭ページ, 1:末尾ページ
+		if(param.search_box_flg == null ) param.search_box_flg = 1; 
+		if(param.search_box_w_xid == null ) param.search_box_w_xid = null; // 検索ボックスラッパーのxid
 		
 		
 		param['xid'] = xid;
@@ -37,15 +41,37 @@ class PaginationRain{
 			param.search_placeholder = this._getSearchPlaceholder(this.tbl, param.searchCols); // 検索テキストボックスのplaceholderを作成
 		}
 		
+		
+		
+		this._initSearchBox(param); // 検索ボックスの初期化
 		// 検索ボックスのラッパー要素を作成
-		this.tbl.before(`<div id="${param.xid}_search_box_w"></div>`);
-		this.jq_search_box_w = jQuery(`#${param.xid}_search_box_w`);
 
 		this.param = param;
 		
 		this.refresh();
 		
 
+	}
+	
+	// 検索ボックスの初期化
+	_initSearchBox(param){
+
+		if(param.search_box_w_xid){
+			this.jq_search_box_w = jQuery('#' + param.search_box_w_xid);
+			if(this.jq_search_box_w[0] == null) throw new Error('search_box_w_xid is empty!');
+		}else{
+			this.tbl.before(`<div id="${param.xid}_search_box_w"></div>`);
+			this.jq_search_box_w = jQuery(`#${param.xid}_search_box_w`);
+		}
+		
+		
+		// 検索ボックスの表示/非表示
+		if(param.search_box_flg == 1){
+			this.jq_search_box_w.show();
+		}else{
+			this.jq_search_box_w.hide();
+		}
+		
 	}
 	
 	

@@ -2,7 +2,7 @@
 require_once 'ICrudBaseStrategy.php';
 require_once 'CrudBaseModel.php';
 require_once 'HashCustom.php';
-require_once 'PagenationForCake.php';
+require_once 'PagenationEx.php';
 /**
  * CRUD系画面用の基本クラス
  * 
@@ -620,8 +620,8 @@ class CrudBaseController {
 
 		$pagenation_param = null;
 		if(isset($option['pagenation_param'])) $pagenation_param = $option['pagenation_param'];
-		$this->PagenationForCake = new PagenationForCake();
-		$pages = $this->PagenationForCake->createPagenationData($pages,$data_count,$base_url , $pagenation_param,$this->table_fields,$kjs);
+		$this->PagenationEx = new PagenationEx();
+		$pages = $this->PagenationEx->createPagenationData($pages,$data_count,$base_url , $pagenation_param,$this->table_fields,$kjs);
 		$kjs_json = json_encode($kjs,JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
 
 		// 行入替機能フラグを取得する
