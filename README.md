@@ -8,7 +8,11 @@ CrudBase Laravel8版
 
 [開発環境構築手順](README_Environment2.md "開発環境構築手順")
 
+## ER図
+
+![ER図](http://localhost/note_prg/mgt/img/sys_design_note2/crud_base_laravel8.drawio.svg "ER図")
 
 ## 設計
 
 [システム改修案件を設計 | 既存のメッセージボードにGoodボタン（評価機能）を組み込む](https://amaraimusi.sakura.ne.jp/note_prg/mgt/sys_design_note2.html "システム改修案件を設計 | 既存のメッセージボードにGoodボタン（評価機能）を組み込む")
+
