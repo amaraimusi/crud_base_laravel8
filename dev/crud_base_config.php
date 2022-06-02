@@ -37,8 +37,6 @@ define('CRUD_BASE_APP_PATH', $crud_base_app_path);
 $crud_base_path = dirname(__FILE__) . '/app/CrudBase/';
 define('CRUD_BASE_PATH', $crud_base_path);
 
-//$crud_base_project_path = '/yobidashi/dev/public'; // 例：「/animal/mng」
-//$crud_base_project_path = rtrim(dirname($_SERVER['REQUEST_URI']), '/');
 $crud_base_project_path = rtrim(dirname($_SERVER["SCRIPT_NAME"]), '/'); 
 
 define('CRUD_BASE_PROJECT_PATH', $crud_base_project_path); // 基本URL(非推奨）

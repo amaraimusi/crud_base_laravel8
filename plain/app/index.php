@@ -45,7 +45,7 @@ function crudBaseJs($code){
     
     switch ($code) {
         case 'MsgBoard': // メッセージボード
-            $script_js .= "<script src='{$crud_base_url_base}js/MsgBoard/MsgBoard.js?v=1.0.0'></script>";
+            $script_js .= "<script src='{$crud_base_url_base}js/MsgBoard/MsgBoard.js?v=1.0.1'></script>";
             $script_js .= "<script src='{$crud_base_url_base}js/MsgBoard/index.js?v=1.0.0'></script>";
             break;
             

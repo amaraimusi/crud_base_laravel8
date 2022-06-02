@@ -235,13 +235,14 @@ class MsgBoard{
 		if(fp == '') file_type = 'empty';
 		
 		let fp2 = fp.replace('/orig/','/mid/');
-		
-		// パスを取得
-		if(fp != ''){
-			let dp = this.crudBaseData.crud_base_project_path;
-			fp = dp + '/' + fp;
-			fp2 = dp + '/' + fp2;
-		}
+
+//		// パスを取得
+//		if(fp != ''){
+//			//let dp = this.crudBaseData.crud_base_project_path;
+//			let dp = this.crudBaseData.crud_base_storage_url;
+//			fp = dp + '/' + fp;
+//			fp2 = dp + '/' + fp2;
+//		}
 
 		let filePreviewA = newEntDiv.find('.' + seg);
 		
