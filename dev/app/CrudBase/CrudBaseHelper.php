@@ -8,8 +8,8 @@
  * 検索条件入力フォームや、一覧テーブルのプロパティのラッパーを提供する
  * 2.0.0よりCakeからの依存から離脱
  * 
- * @version 2.2.3
- * @since 2016-7-27 | 2021-12-9
+ * @version 2.2.4
+ * @since 2016-7-27 | 2022-6-8
  * @author k-uehara
  * @license MIT
  */
@@ -1382,11 +1382,15 @@ class CrudBaseHelper {
 			$ext = mb_strtolower($pi['extension']);
 			
 			// 画像系ファイルであるか判定する。
-			$exts = ['jpg', 'jpeg', 'png', 'gif'];
+			$exts = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 			if(in_array($ext, $exts)){
-				$img_href = $orig_fp;
-				$thum_src = str_replace($orig_dir, $thum_dir, $orig_fp);
-				$display_img_a = '';
+			    $img_href = $orig_fp;
+			    $display_img_a = '';
+			    
+			    $thum_src = str_replace($orig_dir, $thum_dir, $orig_fp);
+			    if($ext == 'svg'){
+			        $thum_src = $orig_fp;
+			    }
 			}else{
 				$dl_href = $orig_fp;
 				$display_dl = '';
