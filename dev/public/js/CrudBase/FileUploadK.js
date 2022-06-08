@@ -12,8 +12,8 @@
  * ファイルの初期表示
  * 
  * @license MIT
- * @version 1.3.7
- * @date 2018-7-6 | 2021-6-11
+ * @version 1.3.8
+ * @date 2018-7-6 | 2022-6-8
  * @history 
  *  - 2021-04-29 var 1.3.0 大幅なバージョンアップ
  *  - 2018-10-2 var 1.2.6 「Now Loading...」メッセージを表示する
@@ -1273,7 +1273,7 @@ class FileUploadK{
 		}
 		
 		else if(valid_ext == 'image'){
-			validExts = ['jpg','jpeg','png','gif','bpg'];
+			validExts = ['jpg','jpeg','png','gif','bpg','svg'];
 		}
 		
 		else if(valid_ext == 'audio'){
@@ -1287,7 +1287,7 @@ class FileUploadK{
 		else if(valid_ext == 'often_use'){
 			validExts = [
 				'pdf',
-				'jpg','jpeg','png','gif','bpg', 'tif', 'tiff',
+				'jpg','jpeg','png','gif','bpg', 'tif', 'tiff','svg',
 				'zip','lzh', 'tar',
 				'xls', 'xlsx', 'doc', 'docx',
 				'txt', 'csv', 'xml', 

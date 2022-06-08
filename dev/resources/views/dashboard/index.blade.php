@@ -73,6 +73,10 @@ $role = $userInfo['role'];
 				</div>
 			</div>
 		</div>
+		
+	</div><!--  row -->
+	
+	<div class="row" style="margin-top:20px;">
 	
 		<!-- カード -->
 		<div class="col-sm-3">
@@ -86,6 +90,19 @@ $role = $userInfo['role'];
 				</div>
 			</div>
 		</div>
+	
+		<!-- カード -->
+		<div class="col-sm-3">
+			<div class="card border-primary ">
+				<div class="card-body" >
+					<h5 class="card-title text-primary" style="font-weight:bold">メッセージボード・ユーザー評価管理</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">メッセージボード・ユーザー評価管理画面の見本</p>
+					</div>
+					<a href="{{url('msg_board')}}" class="btn btn-primary">ページへ移動</a>
+				</div>
+			</div>
+		</div>
 		
 	</div><!--  row -->
 
@@ -93,13 +110,13 @@ $role = $userInfo['role'];
 	
 	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
 		<div class="col-sm-3">
-			<div class="card border-primary ">
+			<div class="card border-secondary ">
 				<div class="card-body" >
-					<h5 class="card-title text-primary" style="font-weight:bold">テーブル情報ツール</h5>
+					<h5 class="card-title text-secondary" style="font-weight:bold">テーブル情報ツール</h5>
 					<div class="card_msg">
 						<p class="card-text" style="height:80px">データベースのテーブル情報を表示/マスタ権限用</p>
 					</div>
-					<a href="/crud_base_laravel8/tool/data_info_tool.php" class="btn btn-primary">ページへ移動</a>
+					<a href="/crud_base_laravel8/tool/data_info_tool.php" class="btn btn-secondary">ページへ移動</a>
 				</div>
 			</div>
 		</div>
@@ -107,13 +124,27 @@ $role = $userInfo['role'];
 	
 	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
 		<div class="col-sm-3">
-			<div class="card border-primary ">
+			<div class="card border-secondary ">
 				<div class="card-body" >
-					<h5 class="card-title text-primary" style="font-weight:bold">パスワード変更画面</h5>
+					<h5 class="card-title text-secondary" style="font-weight:bold">パスワード変更画面</h5>
 					<div class="card_msg">
 						<p class="card-text" style="height:80px">Eメールを介さないシンプルなパスワード変更画面。</p>
 					</div>
-					<a href="{{url('change_pw')}}" class="btn btn-primary">ページへ移動</a>
+					<a href="{{url('change_pw')}}" class="btn btn-secondary">ページへ移動</a>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+	
+	<?php if($crudBaseData['userInfo']['role'] == 'master'){?>
+		<div class="col-sm-3">
+			<div class="card border-secondary ">
+				<div class="card-body" >
+					<h5 class="card-title text-secondary" style="font-weight:bold">メッセージボード・評価種別マスタ</h5>
+					<div class="card_msg">
+						<p class="card-text" style="height:80px">メッセージボタンの評価ボタン画像を編集します。</p>
+					</div>
+					<a href="{{url('msg_board_eval_type')}}" class="btn btn-secondary">ページへ移動</a>
 				</div>
 			</div>
 		</div>
