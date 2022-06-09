@@ -12,8 +12,8 @@
  * ファイルの初期表示
  * 
  * @license MIT
- * @version 1.3.8
- * @date 2018-7-6 | 2022-6-8
+ * @version 1.3.9
+ * @date 2018-7-6 | 2022-6-10
  * @history 
  *  - 2021-04-29 var 1.3.0 大幅なバージョンアップ
  *  - 2018-10-2 var 1.2.6 「Now Loading...」メッセージを表示する
@@ -164,6 +164,7 @@ class FileUploadK{
 
 			// ボックスデータにアップロードファイル情報を追加
 			var files = evt.dataTransfer.files; 
+
 			this.box[fue_id]['files'] = files;
 			this._preview(fue_id, 'files', 'dnd', option); // プレビュー表示
 
@@ -230,6 +231,9 @@ class FileUploadK{
 			// プレビュー表示
 			this.box[fue_id]['bData'] = bData;
 			this._preview(fue_id, 'blob', 'set_file_path', option);
+			
+			this.box[fue_id]['fileData'] = {}; 
+			
 		}
 		
 		// 複数非同期・全終了後コールバック・初期化
@@ -892,7 +896,8 @@ class FileUploadK{
 		parLbl.css({'width':'100%','height':'100%'});
 
 		// ファイルデータもクリアする。
-		this.box[fue_id]['fileData'] = [];
+		this.box[fue_id]['fileData'] ={};
+		
 	}
 	
 	/**

@@ -257,6 +257,7 @@ class CbFileUploadComponent{
 			if(fieldInfo.form_type != form_type) continue;
 
 			var files = box[fu_id]['files']; // FDにセット予定のファイルオブジェクトを取得する
+
 			if(files == null) continue;
 			if(files[0] == null) continue;
 			
@@ -268,6 +269,7 @@ class CbFileUploadComponent{
 			}
 
 		}
+
 		return fd;
 
 	}
