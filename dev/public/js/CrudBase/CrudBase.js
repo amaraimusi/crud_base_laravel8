@@ -8,8 +8,8 @@
  * 
  * 
  * @license MIT
- * @since 2016-9-21 | 2022-2-25
- * @version 3.3.1
+ * @since 2016-9-21 | 2022-6-9
+ * @version 3.3.2
  * @histroy
  * 2019-6-28 v2.8.3 CSVフィールドデータ補助クラス | CsvFieldDataSupport.js
  * 2018-10-21 v2.8.0 ボタンサイズ変更機能にボタン表示切替機能を追加
@@ -2832,7 +2832,7 @@ class CrudBase{
 	 *  - dis_fil_flg 表示フィルター適用フラグ 0:OFF(デフォルト) , 1:ON
 	 */
 	setValueToElement(elm,field,val1,ent,option){
-		
+
 		if(!(elm instanceof jQuery)) elm = jQuery(elm);// 要素がjQueryオブジェクトでなければ、jQueryオブジェクトに変換。
 		
 		// オプションの初期化
@@ -2847,18 +2847,14 @@ class CrudBase{
 		}
 		
 		var tag_name = elm.get(0).tagName; // 入力要素のタグ名を取得する
-		
-	
-		
-		
+
 		// 値に表示フィルターをかける
 		if(option['dis_fil_flg']){
 			var res = this.displayFilter(val1,field,option.disFilData,xss);
 			val1 = res.val1;
 			xss = res.xss;
 		}
-		
-		
+
 		// 拡張型の入力要素への反映
 		var inp_ex = elm.attr('data-inp-ex');
 
@@ -2978,12 +2974,12 @@ class CrudBase{
 	_setEntToImage1(elm, field, fp){
 
 		let mode=0; // 0:ファイル空, 1:画像ファイル系, 2:その他ファイル（ダウンロード対象）
-		
+		let ext = '';
 		if(fp==null || fp==''){
 			mode=0;
 		}else{
-			let ext = this._getExtension(fp);
-			let exts = ['jpg', 'jpeg', 'png', 'gif'];
+			ext = this._getExtension(fp);
+			let exts = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 			if(exts.indexOf(ext) == -1){
 				mode = 2;
 			}else{
@@ -3022,7 +3018,10 @@ class CrudBase{
 				noneElm.show();
 				break;
 			case 1: // 画像系ファイル
+
 				let thum_fp = orig_fp.replace('/orig/', '/thum/');
+				if(ext == 'svg') thum_fp = orig_fp; // SVG画像である場合はオリジナル画像をサムネイルにする。
+				
 				imgElm.attr('src', thum_fp);
 				imgAElm.attr('href', orig_fp);
 				imgAElm.show();
