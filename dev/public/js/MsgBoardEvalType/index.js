@@ -43,6 +43,10 @@ function init(){
 	// 表示フィルターデータの定義とセット
 	var disFilData = {
 			// CBBXS-1008
+			'users_show_flg':{
+				'fil_type':'flg',
+				'option':{'list':['OFF','ON']}
+			},
 			'delete_flg':{
 				'fil_type':'delete_flg',
 			},
@@ -52,6 +56,9 @@ function init(){
 	};
 	
 	// CBBXS-2023
+	// 反対評価種別IDリストJSON
+	let onverselyEvalTypeIdList = crudBaseData.masters.onverselyEvalTypeIdList;
+	disFilData['onversely_eval_type_id'] ={'fil_type':'select','option':{'list':onverselyEvalTypeIdList}};
 
 	// CBBXE
 
@@ -85,6 +92,8 @@ function init(){
 			// CBBXS-2010
 			{'field':'id', 'inp_type':'textarea'}, 
 			{'field':'eval_value', 'inp_type':'textarea'}, 
+			{'field':'onversely_eval_type_id', 'inp_type':'select', 'list':onverselyEvalTypeIdList, 'def':0}, 
+			{'field':'users_show_flg', 'inp_type':'textarea'}, 
 			{'field':'sort_no', 'inp_type':'textarea'}, 
 			{'field':'delete_flg', 'inp_type':'textarea'}, 
 

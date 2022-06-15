@@ -10,7 +10,7 @@ class MsgBoardEvalTypeController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.0.0';
+	public $this_page_version = '1.1.0';
 	
 	private $cb; // CrudBase制御クラス
 	private $md; // モデル
@@ -51,10 +51,6 @@ class MsgBoardEvalTypeController extends AppController
 		// 反対評価種別IDリスト
 		$onverselyEvalTypeIdList = $this->md->getOnverselyEvalTypeIdList();
 		$masters['onverselyEvalTypeIdList'] = $onverselyEvalTypeIdList;
-
-		// ユーザー表示フラグリスト
-		$usersShowFlgList = $this->md->getUsersShowFlgList();
-		$masters['usersShowFlgList'] = $usersShowFlgList;
 
 		// CBBXE
 
@@ -302,7 +298,7 @@ class MsgBoardEvalTypeController extends AppController
 			],
 			'users_show_flg'=>[
 					'name'=>'ユーザー表示フラグ',
-					'row_order'=>'MsgBoardEvalTypeX.users_show_flg',
+					'row_order'=>'MsgBoardEvalType.users_show_flg',
 					'clm_show'=>1,
 			],
 			'icon_fn'=>[

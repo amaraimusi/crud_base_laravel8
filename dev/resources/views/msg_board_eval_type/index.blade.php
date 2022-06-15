@@ -66,7 +66,7 @@ $ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバ�
 		$cbh->inputKjText('kj_eval_type_code','評価タイプコード');
 		$cbh->inputKjNumRange('eval_value','評価値'); 
 		$cbh->inputKjSelect('kj_onversely_eval_type_id','反対評価種別ID', $masters['onverselyEvalTypeIdList']); 
-		$cbh->inputKjSelect('kj_users_show_flg','ユーザー表示フラグ', $masters['usersShowFlgList']); 
+		$cbh->inputKjFlg('kj_users_show_flg','ユーザー表示フラグ');
 		$cbh->inputKjText('kj_icon_fn','アイコンファイル名');
 		$cbh->inputKjText('kj_note','ノート');
 		$cbh->inputKjHidden('kj_sort_no');
@@ -187,7 +187,7 @@ foreach($data as $i=>&$ent){
 	$cbh->tdStr($ent, 'eval_type_code');
 	$cbh->tdPlain($ent, 'eval_value');
 	$cbh->tdList($ent, 'onversely_eval_type_id', $onverselyEvalTypeIdList);
-	$cbh->tdList($ent, 'users_show_flg', $usersShowFlgList);
+	$cbh->tdFlg($ent, 'users_show_flg');
 	$cbh->tdImage($ent, 'icon_fn');
 	$cbh->tdNote($ent, 'note');
 	$cbh->tdPlain($ent, 'sort_no');
@@ -283,7 +283,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザー表示フラグ: </div>
 			<div class='cbf_input'>
-				<?php $cbh->selectX('users_show_flg',null,$usersShowFlgList,null);?>
+				<input type="checkbox" name="users_show_flg" class="valid"/>
 				<label class="text-danger" for="users_show_flg"></label>
 			</div>
 		</div>
@@ -369,7 +369,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >ユーザー表示フラグ: </div>
 			<div class='cbf_input'>
-				<?php $cbh->selectX('users_show_flg',null,$usersShowFlgList,null);?>
+				<input type="checkbox" name="users_show_flg" class="valid"/>
 				<label class="text-danger" for="users_show_flg"></label>
 			</div>
 		</div>
