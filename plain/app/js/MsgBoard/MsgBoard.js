@@ -596,12 +596,70 @@ class MsgBoard{
 
 	/**
 	* 評価ユーザーの一覧を表示する
-	* @param int msg_board_id メッセージボードID
-	* @param int eval_type_id 評価種別ID
+	* @param object btn 評価ユーザー表示ボタン要素
 	* 
 	*/
-	openEvalUsers(msg_board_id, eval_type_id){
+	openEvalUsers(btn){
+		
+		let jqbtn = jQuery(btn);
+		let msg_board_id = jqbtn.attr('data-msg-board-id'); // メッセージボードID
+		let eval_type_id = jqbtn.attr('data-eval-type-id'); // 評価種別ID
+		
+		// 評価種別ハッシュマップから評価種別IDを指定して評価種別エンティティを取得する。
+		let evalTypeEnt = this.evalTypeHm[eval_type_id];
+		
+		// ユーザー表示フラグがONでないなら処理抜け。
+		if (evalTypeEnt.users_show_flg != 1) return;
+
+		//評価データからメッセージボードIDと評価種別IDを指定し、ユーザー評価データを取得する。
+		let userEvals = this.evals[msg_board_id][eval_type_id];
+		console.log('userEvals');//■■■□□□■■■□□□
+		console.log(userEvals);//■■■□□□■■■□□□
+		
+		jQuery('.eval_users_div').hide(); // すべての評価ユーザーズ区分を一旦閉じる
+		
+		// 評価ユーザーズから評価ユーザーズHTMLを組み立てる。
+		let eval_users_html = this._makeEvalUsersHtml(userEvals.users);
+		
+		// ボタン要素から親要素を取得する。
+		let parentElm = jqbtn.parents('.msg_board_eval_div');
+		
+		// 親要素から評価ユーザーズ区分を取得する。
+		let usersDiv = parentElm.find('.eval_users_div');
+		
+		// 評価ユーザーズ区分に評価ユーザーズHTMLを埋め込み、そして表示する。
+		usersDiv.html(eval_users_html);
+		usersDiv.show(300);
+		
+		
+		
 	}
+	
+	/**
+	* 評価ユーザーズから評価ユーザーズHTMLを組み立てる。
+	* @param [] users 評価ユーザーズ
+	* @return string 評価ユーザーズHTML
+	*/	
+	_makeEvalUsersHtml(users){
+		let html = ' - ';
+		for(let i in users){
+			let uEnt = users[i];
+			let nickname = uEnt.nickname;
+			if(this._empty(nickname)) nickname = uEnt.user_name;
+			nickname = this._xss_sanitize(nickname); // XSSサニタイズ
+
+			html += `
+				<div class="eval_user_a1">
+					<span class="eval_user_a2">${nickname}</span>
+				</div>
+			`;
+
+		}
+
+		return html;
+		
+	}
+	
 	
 	
 }

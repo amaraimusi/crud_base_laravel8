@@ -458,21 +458,41 @@ class MsgBoard extends AppModel {
             	UserEval.user_id,
             	UserEval.eval_type_id,
             	UserEval.modified,
-            	EvalType.eval_type_code,
-            	EvalType.eval_value,
-            	EvalType.icon_fn,
             	User.name AS user_name,
             	User.nickname
             FROM 
             	msg_board_user_evals AS UserEval
             	LEFT JOIN users AS USER ON UserEval.user_id = User.id
-            	LEFT JOIN msg_board_eval_types AS EvalType ON UserEval.eval_type_id = EvalType.id
             WHERE
             	UserEval.msg_board_id = {$msg_board_id}
             	AND UserEval.delete_flg = 0
             	AND User.delete_flg = 0
             ORDER BY UserEval.modified DESC
         ";
+	    
+	    
+	    //■■■□□□■■■□□□
+// 	    $sql = "
+//             SELECT
+//             	UserEval.msg_board_id,
+//             	UserEval.user_id,
+//             	UserEval.eval_type_id,
+//             	UserEval.modified,
+//             	EvalType.eval_type_code,
+//             	EvalType.eval_value,
+//             	EvalType.icon_fn,
+//             	User.name AS user_name,
+//             	User.nickname
+//             FROM
+//             	msg_board_user_evals AS UserEval
+//             	LEFT JOIN users AS USER ON UserEval.user_id = User.id
+//             	LEFT JOIN msg_board_eval_types AS EvalType ON UserEval.eval_type_id = EvalType.id
+//             WHERE
+//             	UserEval.msg_board_id = {$msg_board_id}
+//             	AND UserEval.delete_flg = 0
+//             	AND User.delete_flg = 0
+//             ORDER BY UserEval.modified DESC
+//         ";
 	    
 	    $evalData = $this->cb->query($sql);
 	    
@@ -520,10 +540,7 @@ class MsgBoard extends AppModel {
 	        $eval_type_id = $etEnt['id'];
 	        $evalData2[$eval_type_id] = [
 	            'eval_count'=>0,
-	            'eval_type_id'=>$eval_type_id,
-	            'eval_type_code'=>$etEnt['eval_type_code'],
-	            'eval_value'=>$etEnt['eval_value'],
-	            'icon_fn'=>$etEnt['icon_fn'],
+ 	            'eval_type_id'=>$eval_type_id,
 	            'users'=>[],
 	        ];
 
