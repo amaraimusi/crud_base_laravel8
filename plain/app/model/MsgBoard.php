@@ -540,7 +540,33 @@ class MsgBoard extends AppModel {
 	 */
 	public function getEvalTypeHm(){
 	    
-	    $sql = "SELECT id, eval_type_code, ";
+	    $sql = "
+            SELECT
+            	id,
+            	eval_type_code,
+            	eval_value,
+            	icon_fn,
+            	conversely_eval_type_id,
+            	users_show_flg
+            FROM msg_board_eval_types
+            WHERE delete_flg = 0
+            ORDER BY id;
+        ";
+	    
+	    $data = $this->cb->query($sql);
+	    
+	    // XSSサニタイズ
+	    $data = $this->sqlSanitizeW($data);
+	    
+	    // 構造変換
+	    $hashmap = [];
+	    foreach($data as $ent){
+	        $id = $ent['id'];
+	        $hashmap[$id] = $ent;
+	    }
+
+	    return $hashmap;
+
 	}
 	
 	

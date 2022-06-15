@@ -19,6 +19,7 @@ class MsgBoard{
 		this.csrf_token = this.crudBaseData.csrf_token;
 		
 		this.evals = this.crudBaseData.evals; //  評価データ
+		this.evalTypeHm = this.crudBaseData.evalTypeHm; // 評価種別ハッシュマップ
 		this.userInfo = this.crudBaseData.userInfo;
 		this.kjs = this.crudBaseData.kjs;
 		
