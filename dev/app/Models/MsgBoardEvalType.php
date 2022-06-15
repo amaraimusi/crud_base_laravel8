@@ -247,7 +247,7 @@ class MsgBoardEvalType extends AppModel
 	/**
 	 * 反対評価種別IDリストをDBから取得する
 	 */
-	public function getOnverselyEvalTypeIdList(){
+	public function getCconverselyEvalTypeIdList(){
 
 		// DBからデータを取得
 		$query = \DB::table('msg_board_eval_types')->

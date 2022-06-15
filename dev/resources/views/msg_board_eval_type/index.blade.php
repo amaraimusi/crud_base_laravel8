@@ -65,7 +65,7 @@ $ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバ�
 		$cbh->inputKjId(); 
 		$cbh->inputKjText('kj_eval_type_code','評価タイプコード');
 		$cbh->inputKjNumRange('eval_value','評価値'); 
-		$cbh->inputKjSelect('kj_conversely_eval_type_id','反対評価種別ID', $masters['onverselyEvalTypeIdList']); 
+		$cbh->inputKjSelect('kj_conversely_eval_type_id','反対評価種別ID', $masters['converselyEvalTypeIdList']); 
 		$cbh->inputKjFlg('kj_users_show_flg','ユーザー表示フラグ');
 		$cbh->inputKjText('kj_icon_fn','アイコンファイル名');
 		$cbh->inputKjText('kj_note','ノート');
@@ -186,7 +186,7 @@ foreach($data as $i=>&$ent){
 	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
 	$cbh->tdStr($ent, 'eval_type_code');
 	$cbh->tdPlain($ent, 'eval_value');
-	$cbh->tdList($ent, 'conversely_eval_type_id', $onverselyEvalTypeIdList);
+	$cbh->tdList($ent, 'conversely_eval_type_id', $converselyEvalTypeIdList);
 	$cbh->tdFlg($ent, 'users_show_flg');
 	$cbh->tdImage($ent, 'icon_fn');
 	$cbh->tdNote($ent, 'note');
@@ -275,7 +275,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >反対評価種別ID: </div>
 			<div class='cbf_input'>
-				<?php $cbh->selectX('conversely_eval_type_id',null,$onverselyEvalTypeIdList,null);?>
+				<?php $cbh->selectX('conversely_eval_type_id',null,$converselyEvalTypeIdList,null);?>
 				<label class="text-danger" for="conversely_eval_type_id"></label>
 			</div>
 		</div>
@@ -361,7 +361,7 @@ foreach($data as $i=>&$ent){
 		<div class="cbf_inp_wrap">
 			<div class='cbf_inp_label' >反対評価種別ID: </div>
 			<div class='cbf_input'>
-				<?php $cbh->selectX('conversely_eval_type_id',null,$onverselyEvalTypeIdList,null);?>
+				<?php $cbh->selectX('conversely_eval_type_id',null,$converselyEvalTypeIdList,null);?>
 				<label class="text-danger" for="conversely_eval_type_id"></label>
 			</div>
 		</div>

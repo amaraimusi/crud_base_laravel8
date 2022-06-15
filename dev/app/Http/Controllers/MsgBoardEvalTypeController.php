@@ -10,7 +10,7 @@ class MsgBoardEvalTypeController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.1.1';
+	public $this_page_version = '1.1.2';
 	
 	private $cb; // CrudBase制御クラス
 	private $md; // モデル
@@ -49,8 +49,8 @@ class MsgBoardEvalTypeController extends AppController
 		// CBBXS-2020
 
 		// 反対評価種別IDリスト
-		$onverselyEvalTypeIdList = $this->md->getOnverselyEvalTypeIdList();
-		$masters['onverselyEvalTypeIdList'] = $onverselyEvalTypeIdList;
+		$converselyEvalTypeIdList = $this->md->getCconverselyEvalTypeIdList();
+		$masters['converselyEvalTypeIdList'] = $converselyEvalTypeIdList;
 
 		// CBBXE
 
