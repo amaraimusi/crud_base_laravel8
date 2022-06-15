@@ -10,7 +10,7 @@ class MsgBoardEvalTypeController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
-	public $this_page_version = '1.1.0';
+	public $this_page_version = '1.1.1';
 	
 	private $cb; // CrudBase制御クラス
 	private $md; // モデル
@@ -254,7 +254,7 @@ class MsgBoardEvalTypeController extends AppController
 				['name'=>'kj_eval_type_code', 'def'=>null],
 				['name'=>'kj_eval_value1', 'def'=>null, 'field'=>'eval_value'],
 				['name'=>'kj_eval_value2', 'def'=>null, 'field'=>'eval_value'],
-				['name'=>'kj_onversely_eval_type_id', 'def'=>null],
+				['name'=>'kj_conversely_eval_type_id', 'def'=>null],
 				['name'=>'kj_users_show_flg', 'def'=>null],
 				['name'=>'kj_icon_fn', 'def'=>null],
 				['name'=>'kj_note', 'def'=>null],
@@ -291,9 +291,9 @@ class MsgBoardEvalTypeController extends AppController
 					'row_order'=>'MsgBoardEvalType.eval_value',
 					'clm_show'=>1,
 			],
-			'onversely_eval_type_id'=>[
+			'conversely_eval_type_id'=>[
 					'name'=>'反対評価種別ID',
-					'row_order'=>'MsgBoardEvalType.onversely_eval_type_id',
+					'row_order'=>'MsgBoardEvalType.conversely_eval_type_id',
 					'clm_show'=>1,
 			],
 			'users_show_flg'=>[

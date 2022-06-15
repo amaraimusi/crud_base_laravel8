@@ -58,7 +58,7 @@ function init(){
 	// CBBXS-2023
 	// 反対評価種別IDリストJSON
 	let onverselyEvalTypeIdList = crudBaseData.masters.onverselyEvalTypeIdList;
-	disFilData['onversely_eval_type_id'] ={'fil_type':'select','option':{'list':onverselyEvalTypeIdList}};
+	disFilData['conversely_eval_type_id'] ={'fil_type':'select','option':{'list':onverselyEvalTypeIdList}};
 
 	// CBBXE
 
@@ -92,7 +92,7 @@ function init(){
 			// CBBXS-2010
 			{'field':'id', 'inp_type':'textarea'}, 
 			{'field':'eval_value', 'inp_type':'textarea'}, 
-			{'field':'onversely_eval_type_id', 'inp_type':'select', 'list':onverselyEvalTypeIdList, 'def':0}, 
+			{'field':'conversely_eval_type_id', 'inp_type':'select', 'list':onverselyEvalTypeIdList, 'def':0}, 
 			{'field':'users_show_flg', 'inp_type':'textarea'}, 
 			{'field':'sort_no', 'inp_type':'textarea'}, 
 			{'field':'delete_flg', 'inp_type':'textarea'}, 

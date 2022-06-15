@@ -15,7 +15,7 @@ class MsgBoardEvalType extends AppModel
 			'id',
 			'eval_type_code',
 			'eval_value',
-			'onversely_eval_type_id',
+			'conversely_eval_type_id',
 			'users_show_flg',
 			'icon_fn',
 			'note',
@@ -170,8 +170,8 @@ class MsgBoardEvalType extends AppModel
 		if(!empty($kjs['kj_eval_value2'])){
 			$cnds[]="MsgBoardEvalType.eval_value <= {$kjs['kj_eval_value2']}";
 		}
-		if(!empty($kjs['kj_onversely_eval_type_id']) || $kjs['kj_onversely_eval_type_id'] ==='0' || $kjs['kj_onversely_eval_type_id'] ===0){
-			$cnds[]="MsgBoardEvalType.onversely_eval_type_id = {$kjs['kj_onversely_eval_type_id']}";
+		if(!empty($kjs['kj_conversely_eval_type_id']) || $kjs['kj_conversely_eval_type_id'] ==='0' || $kjs['kj_conversely_eval_type_id'] ===0){
+			$cnds[]="MsgBoardEvalType.conversely_eval_type_id = {$kjs['kj_conversely_eval_type_id']}";
 		}
 		$kj_users_show_flg = $kjs['kj_users_show_flg'];
 		if(!empty($kjs['kj_users_show_flg']) || $kjs['kj_users_show_flg'] ==='0' || $kjs['kj_users_show_flg'] ===0){

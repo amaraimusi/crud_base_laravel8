@@ -65,15 +65,18 @@ class MsgBoardController extends AppController {
 		
 		// 当画面のユーザータイプを取得 master:マスター型, login_user:一般ログインユーザー, guest:未ログインユーザー
 		$user_type = $this->getThisUserType($userInfo);
+		$crudBaseData['user_type'] = $user_type;
 		
 		// 当画面のユーザータイプによる変更ボタン、削除ボタンの表示、非表示情報をセットする
 		$data = $this->md->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
 		
 		// データに評価関連データをセットする
 		$evals = $this->md->getEvals($data);
-
 		$crudBaseData['evals'] = $evals;
-		$crudBaseData['user_type'] = $user_type;
+		
+		// 評価種別ハッシュマップをDBから取得する。
+		$evalTypeHm = $this->md->getEvalTypeHm();
+		$crudBaseData['evalTypeHm'] = $evalTypeHm;
 		
 		// メール通知機能の初期化
 		$otherUserIds = $this->md->getOtherUserIds();// その他関係者ユーザーID配列をセミナー受講者テーブルから取得する	

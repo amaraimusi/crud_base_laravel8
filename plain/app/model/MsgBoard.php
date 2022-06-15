@@ -534,5 +534,15 @@ class MsgBoard extends AppModel {
 	}
 	
 	
+	/**
+	 * 評価種別ハッシュマップをDBから取得する。
+	 * @return [] 評価種別ハッシュマップ
+	 */
+	public function getEvalTypeHm(){
+	    
+	    $sql = "SELECT id, eval_type_code, ";
+	}
+	
+	
 
 }
