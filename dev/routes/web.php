@@ -54,15 +54,6 @@ Route::post('msg_board/ajax_pwms', 'App\Http\Controllers\MsgBoardController@ajax
 Route::get('msg_board/csv_download', 'App\Http\Controllers\MsgBoardController@csv_download');
 Route::post('msg_board/bulk_reg', 'App\Http\Controllers\MsgBoardController@bulk_reg');
 
-// MsgBoardGood
-Route::get('msg_board_good', 'App\Http\Controllers\MsgBoardGoodController@index');
-Route::post('msg_board_good/ajax_reg', 'App\Http\Controllers\MsgBoardGoodController@ajax_reg');
-Route::post('msg_board_good/ajax_delete', 'App\Http\Controllers\MsgBoardGoodController@ajax_delete');
-Route::post('msg_board_good/auto_save', 'App\Http\Controllers\MsgBoardGoodController@auto_save');
-Route::post('msg_board_good/ajax_pwms', 'App\Http\Controllers\MsgBoardGoodController@ajax_pwms');
-Route::get('msg_board_good/csv_download', 'App\Http\Controllers\MsgBoardGoodController@csv_download');
-Route::post('msg_board_good/bulk_reg', 'App\Http\Controllers\MsgBoardGoodController@bulk_reg');
-
 // MsgBoardUserEval
 Route::get('msg_board_user_eval', 'App\Http\Controllers\MsgBoardUserEvalController@index');
 Route::post('msg_board_user_eval/ajax_reg', 'App\Http\Controllers\MsgBoardUserEvalController@ajax_reg');
