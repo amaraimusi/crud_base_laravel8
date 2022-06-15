@@ -18,6 +18,7 @@ class MsgBoard{
 		this.crudBaseData = this._getJson('crud_base_json');
 		this.csrf_token = this.crudBaseData.csrf_token;
 		
+		this.evals = this.crudBaseData.evals; //  評価データ
 		this.userInfo = this.crudBaseData.userInfo;
 		this.kjs = this.crudBaseData.kjs;
 		
@@ -592,6 +593,14 @@ class MsgBoard{
 		}
 	}
 
+	/**
+	* 評価ユーザーの一覧を表示する
+	* @param int msg_board_id メッセージボードID
+	* @param int eval_type_id 評価種別ID
+	* 
+	*/
+	openEvalUsers(msg_board_id, eval_type_id){
+	}
 	
 	
 }

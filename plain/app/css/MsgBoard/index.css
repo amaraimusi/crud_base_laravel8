@@ -20,3 +20,36 @@
 	background-color:#edafa0;
 	padding:40px;
 }
+
+.eval_btn_base {
+	width: 1.5em;
+	height: 1.5em;
+	display: inline-block;
+	mask: no-repeat center/70%;
+	-webkit-mask: no-repeat center/70%;
+	background: #69b580;
+}
+
+.eval_user_count_btn{
+	background-color:white;
+	padding:1px;
+	border:solid 1px #37c0f8;
+	border-radius:2px;
+	color:#37c0f8;
+	min-width:2.4em;
+}
+.eval_user_count_btn:hover{
+	border-color:orange;
+	color:orange;
+}
+
+.eval_user_count_btn:focus{
+	border-color:#8a99b0;
+	color:#8a99b0;
+	outline: 1px solid #8a99b0;
+}
+
+
+
+
+

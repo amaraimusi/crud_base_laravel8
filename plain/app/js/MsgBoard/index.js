@@ -38,3 +38,12 @@ function deleteAction(selfElm){
 function regEdit(selfElm){
 	msgBoard.regEdit(selfElm);
 }
+
+// 評価ユーザーを表示する
+function openEvalUsers(btn){
+	let jqbtn = jQuery(btn);
+	let msg_board_id = jqbtn.attr('data-msg-board-id');
+	let eval_type_id = jqbtn.attr('data-eval-type-id');
+	msgBoard.openEvalUsers(msg_board_id, eval_type_id);
+
+}

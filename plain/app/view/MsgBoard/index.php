@@ -87,14 +87,7 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		</div>
 		<div class="row">
 			<div class="col-6" style="padding-top:0.3em">
-				<div style="display:inline-block;margin-right:1.2em;">
-    				<span class="oi" data-glyph="thumb-up" title="いいね"></span>
-    				<span>99</span>
-				</div>
-				<div style="display:inline-block;margin-right:1.2em;">
-    				<span class="oi" data-glyph="thumb-up" title="いいね"></span>
-    				<span>98</span>
-				</div>
+				<?php  include 'evals.php';?>
 			</div>
 			<div class="col-6 text-right" >
 				<button type="button" class="btn btn-outline-secondary btn-sm menu_btn" onclick="showMenu(this)" style="<?php echo $ent['menu_btn']; ?>"><span class="oi" data-glyph="menu"></span></button>

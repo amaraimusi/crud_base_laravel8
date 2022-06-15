@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\AppController;
 use Illuminate\Http\Request;
-use App\Models\MsgBoardEvalType;
+use App\Models\MsgBoardEvalTypeX;
 use Illuminate¥Support¥Facades¥DB;
 
-class MsgBoardEvalTypeController extends AppController
+class MsgBoardEvalTypeXController extends AppController
 {
 	
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
@@ -61,7 +61,7 @@ class MsgBoardEvalTypeController extends AppController
 		$crudBaseData['masters'] = $masters;
 		
 		$crud_base_json = json_encode($crudBaseData,JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
-		return view('msg_board_eval_type.index', compact('data', 'crudBaseData', 'crud_base_json'));
+		return view('msg_board_eval_type_x.index', compact('data', 'crudBaseData', 'crud_base_json'));
 		
 		
 	}
@@ -106,7 +106,7 @@ class MsgBoardEvalTypeController extends AppController
 		// ファイルアップロードとファイル名のDB保存
 		if(!empty($_FILES)){
 			// CBBXS-20271
-			$icon_fn = $this->cb->makeFilePath($_FILES, "storage/MsgBoardEvalType/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'icon_fn');
+			$icon_fn = $this->cb->makeFilePath($_FILES, "storage/MsgBoardEvalTypeX/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'icon_fn');
 			$fileUploadK = $this->factoryFileUploadK();
 			
 			// ▼旧ファイルを指定ディレクトリごと削除する。
@@ -282,22 +282,22 @@ class MsgBoardEvalTypeController extends AppController
 				// CBBXS-2002
 			'id'=>[
 					'name'=>'ID',//HTMLテーブルの列名
-					'row_order'=>'MsgBoardEvalType.id',//SQLでの並び替えコード
+					'row_order'=>'MsgBoardEvalTypeX.id',//SQLでの並び替えコード
 					'clm_show'=>1,//デフォルト列表示 0:非表示 1:表示
 			],
 			'eval_type_code'=>[
 					'name'=>'評価タイプコード',
-					'row_order'=>'MsgBoardEvalType.eval_type_code',
+					'row_order'=>'MsgBoardEvalTypeX.eval_type_code',
 					'clm_show'=>1,
 			],
 			'eval_value'=>[
 					'name'=>'評価値',
-					'row_order'=>'MsgBoardEvalType.eval_value',
+					'row_order'=>'MsgBoardEvalTypeX.eval_value',
 					'clm_show'=>1,
 			],
 			'onversely_eval_type_id'=>[
 					'name'=>'反対評価種別ID',
-					'row_order'=>'MsgBoardEvalType.onversely_eval_type_id',
+					'row_order'=>'MsgBoardEvalTypeX.onversely_eval_type_id',
 					'clm_show'=>1,
 			],
 			'users_show_flg'=>[
@@ -307,42 +307,42 @@ class MsgBoardEvalTypeController extends AppController
 			],
 			'icon_fn'=>[
 					'name'=>'アイコンファイル名',
-					'row_order'=>'MsgBoardEvalType.icon_fn',
+					'row_order'=>'MsgBoardEvalTypeX.icon_fn',
 					'clm_show'=>1,
 			],
 			'note'=>[
 					'name'=>'ノート',
-					'row_order'=>'MsgBoardEvalType.note',
+					'row_order'=>'MsgBoardEvalTypeX.note',
 					'clm_show'=>1,
 			],
 			'sort_no'=>[
 					'name'=>'順番',
-					'row_order'=>'MsgBoardEvalType.sort_no',
+					'row_order'=>'MsgBoardEvalTypeX.sort_no',
 					'clm_show'=>0,
 			],
 			'delete_flg'=>[
 					'name'=>'無効フラグ',
-					'row_order'=>'MsgBoardEvalType.delete_flg',
+					'row_order'=>'MsgBoardEvalTypeX.delete_flg',
 					'clm_show'=>0,
 			],
 			'update_user'=>[
 					'name'=>'更新者',
-					'row_order'=>'MsgBoardEvalType.update_user',
+					'row_order'=>'MsgBoardEvalTypeX.update_user',
 					'clm_show'=>0,
 			],
 			'ip_addr'=>[
 					'name'=>'IPアドレス',
-					'row_order'=>'MsgBoardEvalType.ip_addr',
+					'row_order'=>'MsgBoardEvalTypeX.ip_addr',
 					'clm_show'=>0,
 			],
 			'created'=>[
 					'name'=>'生成日時',
-					'row_order'=>'MsgBoardEvalType.created',
+					'row_order'=>'MsgBoardEvalTypeX.created',
 					'clm_show'=>0,
 			],
 			'modified'=>[
 					'name'=>'更新日',
-					'row_order'=>'MsgBoardEvalType.modified',
+					'row_order'=>'MsgBoardEvalTypeX.modified',
 					'clm_show'=>0,
 			],
 
@@ -363,11 +363,11 @@ class MsgBoardEvalTypeController extends AppController
 		$crud_base_css = CRUD_BASE_CSS;
 		require_once $crud_base_path . 'CrudBaseController.php';
 		
-		$model = new MsgBoardEvalType(); // モデルクラス
+		$model = new MsgBoardEvalTypeX(); // モデルクラス
 		
 		$crudBaseData = [
 				'fw_type' => 'laravel7',
-				'model_name_c' => 'MsgBoardEvalType',
+				'model_name_c' => 'MsgBoardEvalTypeX',
 				'tbl_name' => 'msg_board_eval_types', // テーブル名をセット
 				'kensakuJoken' => $kensakuJoken, //検索条件情報
 				'fieldData' => $fieldData, //フィールドデータ
@@ -432,7 +432,7 @@ class MsgBoardEvalTypeController extends AppController
 		//CSVファイル名を作成
 		$date = new \DateTime();
 		$strDate=$date->format("Y-m-d");
-		$fn='msg_board_eval_type'.$strDate.'.csv';
+		$fn='msg_board_eval_type_x'.$strDate.'.csv';
 		
 		
 		//CSVダウンロード
@@ -448,10 +448,10 @@ class MsgBoardEvalTypeController extends AppController
 	private function getDataForDownload(){
 		
 		//セッションから検索条件情報を取得
-		$kjs=session('msg_board_eval_type_kjs');
+		$kjs=session('msg_board_eval_type_x_kjs');
 
 		// セッションからページネーション情報を取得
-		$pages = session('msg_board_eval_type_pages');
+		$pages = session('msg_board_eval_type_x_pages');
 		
 		$page_no = 0;
 		$row_limit = 100000;

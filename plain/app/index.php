@@ -3,9 +3,6 @@ session_start(); // セッションを開始。 警告が出るので、echoの�
 
 require_once 'crud_base_config.php';
 
-// ■■■□□□■■■□□□
-// $class_name = $_GET['c'] ?? null; // クラス名を取得する
-// $action_name = $_GET['a'] ?? 'index'; // アクション名を取得する
 $place_str = cbStringRight($_SERVER["REQUEST_URI"], CRUD_BASE_URL_BASE);
 $places =explode("/",$place_str);
 $class_name = $places[0];

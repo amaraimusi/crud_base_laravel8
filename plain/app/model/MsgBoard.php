@@ -391,5 +391,148 @@ class MsgBoard extends AppModel {
 		return $sendMailInfo;
 	}
 	
+	
+	/**
+	 *  メッセージデータに評価関連データをセットする
+	 * @param [] $data メッセージデータ
+	 * @return [] 評価関連データをセットしたメッセージデータ
+	 */
+	public function getEvals(&$data){
+	    
+	    $evals = [];
+	    $evalTypes = $this->getEvalTypes(); // 評価種別情報をDBから取得する
+	    
+	    foreach($data as &$ent){
+	       
+	        $msg_board_id = $ent['id'];
+	        $evalData = $this->getEvalData($msg_board_id); // 評価データを取得する
+	        $evalData = $this->convEvalData($evalData, $evalTypes); // 評価データの構造変換
+	        $evals[$msg_board_id] = $evalData;
+	        
+	    }
+	    unset($ent);
+	    
+	    return $evals;
+	}
+	
+	
+	/**
+	 * 評価種別情報をDBから取得する
+	 * @return [] 評価種別情報
+	 */
+	private function getEvalTypes(){
+	    $sql = "
+        	SELECT 
+        		id,
+        		eval_type_code,
+        		eval_value,
+        		icon_fn,
+        		sort_no
+        	FROM msg_board_eval_types 
+        	WHERE delete_flg = 0
+                ";
+	    
+	    $evalTypes0 = $this->cb->query($sql);
+	    
+	    $evalTypes = [];
+	    foreach($evalTypes0 as $ent){
+	        $id = $ent['id'];
+	        $evalTypes[$id] = $ent;
+	    }
+	    
+	    
+	    return $evalTypes;
+	    
+	}
+	
+	/**
+	 * 評価データをDBから取得する
+	 * @param int $msg_board_id メッセージボードID
+	 * @return [] 評価データ
+	 */
+	private function getEvalData($msg_board_id){
+	    
+	    $sql = "
+            SELECT
+            	UserEval.msg_board_id,
+            	UserEval.user_id,
+            	UserEval.eval_type_id,
+            	UserEval.modified,
+            	EvalType.eval_type_code,
+            	EvalType.eval_value,
+            	EvalType.icon_fn,
+            	User.name AS user_name,
+            	User.nickname
+            FROM 
+            	msg_board_user_evals AS UserEval
+            	LEFT JOIN users AS USER ON UserEval.user_id = User.id
+            	LEFT JOIN msg_board_eval_types AS EvalType ON UserEval.eval_type_id = EvalType.id
+            WHERE
+            	UserEval.msg_board_id = {$msg_board_id}
+            	AND UserEval.delete_flg = 0
+            	AND User.delete_flg = 0
+            ORDER BY UserEval.modified DESC
+        ";
+	    
+	    $evalData = $this->cb->query($sql);
+	    
+	    
+	    return $evalData;
+	    
+	    
+	}
+	
+	
+	/**
+	 * 評価データの構造変換 
+	 * @param [] $evalData 評価データ（返還前）
+	 * @param [] $evalTypes 評価種別情報
+	 * @return [] 評価データ（変換後）
+	 */
+	private function convEvalData($evalData, &$evalTypes){
+	    
+	    $evalData2 = $this->makeDefEvalData2($evalTypes); // 空の評価データ2型を作成する。
+	    
+	    foreach($evalData as $ent){
+	        
+	        $eval_type_id = $ent['eval_type_id'];
+	        $eval_count = $evalData2[$eval_type_id]['eval_count'];
+	        $eval_count ++;
+	        
+	        $evalData2[$eval_type_id]['users'][] = $ent;
+	        
+	        $evalData2[$eval_type_id]['eval_count'] = $eval_count;
+
+	    }
+	    
+	    return $evalData2;
+	}
+	
+	/**
+	 * 空の評価データ2型を作成する。
+	 * @param [] $evalTypes 評価種別情報
+	 * @return [][] 空の評価データ2型
+	 */
+	private function makeDefEvalData2($evalTypes){
+	    
+	    $evalData2 = [];
+	    foreach($evalTypes as $etEnt){
+	        $eval_type_id = $etEnt['id'];
+	        $evalData2[$eval_type_id] = [
+	            'eval_count'=>0,
+	            'eval_type_id'=>$eval_type_id,
+	            'eval_type_code'=>$etEnt['eval_type_code'],
+	            'eval_value'=>$etEnt['eval_value'],
+	            'icon_fn'=>$etEnt['icon_fn'],
+	            'users'=>[],
+	        ];
+
+	    }
+	    
+	    return $evalData2;
+	    
+	}
+	
+	
 
 }

@@ -15,6 +15,8 @@ class MsgBoardEvalType extends AppModel
 			'id',
 			'eval_type_code',
 			'eval_value',
+			'onversely_eval_type_id',
+			'users_show_flg',
 			'icon_fn',
 			'note',
 			'sort_no',
@@ -168,6 +170,12 @@ class MsgBoardEvalType extends AppModel
 		if(!empty($kjs['kj_eval_value2'])){
 			$cnds[]="MsgBoardEvalType.eval_value <= {$kjs['kj_eval_value2']}";
 		}
+		if(!empty($kjs['kj_onversely_eval_type_id']) || $kjs['kj_onversely_eval_type_id'] ==='0' || $kjs['kj_onversely_eval_type_id'] ===0){
+			$cnds[]="MsgBoardEvalType.onversely_eval_type_id = {$kjs['kj_onversely_eval_type_id']}";
+		}
+		if(!empty($kjs['kj_users_show_flg']) || $kjs['kj_users_show_flg'] ==='0' || $kjs['kj_users_show_flg'] ===0){
+			$cnds[]="MsgBoardEvalTypeX.users_show_flg = {$kjs['kj_users_show_flg']}";
+		}
 		if(!empty($kjs['kj_icon_fn'])){
 			$cnds[]="MsgBoardEvalType.icon_fn LIKE '%{$kjs['kj_icon_fn']}%'";
 		}
@@ -233,6 +241,52 @@ class MsgBoardEvalType extends AppModel
 	
 	
 	// CBBXS-2021
+	/**
+	 * 反対評価種別IDリストをDBから取得する
+	 */
+	public function getOnverselyEvalTypeIdList(){
+
+		// DBからデータを取得
+		$query = \DB::table('onversely_eval_types')->
+		whereRaw("delete_flg = 0")->
+		orderBy('sort_no', 'ASC');
+		$data = $query->get();
+
+		// リスト変換
+		$list = [];
+		foreach($data as $ent){
+			$ent = (array)$ent;
+			$id = $ent['id'];
+			$name = $ent['onversely_eval_type_name'];
+			$list[$id] = $name;
+		}
+
+		return $list;
+		
+	}
+	/**
+	 * ユーザー表示フラグリストをDBから取得する
+	 */
+	public function getUsersShowFlgList(){
+
+		// DBからデータを取得
+		$query = \DB::table('users_show_flgs')->
+		whereRaw("delete_flg = 0")->
+		orderBy('sort_no', 'ASC');
+		$data = $query->get();
+
+		// リスト変換
+		$list = [];
+		foreach($data as $ent){
+			$ent = (array)$ent;
+			$id = $ent['id'];
+			$name = $ent['users_show_flg_name'];
+			$list[$id] = $name;
+		}
+
+		return $list;
+		
+	}
 
 	// CBBXE
 	

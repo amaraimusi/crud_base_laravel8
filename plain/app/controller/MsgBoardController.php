@@ -69,6 +69,10 @@ class MsgBoardController extends AppController {
 		// 当画面のユーザータイプによる変更ボタン、削除ボタンの表示、非表示情報をセットする
 		$data = $this->md->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
 		
+		// データに評価関連データをセットする
+		$evals = $this->md->getEvals($data);
+
+		$crudBaseData['evals'] = $evals;
 		$crudBaseData['user_type'] = $user_type;
 		
 		// メール通知機能の初期化
@@ -80,7 +84,8 @@ class MsgBoardController extends AppController {
 
 		$this->set([
 			'title_for_layout'=>'メッセージボード',
-			'data'=> $data,
+		    'data'=> $data,
+		    'evals'=> $evals,
 			'crudBaseData'=> $crudBaseData,
 			'crud_base_json'=> $crud_base_json,
 		]);

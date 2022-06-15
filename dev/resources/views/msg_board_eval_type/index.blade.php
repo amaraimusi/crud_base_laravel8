@@ -65,6 +65,8 @@ $ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバ�
 		$cbh->inputKjId(); 
 		$cbh->inputKjText('kj_eval_type_code','評価タイプコード');
 		$cbh->inputKjNumRange('eval_value','評価値'); 
+		$cbh->inputKjSelect('kj_onversely_eval_type_id','反対評価種別ID', $masters['onverselyEvalTypeIdList']); 
+		$cbh->inputKjSelect('kj_users_show_flg','ユーザー表示フラグ', $masters['usersShowFlgList']); 
 		$cbh->inputKjText('kj_icon_fn','アイコンファイル名');
 		$cbh->inputKjText('kj_note','ノート');
 		$cbh->inputKjHidden('kj_sort_no');
@@ -184,8 +186,10 @@ foreach($data as $i=>&$ent){
 	$cbh->tdId($ent,'id', ['checkbox_name'=>'pwms']);
 	$cbh->tdStr($ent, 'eval_type_code');
 	$cbh->tdPlain($ent, 'eval_value');
+	$cbh->tdList($ent, 'onversely_eval_type_id', $onverselyEvalTypeIdList);
+	$cbh->tdList($ent, 'users_show_flg', $usersShowFlgList);
 	$cbh->tdImage($ent, 'icon_fn');
-	$cbh->tdStr($ent, 'note');
+	$cbh->tdNote($ent, 'note');
 	$cbh->tdPlain($ent, 'sort_no');
 	$cbh->tdDeleteFlg($ent, 'delete_flg');
 	$cbh->tdStr($ent, 'update_user');
@@ -268,6 +272,22 @@ foreach($data as $i=>&$ent){
 				<label class="text-danger" for="eval_value" ></label>
 			</div>
 		</div>
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >反対評価種別ID: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('onversely_eval_type_id',null,$onverselyEvalTypeIdList,null);?>
+				<label class="text-danger" for="onversely_eval_type_id"></label>
+			</div>
+		</div>
+
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザー表示フラグ: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('users_show_flg',null,$usersShowFlgList,null);?>
+				<label class="text-danger" for="users_show_flg"></label>
+			</div>
+		</div>
+
 		<div class="cbf_inp_wrap" style="float:left">
 			<div class='cbf_inp_label_long' >アイコンファイル名: </div>
 			<div class='cbf_input' style="width:180px;height:auto;">
@@ -277,10 +297,10 @@ foreach($data as $i=>&$ent){
 				</label>
 			</div>
 		</div>
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >ノート: </div>
+		<div class="cbf_inp_wrap_long">
+			<div class='cbf_inp_label' >ノート： </div>
 			<div class='cbf_input'>
-				<input type="text" name="note" class="valid " value=""  maxlength="1000" title="1000文字以内で入力してください" />
+				<textarea name="note" maxlength="1000" title="1000文字以内で入力してください" style="height:100px;width:100%"></textarea>
 				<label class="text-danger" for="note"></label>
 			</div>
 		</div>
@@ -338,6 +358,22 @@ foreach($data as $i=>&$ent){
 			</div>
 		</div>
 
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >反対評価種別ID: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('onversely_eval_type_id',null,$onverselyEvalTypeIdList,null);?>
+				<label class="text-danger" for="onversely_eval_type_id"></label>
+			</div>
+		</div>
+
+		<div class="cbf_inp_wrap">
+			<div class='cbf_inp_label' >ユーザー表示フラグ: </div>
+			<div class='cbf_input'>
+				<?php $cbh->selectX('users_show_flg',null,$usersShowFlgList,null);?>
+				<label class="text-danger" for="users_show_flg"></label>
+			</div>
+		</div>
+
 		<div class="cbf_inp_wrap" style="float:left">
 			<div class='cbf_inp_label_long' >アイコンファイル名: </div>
 			<div class='cbf_input' style="width:180px;height:auto;">
@@ -347,10 +383,10 @@ foreach($data as $i=>&$ent){
 				</label>
 			</div>
 		</div>
-		<div class="cbf_inp_wrap">
-			<div class='cbf_inp' >ノート: </div>
+		<div class="cbf_inp_wrap_long">
+			<div class='cbf_inp_label' >ノート： </div>
 			<div class='cbf_input'>
-				<input type="text" name="note" class="valid " value=""  maxlength="1000" title="1000文字以内で入力してください" />
+				<textarea name="note" maxlength="1000" title="1000文字以内で入力してください" data-folding-ta="40" style="height:100px;width:100%"></textarea>
 				<label class="text-danger" for="note"></label>
 			</div>
 		</div>
