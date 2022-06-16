@@ -86,10 +86,10 @@ $cbh = new CrudBaseHelper($crudBaseData);
 		<?php echo $cbh->filePreviewA($ent['attach_fn']); ?>
 		</div>
 		<div class="row">
-			<div class="col-6" style="padding-top:0.3em">
+			<div class="col-9" style="padding-top:0.3em">
 				<?php  include 'evals.php';?>
 			</div>
-			<div class="col-6 text-right" >
+			<div class="col-3 text-right" >
 				<button type="button" class="btn btn-outline-secondary btn-sm menu_btn" onclick="showMenu(this)" style="<?php echo $ent['menu_btn']; ?>"><span class="oi" data-glyph="menu"></span></button>
 				<div class="menu_div" style="margin-top:4px;display:none">
 					

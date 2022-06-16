@@ -613,19 +613,19 @@ class MsgBoard{
 
 		//評価データからメッセージボードIDと評価種別IDを指定し、ユーザー評価データを取得する。
 		let userEvals = this.evals[msg_board_id][eval_type_id];
-		console.log('userEvals');//■■■□□□■■■□□□
-		console.log(userEvals);//■■■□□□■■■□□□
-		
-		jQuery('.eval_users_div').hide(); // すべての評価ユーザーズ区分を一旦閉じる
-		
-		// 評価ユーザーズから評価ユーザーズHTMLを組み立てる。
-		let eval_users_html = this._makeEvalUsersHtml(userEvals.users);
-		
+
 		// ボタン要素から親要素を取得する。
 		let parentElm = jqbtn.parents('.msg_board_eval_div');
+		let usersDiv = parentElm.next(); // 評価ユーザーズ区分を取得する。
 		
-		// 親要素から評価ユーザーズ区分を取得する。
-		let usersDiv = parentElm.find('.eval_users_div');
+		// 評価ユーザーズ区分が非表示でないなら非表示にする。（表示中なら区分を隠して処理抜け）
+		if(usersDiv.css('display') != 'none') {
+			usersDiv.hide();
+			return;
+		}
+
+		// 評価ユーザーズから評価ユーザーズHTMLを組み立てる。
+		let eval_users_html = this._makeEvalUsersHtml(userEvals.users);
 		
 		// 評価ユーザーズ区分に評価ユーザーズHTMLを埋め込み、そして表示する。
 		usersDiv.html(eval_users_html);
@@ -641,20 +641,18 @@ class MsgBoard{
 	* @return string 評価ユーザーズHTML
 	*/	
 	_makeEvalUsersHtml(users){
-		let html = ' - ';
+		let html = '';
 		for(let i in users){
 			let uEnt = users[i];
 			let nickname = uEnt.nickname;
 			if(this._empty(nickname)) nickname = uEnt.user_name;
 			nickname = this._xss_sanitize(nickname); // XSSサニタイズ
 
-			html += `
-				<div class="eval_user_a1">
-					<span class="eval_user_a2">${nickname}</span>
-				</div>
-			`;
+			html += `<span class="eval_user_a2">${nickname}</span>`;
 
 		}
+		
+		html = `<div class="eval_user_a1">${html}</div>`;
 
 		return html;
 		
