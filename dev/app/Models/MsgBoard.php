@@ -222,24 +222,6 @@ class MsgBoard extends AppModel
 	public function getUserTypeList(){
 	    
 	    return ['login_user'=>'ログインユーザー', 'master'=>'マスター'];
-
-	    //■■■□□□■■■□□□
-// 		// DBからデータを取得
-// 		$query = \DB::table('user_types')->
-// 		whereRaw("delete_flg = 0")->
-// 		orderBy('sort_no', 'ASC');
-// 		$data = $query->get();
-
-// 		// リスト変換
-// 		$list = [];
-// 		foreach($data as $ent){
-// 			$ent = (array)$ent;
-// 			$id = $ent['id'];
-// 			$name = $ent['user_type_name'];
-// 			$list[$id] = $name;
-// 		}
-
-// 		return $list;
 		
 	}
 
