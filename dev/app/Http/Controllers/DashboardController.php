@@ -12,8 +12,8 @@ class DashboardController extends AppController
 	// 当画面バージョン
 	public $this_page_version = '1.0.0';
 	
-	private $cb; // CrudBase制御クラス
-	private $md; // モデル
+	protected $cb; // CrudBase制御クラス
+	protected $md; // モデル
 	
 	/**
 	 * ネコCRUDページ

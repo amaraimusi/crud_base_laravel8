@@ -658,6 +658,68 @@ class MsgBoard{
 		
 	}
 	
+	/**
+	* 評価アクション
+	* @param object btn 評価ユーザー表示ボタン要素
+	* 
+	*/	
+	evaluate(btn){
+		let jqbtn = jQuery(btn);
+		let msg_board_id = jqbtn.attr('data-msg-board-id'); // メッセージボードID
+		let eval_type_id = jqbtn.attr('data-eval-type-id'); // 評価種別ID
+		
+		let sendData={
+			msg_board_id: msg_board_id,
+			eval_type_id: eval_type_id, 
+			};
+		
+		// データ中の「&」と「%」を全角の＆と％に一括エスケープ(&記号や%記号はPHPのJSONデコードでエラーになる)
+		sendData = this._escapeAjaxSendData(sendData);
+		
+		let fd = new FormData();
+		
+		let send_json = JSON.stringify(sendData);//データをJSON文字列にする。
+		fd.append( "key1", send_json );
+		
+		// CSRFトークンを取得
+		let csrf_token = this.crudBaseData.csrf_token;
+		fd.append( "csrf_token", csrf_token );
+		
+		let crud_base_project_path = this.crudBaseData.crud_base_project_path;
+		let ajax_url = crud_base_project_path + '/msg_board/evaluate';
+
+		// AJAX
+		jQuery.ajax({
+			type: "post",
+			url: ajax_url,
+			data: fd,
+			cache: false,
+			dataType: "text",
+			processData: false,
+			contentType : false,
+		})
+		.done((res_json, type) => {
+			let res;
+			try{
+				res =jQuery.parseJSON(res_json);//パース
+				
+			}catch(e){
+				jQuery("#err_eval_" + msg_board_id).append(res_json);
+				return;
+			}
+			
+			res = this._xss_sanitize(res); // XSS対策
+
+
+		})
+		.fail((jqXHR, statusText, errorThrown) => {
+			let errElm = jQuery("#err_eval_" + msg_board_id);
+			errElm.append('アクセスエラー');
+			errElm.append(jqXHR.responseText);
+			alert(statusText);
+		});		
+	}
+	
 	
 	
 }

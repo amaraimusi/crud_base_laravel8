@@ -44,3 +44,9 @@ function openEvalUsers(btn){
 	msgBoard.openEvalUsers(btn);
 
 }
+
+// 評価アクション
+function evaluateForMsgBoard(btn){
+	msgBoard.evaluate(btn);
+
+}

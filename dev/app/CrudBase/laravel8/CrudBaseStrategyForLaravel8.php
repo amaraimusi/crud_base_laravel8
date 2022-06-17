@@ -2,11 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+require_once CRUD_BASE_PATH . 'PdoDao.php';
+require_once CRUD_BASE_PATH . 'SaveData.php';
 
 /**
  * Laravel8用ストラテジークラス
- * @version 1.0.1
- * @since 2021-12-1 | 2021-12-5
+ * @version 1.1.0
+ * @since 2021-12-1 | 2022-617
  * @license MIT
  */
 class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
@@ -15,6 +17,17 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 	private $model; // クライアントモデル
 	private $whiteList; // ホワイトリスト
 	private $crudBaseData;
+	private $dao; // IDaoインターフェースを実装したクラス。PdoDaoクラスなど。
+	private $pdo; // PDOオブジェクト
+	
+	public function __construct(){
+	    $this->pdo = \DB::connection()->getPdo();
+	    
+	    $this->dao = new PdoDao(null, $this->pdo);
+	   
+	    $this->saveData = new SaveData($this->dao);
+	    
+	}
 	
 	/**
 	 * クライアントコントローラのセッター
@@ -209,6 +222,19 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 		}
 		
 		return $ent;
+	}
+	
+	
+	/**
+	 * エンティティをDB保存(シンプル版)
+	 * @param [] $ent エンティティ
+	 * @param string $tbl_name
+	 */
+	public function saveSimple(&$ent, $tbl_name){
+	    $res = $this->saveData->save($tbl_name, $ent); // DB保存
+	    $ent = $res['ent'];
+	    
+	    return $ent;
 	}
 	
 	/**

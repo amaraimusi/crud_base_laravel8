@@ -12,8 +12,8 @@ class MsgBoardEvalTypeController extends AppController
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
 	public $this_page_version = '1.1.2';
 	
-	private $cb; // CrudBase制御クラス
-	private $md; // モデル
+	protected $cb; // CrudBase制御クラス
+	protected $md; // モデル
 	
 	/**
 	 * メッセージボード・評価種別CRUDページ

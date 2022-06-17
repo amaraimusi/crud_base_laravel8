@@ -10,6 +10,9 @@ use Illuminate¥Support¥Facades¥DB;
  */
 class AppController {
 	
+    protected $cb; // CrudBase制御クラス
+    protected $md;
+    
 	// 更新ユーザーなど共通フィールドをデータにセットする。
 	protected function setCommonToData($data){
 	
@@ -231,6 +234,16 @@ class AppController {
 		}
 		
 		return $authority;
+	}
+	
+	/**
+	 * エンティティをDB保存(シンプル版)
+	 * @param [] $ent エンティティ
+	 * @param string $tbl_name
+	 */
+	public function saveSimple(&$ent, $tbl_name){
+	    return $this->cb->saveSimple($ent, $tbl_name);
+	    
 	}
 	
 

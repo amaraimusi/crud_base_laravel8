@@ -12,8 +12,8 @@ class NekoController extends AppController
 	// 当画面バージョン (バージョンを変更すると画面に新バージョン通知とクリアボタンが表示されます。）
 	public $this_page_version = '1.0.0';
 	
-	private $cb; // CrudBase制御クラス
-	private $md; // モデル
+	protected $cb; // CrudBase制御クラス
+	protected $md; // モデル
 	
 	/**
 	 * ネコCRUDページ
@@ -24,9 +24,9 @@ class NekoController extends AppController
 //         if(\Auth::id() == null){
 //             return redirect('login');
 //         }
-    
-		$this->init();
 
+		$this->init();
+		
  		// CrudBase共通処理（前）
  		$crudBaseData = $this->cb->indexBefore();//indexアクションの共通先処理(CrudBaseController)
  		

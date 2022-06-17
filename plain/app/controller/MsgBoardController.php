@@ -502,6 +502,46 @@ class MsgBoardController extends AppController {
 	public function getMd(){
 	    return $this->md;
 	}
+	
+	
+	/**
+	 * 評価アクション
+	 *
+	 */
+	public function evaluate(){
+	    
+	    $this->init();
+	    
+	    // CSRFトークンによるセキュリティチェック
+	    if(CrudBaseU::checkCsrfToken('msg_board') == false){
+	        return '不正なアクションを検出しました。';
+	    }
+	    
+	    $userInfo = $this->cb->getUserInfo();
+	    if(empty($userInfo['id'])) throw new Exception('システムエラー 220616A');
+	    
+	    // JSON文字列をパースしてエンティティを取得する
+	    $json=$_POST['key1'];
+	    $param = json_decode($json, true);
+	    
+	    $res = $this->md->evaluate($param, $userInfo); // 評価アクション
+	    
+// 	    // 登録パラメータ■■■□□□■■■□□□
+// 	    $reg_param_json = $_POST['reg_param_json'];
+// 	    $regParam = json_decode($reg_param_json,true);
+	    
+// 	    $ent = $this->setCommonToEntity($ent);
+	    
+
+	    
+// 	    // CBBXE
+// 	    $ent = $this->md->saveEntity($ent, $regParam);
+	    
+	    $json_str = json_encode($res, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS); // JSONに変換
+	    
+	    return $json_str;
+	    
+	}
 
 
 }

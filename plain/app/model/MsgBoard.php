@@ -36,7 +36,7 @@ class MsgBoard extends AppModel {
 
 	// CBBXE
 	
-	private $cb; // CrudBase制御クラス
+	protected $cb; // CrudBase制御クラス
 	
 	
 	public function __construct() {
@@ -52,6 +52,7 @@ class MsgBoard extends AppModel {
 	 */
 	public function init($cb){
 		$this->cb = $cb;
+		
 		
 		// ホワイトリストをセット
 		$cbParam = $this->cb->getCrudBaseData();
@@ -469,34 +470,9 @@ class MsgBoard extends AppModel {
             	AND User.delete_flg = 0
             ORDER BY UserEval.modified DESC
         ";
-	    
-	    
-	    //■■■□□□■■■□□□
-// 	    $sql = "
-//             SELECT
-//             	UserEval.msg_board_id,
-//             	UserEval.user_id,
-//             	UserEval.eval_type_id,
-//             	UserEval.modified,
-//             	EvalType.eval_type_code,
-//             	EvalType.eval_value,
-//             	EvalType.icon_fn,
-//             	User.name AS user_name,
-//             	User.nickname
-//             FROM
-//             	msg_board_user_evals AS UserEval
-//             	LEFT JOIN users AS USER ON UserEval.user_id = User.id
-//             	LEFT JOIN msg_board_eval_types AS EvalType ON UserEval.eval_type_id = EvalType.id
-//             WHERE
-//             	UserEval.msg_board_id = {$msg_board_id}
-//             	AND UserEval.delete_flg = 0
-//             	AND User.delete_flg = 0
-//             ORDER BY UserEval.modified DESC
-//         ";
-	    
+
 	    $evalData = $this->cb->query($sql);
-	    
-	    
+
 	    return $evalData;
 	    
 	    
@@ -584,6 +560,76 @@ class MsgBoard extends AppModel {
 
 	    return $hashmap;
 
+	}
+	
+	
+	/**
+	 * 評価アクション
+	 * @param [] $param フロントエンド側から送られてきたパラメータ
+	 * @param [] $userInfo 自分のユーザー情報
+	 */
+	public function evaluate($param, $userInfo){
+	    
+	    $msg_board_id = $param['msg_board_id']; // メッセージボードID
+	    $eval_type_id = $param['eval_type_id']; // 評価種別ID
+	    
+	    
+	    // ユーザー評価エンティティを作成
+	    $userEvalEnt = $this->makeUserEvals_evaluate($msg_board_id, $eval_type_id, $userInfo);
+	    $this->cb->saveSimple($userEvalEnt, 'msg_board_user_evals');
+	    
+	    
+	    
+	}
+	
+	/**
+	 * ユーザー評価エンティティを作成
+	 * @param int $msg_board_id メッセージボードID
+	 * @param int $eval_type_id 評価種別ID
+	 * @param [] $userInfo 自分のユーザー情報
+	 */
+	private function makeUserEvals_evaluate($msg_board_id, $eval_type_id, $userInfo){
+	    
+	    $user_id = $userInfo['id']; // ユーザーID
+	    debug('$user_id＝' . $user_id);//■■■□□□■■■□□□)
+	    
+	    // DBからユーザー評価エンティティを取得する
+	    $sql = "SELECT * FROM msg_board_user_evals WHERE msg_board_id={$msg_board_id} AND user_id={$user_id} AND eval_type_id={$eval_type_id}";
+	    $ent = $this->cb->selectEntity($sql);
+	    debug($ent);//■■■□□□■■■□□□)
+	    
+	    if(empty($ent)){
+	        $ent = $this->makeDefUserEvalEntity($msg_board_id, $eval_type_id, $user_id); // 空のユーザー評価エンティティを作成する
+	        
+	    }else{
+	        if($ent['delete_flg'] == 1){
+	            $ent['delete_flg'] == 0;
+	        }else{
+	            $ent['delete_flg'] == 1;
+	        }
+	    }
+	    
+	    // ユーザー評価エンティティに基本パラメータをセットする。
+	    //■■■□□□■■■□□□保留中
+	    
+	    return $ent;
+	}
+	
+	
+	/**
+	 * 空のユーザー評価エンティティを作成する
+	 * @param int $msg_board_id メッセージボードID
+	 * @param int $eval_type_id 評価種別ID
+	 * @param int $user_id ユーザーID
+	 */
+	private function makeDefUserEvalEntity($msg_board_id, $eval_type_id, $user_id){
+	    $ent = [
+	        'msg_board_id' => $msg_board_id,
+	        'user_id' => $user_id,
+	        'eval_type_id' => $eval_type_id,
+	        'delete_flg' => 0,
+	    ];
+	    return $ent;
 	}
 	
 	

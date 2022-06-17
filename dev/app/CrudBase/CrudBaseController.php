@@ -14,7 +14,7 @@ require_once 'PagenationEx.php';
 class CrudBaseController {
 
 	///バージョン
-	public $version = "3.5.1";
+	public $version = "3.6.0";
 	
 	public $crudBaseData = [];
 
@@ -2032,6 +2032,7 @@ class CrudBaseController {
 	*/
 	public function saveEntity(&$ent, $regParam = []){
 		
+	    debug('saveEntity');//■■■□□□■■■□□□)
 	    // ホワイトリストを取得する
 	    $whiteList = [];
 	    if(!empty($regParam['whiteList'])){
@@ -2052,8 +2053,20 @@ class CrudBaseController {
 			$ni_tr_place = $regParam['ni_tr_place'];
 			$ent['sort_no'] = $this->crudBaseModel->getSortNo($tbl_name, $ni_tr_place); // 順番を取得する
 		}
-
+		debug('A5');//■■■□□□■■■□□□)
+		debug($ent);//■■■□□□■■■□□□)
 		return $this->crudBaseModel->saveEntity($ent, $whiteList); // エンティティをDB保存
+	}
+	
+	
+	/**
+	 * エンティティをDB保存(シンプル版)
+	 * @param [] $ent エンティティ
+	 * @param string $tbl_name
+	 */
+	public function saveSimple(&$ent, $tbl_name){
+	    return $this->crudBaseModel->saveSimple($ent, $tbl_name);
+	    
 	}
 	
 	

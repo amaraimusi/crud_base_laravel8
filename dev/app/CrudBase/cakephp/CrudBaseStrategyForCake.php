@@ -159,6 +159,19 @@ class CrudBaseStrategyForCake extends AppController implements ICrudBaseStrategy
 		return $rs;
 	}
 	
+	
+	/**
+	 * エンティティをDB保存(シンプル版)
+	 * @param [] $ent エンティティ
+	 * @param string $tbl_name
+	 */
+	public function saveSimple(&$ent, $tbl_name){
+	    $res = $this->saveData->save($tbl_name, $ent); // DB保存
+	    $ent = $res['ent'];
+	    
+	    return $ent;
+	}
+	
 	/**
 	 * 検索条件のバリデーション
 	 *

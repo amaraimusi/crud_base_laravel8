@@ -4,8 +4,8 @@ require_once 'IDao.php';
 /**
  * PDOのDAO（データベースアクセスオブジェクト）
  * 
- * @date 2019-10-26 | 2021-12-23
- * @version 1.3.1
+ * @date 2019-10-26 | 2022-6-17
+ * @version 1.4.0
  * @license MIT
  * @author Kenji Uehara
  *
@@ -15,7 +15,19 @@ class PdoDao implements IDao
 	
     private $dao;
     
-    public function __construct($dbConf=[]){
+    /**
+     * 初期化方法は下記の2通りある。
+     * 1. 引数$dbConfにDB接続情報を指定する方法。フレームワーク未使用ならこちらの方法を採用。
+     * 2. 引数$pdoを指定する方法。Laravelなどのフレームワークを利用している場合は、Laravelが保有するPDOのインスタンスを指定する。
+     * @param array $dbConf
+     * @param PDO $pdo 
+     */
+    public function __construct($dbConf=[], $pdo = null){
+        
+        if(!empty($pdo)){
+            $this->dao = $pdo;
+            return;
+        }
         
         if(empty($dbConf)){
             global $crudBaseConfig;

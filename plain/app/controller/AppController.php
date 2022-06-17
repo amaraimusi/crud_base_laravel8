@@ -177,6 +177,16 @@ class AppController {
 		return $authority;
 	}
 	
+	/**
+	 * エンティティをDB保存(シンプル版)
+	 * @param [] $ent エンティティ
+	 * @param string $tbl_name
+	 */
+	public function saveSimple(&$ent, $tbl_name){
+	    return $this->cb->saveSimple($ent, $tbl_name);
+	    
+	}
+	
 
 
 }

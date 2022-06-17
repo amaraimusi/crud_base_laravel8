@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class AppModel extends Model{
     
-    private $cb; // CrudBase制御クラス
+    protected $cb; // CrudBase制御クラス
     protected $table = false; // 紐づけるテーブル名
     
     
@@ -103,5 +103,15 @@ class AppModel extends Model{
         }else{
             // 何もしない
         }
+    }
+    
+    /**
+     * エンティティをDB保存(シンプル版)
+     * @param [] $ent エンティティ
+     * @param string $tbl_name
+     */
+    public function saveSimple(&$ent, $tbl_name){
+        return $this->cb->saveSimple($ent, $tbl_name);
+        
     }
 }

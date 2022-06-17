@@ -39,7 +39,7 @@ class Neko extends AppModel
 	//public $timestamps = false; // タイムスタンプ。 trueならcreated_atフィールド、updated_atフィールドに適用される。（それ以外のフィールドを設定で指定可）
 	
 	
-	private $cb; // CrudBase制御クラス
+	protected $cb; // CrudBase制御クラス
 	
 	
 	public function __construct(){

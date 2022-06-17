@@ -14,7 +14,7 @@ class Dashboard extends Model{
 
 	
 	
-	private $cb; // CrudBase制御クラス
+    protected $cb; // CrudBase制御クラス
 	
 	
 	public function __construct(){

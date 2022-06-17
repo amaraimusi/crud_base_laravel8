@@ -14,8 +14,8 @@ class UserMngController extends AppController
 	
 	private $review_mode = false; // レビューモード（見本モード）
 	
-	private $cb; // CrudBase制御クラス
-	private $md; // モデル
+	protected $cb; // CrudBase制御クラス
+	protected $md; // モデル
 
 	/**
 	 * ユーザー管理CRUDページ
