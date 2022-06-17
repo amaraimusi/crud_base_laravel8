@@ -324,6 +324,7 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	
 	/**
 	 * エンティティをDB保存(シンプル版)
+	 * ※SQLインジェクションのサニタイズは当メソッドで行っていないためよく注意すること。
 	 * @param [] $ent エンティティ
 	 * @param string $tbl_name
 	 */
