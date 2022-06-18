@@ -573,14 +573,41 @@ class MsgBoard extends AppModel {
 	    $msg_board_id = $param['msg_board_id']; // メッセージボードID
 	    $eval_type_id = $param['eval_type_id']; // 評価種別ID
 	    
+	    // セキュリティ
+	    if(!is_numeric($msg_board_id)) throw new Exception('ERR220618A');
+	    if(!is_numeric($eval_type_id)) throw new Exception('ERR220618B');
+
+	    // 評価種別テーブルから評価種別IDに紐づく評価種別エンティティを取得する。
+	    $evalTypeEnt = $this->getEvalTypeEntity($eval_type_id);
+	    if(empty($evalTypeEnt)) throw new Exception('ERR220618C');
 	    
 	    // ユーザー評価エンティティを作成
 	    $userEvalEnt = $this->makeUserEvals_evaluate($msg_board_id, $eval_type_id, $userInfo);
 	    $this->cb->saveSimple($userEvalEnt, 'msg_board_user_evals');
 	    
+	    // 評価種別エンティティに反対評価種別IDがセットされている場合
+	    if(!empty($evalTypeEnt['conversely_eval_type_id'])){
+	        $conversely_eval_type_id = $evalTypeEnt['conversely_eval_type_id'];
+	        
+	        // 反対評価種別ID用ユーザー評価エンティティを作成（引数:メッセージボードID, 評価種別ID, 自分のユーザー情報)
+	        $userEvalEnt = $this->makeUserEvalsForConversely($msg_board_id, $conversely_eval_type_id, $userInfo);
+	        if(!empty($userEvalEnt)){
+	            $this->cb->saveSimple($userEvalEnt, 'msg_board_user_evals');
+	        }
+	        
+	    }
 	    
 	    
 	}
+	
+	// 評価種別テーブルから評価種別IDに紐づく評価種別エンティティを取得する。
+	private function getEvalTypeEntity($eval_type_id){
+	    $sql = "SELECT * FROM msg_board_eval_types WHERE id = {$eval_type_id} AND delete_flg = 0";
+	    $evalTypeEnt = $this->cb->selectEntity($sql);
+	    debug($evalTypeEnt);//■■■□□□■■■□□□)
+	    return $evalTypeEnt;
+	}
+	
 	
 	/**
 	 * ユーザー評価エンティティを作成
@@ -591,13 +618,11 @@ class MsgBoard extends AppModel {
 	private function makeUserEvals_evaluate($msg_board_id, $eval_type_id, $userInfo){
 	    
 	    $user_id = $userInfo['id']; // ユーザーID
-	    debug('$user_id＝' . $user_id);//■■■□□□■■■□□□)
-	    
+
 	    // DBからユーザー評価エンティティを取得する
 	    $sql = "SELECT * FROM msg_board_user_evals WHERE msg_board_id={$msg_board_id} AND user_id={$user_id} AND eval_type_id={$eval_type_id}";
 	    $ent = $this->cb->selectEntity($sql);
-	    debug($ent);//■■■□□□■■■□□□)
-	    
+
 	    if(empty($ent)){
 	        $ent = $this->makeDefUserEvalEntity($msg_board_id, $eval_type_id, $user_id); // 空のユーザー評価エンティティを作成する
 	        
@@ -610,7 +635,9 @@ class MsgBoard extends AppModel {
 	    }
 	    
 	    // ユーザー評価エンティティに基本パラメータをセットする。
-	    //■■■□□□■■■□□□保留中
+	    $update_user = $userInfo['update_user'];
+	    $ent = $this->setCommonToEntity($ent, $update_user);
+	    unset($ent['user_agent']);
 	    
 	    return $ent;
 	}
@@ -629,6 +656,41 @@ class MsgBoard extends AppModel {
 	        'eval_type_id' => $eval_type_id,
 	        'delete_flg' => 0,
 	    ];
+	    return $ent;
+	}
+	
+	/**
+	 * 反対評価種別ID用ユーザー評価エンティティを作成（引数:メッセージボードID, 評価種別ID, 自分のユーザー情報)
+	 * @param int $msg_board_id メッセージボードID
+	 * @param int $conversely_eval_type_id 反対評価種別ID
+	 * @param [] $userInfo 自分のユーザー情報
+	 */
+	private function makeUserEvalsForConversely($msg_board_id, $conversely_eval_type_id, &$userInfo){
+	    $user_id = $userInfo['id']; // ユーザーID
+	    
+	    // DBからユーザー評価エンティティを取得する
+	    $sql = "SELECT * FROM msg_board_user_evals WHERE msg_board_id={$msg_board_id} AND user_id={$user_id} AND eval_type_id={$conversely_eval_type_id}";
+	    $ent = $this->cb->selectEntity($sql);
+	    
+	    if(empty($ent)){
+	        // 一度も反対の評価をしていないので、何もする必要なし。
+	        
+	    }else{
+	        // 反対の評価をしている場合のみ、無効フラグをONにする。
+	        if($ent['delete_flg'] == 0){
+	            $ent['delete_flg'] == 1;
+	        }else{
+	            $ent = [];
+	        }
+	    }
+	    
+	    // ユーザー評価エンティティに基本パラメータをセットする。
+	    if(!empty($ent)){
+	        $update_user = $userInfo['update_user'];
+	        $ent = $this->setCommonToEntity($ent, $update_user);
+	        unset($ent['user_agent']);
+	    }
+	    
 	    return $ent;
 	}
 	
