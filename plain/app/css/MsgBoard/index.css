@@ -27,8 +27,15 @@
 	display: inline-block;
 	mask: no-repeat center/70%;
 	-webkit-mask: no-repeat center/70%;
-	background: #69b580;
 }
+
+.eval_btn_color_unpushed{
+	background: #a5b1a7;
+}
+.eval_btn_color_pushed{
+	background: #269745;
+}
+
 
 .eval_user_count_btn{
 	background-color:white;

@@ -71,7 +71,7 @@ class MsgBoardController extends AppController {
 		$data = $this->md->setBtnDisplayByThisUserType($user_type, $data, $userInfo);
 		
 		// データに評価関連データをセットする
-		$evals = $this->md->getEvals($data);
+		$evals = $this->md->getEvals($data, $userInfo);
 		$crudBaseData['evals'] = $evals;
 		
 		// 評価種別ハッシュマップをDBから取得する。
@@ -525,17 +525,6 @@ class MsgBoardController extends AppController {
 	    $param = json_decode($json, true);
 	    
 	    $res = $this->md->evaluate($param, $userInfo); // 評価アクション
-	    
-// 	    // 登録パラメータ■■■□□□■■■□□□
-// 	    $reg_param_json = $_POST['reg_param_json'];
-// 	    $regParam = json_decode($reg_param_json,true);
-	    
-// 	    $ent = $this->setCommonToEntity($ent);
-	    
-
-	    
-// 	    // CBBXE
-// 	    $ent = $this->md->saveEntity($ent, $regParam);
 	    
 	    $json_str = json_encode($res, JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS); // JSONに変換
 	    

@@ -5,8 +5,8 @@ require_once CRUD_BASE_PATH . 'SaveData.php';
 
 /**
  * プレーン版ストラテジークラス
- * @version 1.0.1
- * @since 2021-12-9
+ * @version 1.0.2
+ * @since 2021-12-9 | 2022-6-18
  * @license MIT
  */
 class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
@@ -330,9 +330,8 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 	 */
 	public function saveSimple(&$ent, $tbl_name){
 	    $res = $this->saveData->save($tbl_name, $ent); // DB保存
-	    $ent = $res['ent'];
-	    
-	    return $ent;
+
+	    return $res;
 	}
 	
 	/**
@@ -400,7 +399,13 @@ class CrudBaseStrategyForPlain  implements ICrudBaseStrategy{
 		
 	    if(empty($res)) return [];
 
-		$ent = $res[0];
+	    $ent = [];
+	    foreach($res[0] as $key => $value){
+	        if(!is_numeric($key)){
+	            $ent[$key] = $value;
+	        }
+	    }
+
 		return $ent;
 
 	}

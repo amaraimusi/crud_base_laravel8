@@ -233,9 +233,8 @@ class CrudBaseStrategyForLaravel8  implements ICrudBaseStrategy{
 	 */
 	public function saveSimple(&$ent, $tbl_name){
 	    $res = $this->saveData->save($tbl_name, $ent); // DB保存
-	    $ent = $res['ent'];
-	    
-	    return $ent;
+
+	    return $res;
 	}
 	
 	/**

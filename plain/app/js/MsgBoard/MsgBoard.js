@@ -709,6 +709,8 @@ class MsgBoard{
 			}
 			
 			res = this._xss_sanitize(res); // XSS対策
+			
+			console.log(res);//■■■□□□■■■□□□
 
 
 		})

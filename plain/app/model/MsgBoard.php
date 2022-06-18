@@ -396,9 +396,12 @@ class MsgBoard extends AppModel {
 	/**
 	 *  メッセージデータに評価関連データをセットする
 	 * @param [] $data メッセージデータ
+	 * @param [] $userInfo ユーザー情報
 	 * @return [] 評価関連データをセットしたメッセージデータ
 	 */
-	public function getEvals(&$data){
+	public function getEvals(&$data, &$userInfo){
+	    
+	    $my_user_id = $userInfo['id'];
 	    
 	    $evals = [];
 	    $evalTypes = $this->getEvalTypes(); // 評価種別情報をDBから取得する
@@ -407,7 +410,7 @@ class MsgBoard extends AppModel {
 	       
 	        $msg_board_id = $ent['id'];
 	        $evalData = $this->getEvalData($msg_board_id); // 評価データを取得する
-	        $evalData = $this->convEvalData($evalData, $evalTypes); // 評価データの構造変換
+	        $evalData = $this->convEvalData($evalData, $evalTypes, $my_user_id); // 評価データの構造変換
 	        $evals[$msg_board_id] = $evalData;
 	        
 	    }
@@ -483,13 +486,15 @@ class MsgBoard extends AppModel {
 	 * 評価データの構造変換 
 	 * @param [] $evalData 評価データ（返還前）
 	 * @param [] $evalTypes 評価種別情報
+	 * @param int $my_user_id 自分のユーザーID
 	 * @return [] 評価データ（変換後）
 	 */
-	private function convEvalData($evalData, &$evalTypes){
+	private function convEvalData($evalData, &$evalTypes, $my_user_id){
 	    
 	    $evalData2 = $this->makeDefEvalData2($evalTypes); // 空の評価データ2型を作成する。
 	    
 	    foreach($evalData as $ent){
+	        
 	        
 	        $eval_type_id = $ent['eval_type_id'];
 	        $eval_count = $evalData2[$eval_type_id]['eval_count'];
@@ -498,6 +503,9 @@ class MsgBoard extends AppModel {
 	        $evalData2[$eval_type_id]['users'][] = $ent;
 	        
 	        $evalData2[$eval_type_id]['eval_count'] = $eval_count;
+	        
+	        if($my_user_id == $ent['user_id']) $evalData2[$eval_type_id]['pushed'] = 1; // ログインユーザー自身が評価ボタンを押したことがあれば、押下フラグをONにする。
+	        
 
 	    }
 	    
@@ -516,7 +524,8 @@ class MsgBoard extends AppModel {
 	        $eval_type_id = $etEnt['id'];
 	        $evalData2[$eval_type_id] = [
 	            'eval_count'=>0,
- 	            'eval_type_id'=>$eval_type_id,
+	            'eval_type_id'=>$eval_type_id,
+	            'pushed'=>0, // 押下フラグ
 	            'users'=>[],
 	        ];
 
@@ -586,25 +595,30 @@ class MsgBoard extends AppModel {
 	    $this->cb->saveSimple($userEvalEnt, 'msg_board_user_evals');
 	    
 	    // 評価種別エンティティに反対評価種別IDがセットされている場合
+	    $converselyUserEvalEnt = [];
 	    if(!empty($evalTypeEnt['conversely_eval_type_id'])){
 	        $conversely_eval_type_id = $evalTypeEnt['conversely_eval_type_id'];
 	        
 	        // 反対評価種別ID用ユーザー評価エンティティを作成（引数:メッセージボードID, 評価種別ID, 自分のユーザー情報)
-	        $userEvalEnt = $this->makeUserEvalsForConversely($msg_board_id, $conversely_eval_type_id, $userInfo);
+	        $converselyUserEvalEnt = $this->makeUserEvalsForConversely($msg_board_id, $conversely_eval_type_id, $userInfo);
 	        if(!empty($userEvalEnt)){
-	            $this->cb->saveSimple($userEvalEnt, 'msg_board_user_evals');
+	            $this->cb->saveSimple($ConverselyUserEvalEnt, 'msg_board_user_evals');
 	        }
 	        
 	    }
 	    
+	    $res = [
+	        'userEvalEnt' => $userEvalEnt,
+	        'converselyUserEvalEnt' => $converselyUserEvalEnt,
+	    ];
 	    
+	    return $res;
 	}
 	
 	// 評価種別テーブルから評価種別IDに紐づく評価種別エンティティを取得する。
 	private function getEvalTypeEntity($eval_type_id){
 	    $sql = "SELECT * FROM msg_board_eval_types WHERE id = {$eval_type_id} AND delete_flg = 0";
 	    $evalTypeEnt = $this->cb->selectEntity($sql);
-	    debug($evalTypeEnt);//■■■□□□■■■□□□)
 	    return $evalTypeEnt;
 	}
 	
@@ -622,6 +636,8 @@ class MsgBoard extends AppModel {
 	    // DBからユーザー評価エンティティを取得する
 	    $sql = "SELECT * FROM msg_board_user_evals WHERE msg_board_id={$msg_board_id} AND user_id={$user_id} AND eval_type_id={$eval_type_id}";
 	    $ent = $this->cb->selectEntity($sql);
+	    debug('$ent2');//■■■□□□■■■□□□)
+	    debug($ent);//■■■□□□■■■□□□)
 
 	    if(empty($ent)){
 	        $ent = $this->makeDefUserEvalEntity($msg_board_id, $eval_type_id, $user_id); // 空のユーザー評価エンティティを作成する
@@ -637,6 +653,7 @@ class MsgBoard extends AppModel {
 	    // ユーザー評価エンティティに基本パラメータをセットする。
 	    $update_user = $userInfo['update_user'];
 	    $ent = $this->setCommonToEntity($ent, $update_user);
+	    
 	    unset($ent['user_agent']);
 	    
 	    return $ent;
