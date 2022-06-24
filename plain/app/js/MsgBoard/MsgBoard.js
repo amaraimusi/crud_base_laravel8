@@ -707,10 +707,24 @@ class MsgBoard{
 				jQuery("#err_eval_" + msg_board_id).append(res_json);
 				return;
 			}
-			
+
 			res = this._xss_sanitize(res); // XSS対策
+			console.log(res);//■■■□□□■■■□□□converselyUserEvalEnt
 			
-			console.log(res);//■■■□□□■■■□□□
+			// 評価ボタン押下後、評価ボタンの色を変更する。（スタイルを変更する）
+			let perElm = jqbtn.parents('.msg_board_eval_w');
+			this._reflectOnEvalBtn(perElm, res.userEvalEnt);
+			this._reflectOnEvalBtn(perElm, res.converselyUserEvalEnt);
+			
+			// 評価データへレスポンスを反映する。
+			this.evals = this._reflectToEvals(this.evals, res.userEvalEnt); 
+			this.evals = this._reflectToEvals(this.evals, res.converselyUserEvalEnt); 
+			
+			// 評価ユーザー一覧表示ボタンの人数を変更する
+			this._reflectOnEvalUserCountBtn(perElm, this.evals, res.userEvalEnt);
+			this._reflectOnEvalUserCountBtn(perElm, this.evals, res.converselyUserEvalEnt);
+			
+			
 
 
 		})
@@ -720,6 +734,147 @@ class MsgBoard{
 			errElm.append(jqXHR.responseText);
 			alert(statusText);
 		});		
+	}
+	
+	
+	/**
+	* 評価ボタン押下後、評価ボタンの色を変更する。（スタイルを変更する）
+	* @param jQuery perElm 評価ボタンの親区分要素
+	* @param {} userEvalEnt ユーザー評価エンティティ
+	*/
+	_reflectOnEvalBtn(perElm, userEvalEnt){
+
+		if(this._empty(userEvalEnt)) return;
+		
+		let msg_board_id = userEvalEnt.msg_board_id;
+		let eval_type_id = userEvalEnt.eval_type_id;
+		
+		let eval_btn_xid = `eval_btn_${msg_board_id}_${eval_type_id}`;
+		let jqEvalBtn = perElm.find('#' + eval_btn_xid);
+		
+		// 無効フラグの値によって適用するCSSスタイルを変更する。
+		if(userEvalEnt.delete_flg == 0){
+
+			jqEvalBtn.removeClass('eval_btn_color_unpushed');
+			jqEvalBtn.addClass('eval_btn_color_pushed');
+		}else{
+			
+			jqEvalBtn.removeClass('eval_btn_color_pushed');
+			jqEvalBtn.addClass('eval_btn_color_unpushed');
+		}
+		
+		
+
+	}
+	
+	/**
+	* 評価データへレスポンスを反映する。
+	* @param {} evals 評価データ
+	* @param {} userEvalEnt ユーザー評価エンティティ
+	* @return {} evals ユーザー評価エンティティを反映させた評価データ
+	*/
+	_reflectToEvals(evals, userEvalEnt){
+
+		if(this._empty(userEvalEnt)) return evals;
+
+		let msg_board_id = userEvalEnt.msg_board_id;
+		let eval_type_id = userEvalEnt.eval_type_id;
+		let user_id = userEvalEnt.user_id;
+		let dataL3 = evals[msg_board_id][eval_type_id];
+		
+		if(dataL3 == undefined) return;
+		let dataL4 = dataL3.users;
+
+		if(userEvalEnt.delete_flg == 0){
+			let entL5 = this._getUserEntityFormDataL4(dataL4, user_id);
+			if(entL5 == null){
+				entL5 = this._makeUserEntL5(userEvalEnt); // 評価データ用ユーザーエンティティを作成する。
+				dataL4.push(entL5);
+			}
+	
+		}else if(userEvalEnt.delete_flg == 1){
+			dataL4 = this._delteMyUser(dataL4, user_id); // L4データに自分のユーザーIDに一致するレコードが見つかった場合削除する。
+		}
+
+		dataL3.eval_count = dataL4.length; // 人数を評価データへ反映
+	
+		return evals;
+	
+	}
+	
+	
+	/**
+	* L4データに自分のユーザーIDに一致するレコードが見つかった場合削除する。
+	* @param {} dataL4 評価データ第4階層
+	* @return {} my_user_id ログイン中ユーザーのユーザーID
+	*/
+	_delteMyUser(dataL4, my_user_id){
+		for(let i in dataL4){
+			if(dataL4[i].user_id == my_user_id){
+				dataL4.splice(i);
+				return　dataL4;
+			}
+		}
+		return dataL4;
+	}
+	
+	/**
+	* 評価データ用ユーザーエンティティを作成する。
+	* @param {} userEvalEnt ユーザー評価エンティティ
+	* @return {} entL5 評価データの第5階層(ユーザーエンティティ)
+	*/
+	_makeUserEntL5(userEvalEnt){
+		var now_time = new Date().toLocaleTimeString();
+		let nickname = this.userInfo.nickname;
+		if(this._empty(nickname)) nickname = this.userInfo.user_name;
+		
+		let entL5 = {
+			eval_type_id: userEvalEnt.eval_type_id,
+			modified: now_time,
+			msg_board_id: userEvalEnt.msg_board_id,
+			nickname: nickname,
+			user_id: userEvalEnt.user_id,
+			user_name: this.userInfo.user_name,
+		};
+
+		return entL5;
+		
+	}
+	
+	_getUserEntityFormDataL4(dataL4, my_user_id){
+		
+		for(let i in dataL4){
+			let entL5 = dataL4[i];
+			if(entL5.user_id == my_user_id){
+				return entL5;
+			}	
+		}
+		return null;
+	}
+			
+	
+	/**
+	* 評価ユーザー一覧表示ボタンの人数を変更する
+	* @param jQuery perElm 評価ボタンの親区分要素
+	* @param {} evals 評価データ
+	* @param {} converselyUserEvalEnt ユーザー評価エンティティ
+	*/
+	_reflectOnEvalUserCountBtn(perElm, evals, userEvalEnt){
+
+		if(this._empty(userEvalEnt)) return;
+		
+		let msg_board_id = userEvalEnt.msg_board_id;
+		let eval_type_id = userEvalEnt.eval_type_id;
+		
+		let dataL4 = evals[msg_board_id][eval_type_id]['users'];
+		let eval_count = dataL4.length;
+		
+		let btn_xid = `eval_user_count_btn_${msg_board_id}_${eval_type_id}`;
+		let jqBtn = perElm.find('#' + btn_xid); // 評価ユーザー一覧表示ボタン要素
+		
+		// ボタン要素に人数を表示。
+		jqBtn.html(eval_count);
+		
 	}
 	
 	

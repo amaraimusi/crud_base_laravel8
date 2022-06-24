@@ -10,7 +10,11 @@ CrudBase Laravel8版
 
 ## ER図
 
-![ER図](http://localhost/note_prg/mgt/img/sys_design_note2/crud_base_laravel8.drawio.svg "ER図")
+メッセージボードまわり
+
+
+![ER図](doc/crud_base_laravel8.drawio.svg "ER図")
+
 
 ## 設計
 

@@ -602,7 +602,7 @@ class MsgBoard extends AppModel {
 	        // 反対評価種別ID用ユーザー評価エンティティを作成（引数:メッセージボードID, 評価種別ID, 自分のユーザー情報)
 	        $converselyUserEvalEnt = $this->makeUserEvalsForConversely($msg_board_id, $conversely_eval_type_id, $userInfo);
 	        if(!empty($userEvalEnt)){
-	            $this->cb->saveSimple($ConverselyUserEvalEnt, 'msg_board_user_evals');
+	            $this->cb->saveSimple($converselyUserEvalEnt, 'msg_board_user_evals');
 	        }
 	        
 	    }
@@ -636,17 +636,15 @@ class MsgBoard extends AppModel {
 	    // DBからユーザー評価エンティティを取得する
 	    $sql = "SELECT * FROM msg_board_user_evals WHERE msg_board_id={$msg_board_id} AND user_id={$user_id} AND eval_type_id={$eval_type_id}";
 	    $ent = $this->cb->selectEntity($sql);
-	    debug('$ent2');//■■■□□□■■■□□□)
-	    debug($ent);//■■■□□□■■■□□□)
 
 	    if(empty($ent)){
 	        $ent = $this->makeDefUserEvalEntity($msg_board_id, $eval_type_id, $user_id); // 空のユーザー評価エンティティを作成する
 	        
 	    }else{
 	        if($ent['delete_flg'] == 1){
-	            $ent['delete_flg'] == 0;
+	            $ent['delete_flg'] = 0;
 	        }else{
-	            $ent['delete_flg'] == 1;
+	            $ent['delete_flg'] = 1;
 	        }
 	    }
 	    
@@ -695,7 +693,7 @@ class MsgBoard extends AppModel {
 	    }else{
 	        // 反対の評価をしている場合のみ、無効フラグをONにする。
 	        if($ent['delete_flg'] == 0){
-	            $ent['delete_flg'] == 1;
+	            $ent['delete_flg'] = 1;
 	        }else{
 	            $ent = [];
 	        }
