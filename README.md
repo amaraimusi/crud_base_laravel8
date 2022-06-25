@@ -5,6 +5,8 @@ CrudBase Laravel8版
 
 @auther amaraimusi
 
+@license MIT
+
 
 [開発環境構築手順](README_Environment2.md "開発環境構築手順")
 

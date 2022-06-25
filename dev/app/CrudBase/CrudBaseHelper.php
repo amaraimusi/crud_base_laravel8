@@ -8,8 +8,8 @@
  * 検索条件入力フォームや、一覧テーブルのプロパティのラッパーを提供する
  * 2.0.0よりCakeからの依存から離脱
  * 
- * @version 2.2.4
- * @since 2016-7-27 | 2022-6-8
+ * @version 2.2.5
+ * @since 2016-7-27 | 2022-6-26
  * @author k-uehara
  * @license MIT
  */
@@ -2474,7 +2474,7 @@ class CrudBaseHelper {
 		}
 		
 		$fp2 = '';
-		if(!empty($fp)){
+		if(!empty($fp) && $fn_type == 'img'){
 			$fp2 = str_replace('/orig/', "/{$size_type}/", $fp);
 		}
 		
