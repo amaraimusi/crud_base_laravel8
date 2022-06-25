@@ -10,7 +10,7 @@ CrudBase Laravel8版
 
 ## ER図
 
-メッセージボードまわり
+とりあえずメッセージボードまわりのみ。 draw.ioにて記述しています。
 
 
 ![ER図](doc/crud_base_laravel8.drawio.svg "ER図")

@@ -709,8 +709,7 @@ class MsgBoard{
 			}
 
 			res = this._xss_sanitize(res); // XSS対策
-			console.log(res);//■■■□□□■■■□□□converselyUserEvalEnt
-			
+
 			// 評価ボタン押下後、評価ボタンの色を変更する。（スタイルを変更する）
 			let perElm = jqbtn.parents('.msg_board_eval_w');
 			this._reflectOnEvalBtn(perElm, res.userEvalEnt);
