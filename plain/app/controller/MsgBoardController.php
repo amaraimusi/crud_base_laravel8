@@ -54,7 +54,12 @@ class MsgBoardController extends AppController {
 		$crudBaseData = $this->cb->indexAfter($crudBaseData, ['non_limit_count'=>$non_limit_count]);
 
 		//■■■□□□■■■□□□仮ログイン
-		$_SESSION['uid'] = 1;
+		if(empty($_SESSION['uid'])){
+		    $_SESSION['uid'] = 1;
+		}
+		
+		
+		
 		$crudBaseData['userInfo'] = $this->cb->getUserInfo();
 		
 		$userInfo = $crudBaseData['userInfo'];
@@ -148,7 +153,7 @@ class MsgBoardController extends AppController {
 		
 		// ファイルアップロードとファイル名のDB保存
 		if(!empty($_FILES)){
-			$ent['attach_fn'] = $this->cb->makeFilePath($_FILES, "/crud_base_laravel8/dev/storage/msg_board/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'attach_fn');
+			$ent['attach_fn'] = $this->cb->makeFilePath($_FILES, "/crud_base_laravel8/dev/public/storage/msg_board/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'attach_fn');
 			$fileUploadK = $this->factoryFileUploadK();
 			$fileUploadK->putFile1($_FILES, 'attach_fn', $ent['attach_fn']);
 			$this->md->saveEntity($ent, $regParam);

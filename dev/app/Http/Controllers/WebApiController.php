@@ -36,8 +36,6 @@ class WebApiController extends AppController
 			'fw_type' => 'laravel8',
 			'model_name_c' => 'Api',
 			'tbl_name' => 'nekos', // テーブル名をセット
-// 			'kensakuJoken' => [], //検索条件情報■■■□□□■■■□□□
-// 			'fieldData' => [], //フィールドデータ
 			'crud_base_path' => $crud_base_path,
 		];
 		

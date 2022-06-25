@@ -466,7 +466,7 @@ class MsgBoard extends AppModel {
             	User.nickname
             FROM 
             	msg_board_user_evals AS UserEval
-            	LEFT JOIN users AS USER ON UserEval.user_id = User.id
+            	LEFT JOIN users AS User ON UserEval.user_id = User.id
             WHERE
             	UserEval.msg_board_id = {$msg_board_id}
             	AND UserEval.delete_flg = 0

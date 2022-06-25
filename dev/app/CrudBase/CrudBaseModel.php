@@ -789,8 +789,6 @@ class CrudBaseModel{
 		
 		// 更新ユーザーなど共通フィールドをセットする。
 		$ent = $this->setCommonToEntity($ent);
-		debug('A6');//■■■□□□■■■□□□)
-		debug($ent);//■■■□□□■■■□□□)
 		$this->strategy->setWhiteList($whiteList);
 		return $this->strategy->saveEntity($ent, $whiteList);
 

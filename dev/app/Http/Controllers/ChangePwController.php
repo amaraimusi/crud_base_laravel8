@@ -33,13 +33,7 @@ class ChangePwController extends AppController
  		
  		$userInfo = $this->getUserInfo();
 		$crudBaseData['userInfo'] = $userInfo;
-		
-		
-// 		// セキュリティ対策■■■□□□■■■□□□
-// 		$qr_read_token = \CrudBaseU::random(); //　トークン
-// 		Session::put('qr_read_token', $qr_read_token);
-// 		$crudBaseData['qr_read_token'] = $qr_read_token;
-		
+
 		$crud_base_json = json_encode($crudBaseData,JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS);
 		return view('change_pw.index', compact('crudBaseData', 'crud_base_json'));
 		

@@ -509,65 +509,6 @@ class CrudBaseController {
 
 	}
 	
-// 	/**
-// 	 * フィールドデータに関する処理■■■□□□■■■□□□【後日、関連メソッドを含めて削除 2022-2】
-// 	 * 
-// 	 * @param array $def_fieldData コントローラで定義しているフィールドデータ
-// 	 * @param string $page_code ページコード（モデル名）
-// 	 * @return array res 
-// 	 * - table_fields 一覧列情報
-// 	 */
-// 	private function exe_fieldData_old($def_fieldData,$page_code){
-		
-// 		//フィールドデータから一覧列情報を作成する。
-
-
-// 		//フィールドデータをセッションに保存する
-// 		$fd_ses_key=$page_code.'_sorter_fieldData';
-
-// 		//一覧列情報のセッションキー
-// 		$tf_ses_key = $page_code.'_table_fields';
-
-// 		//セッションキーに紐づくフィールドデータを取得する
-// 		$fieldData=$this->strategy->sessionRead($fd_ses_key);
-
-// 		$table_fields=[];//一覧列情報
-
-// 		//フィールドデータが空である場合
-// 		if(empty($fieldData)){
-
-// 			//定義フィールドデータをフィールドデータにセットする。
-// 			$fieldData=$def_fieldData;
-
-// 			//defをactiveとして取得。
-// 			$active=$fieldData['def'];
-
-// 			//列並番号でデータを並び替える。データ構造も変換する。
-// 			$active = $this->crudBaseModel->sortAndCombine($active);
-// 			$fieldData['active']=$active;
-
-// 			//セッションにフィールドデータを書き込む
-// 			$this->strategy->sessionWrite($fd_ses_key,$fieldData);
-
-// 			//フィールドデータから一覧列情報を作成する。
-// 			$table_fields=$this->crudBaseModel->makeTableFieldFromFieldData($fieldData);
-
-// 			//セッションに一覧列情報をセットする。
-// 			$this->strategy->sessionWrite($tf_ses_key,$table_fields);
-
-// 		}
-
-// 		//セッションから一覧列情報を取得する。
-// 		if(empty($table_fields)){
-// 			$table_fields = $this->strategy->sessionRead($tf_ses_key);
-// 		}
-
-// 		$res['table_fields']=$table_fields;
-// 		$res['fieldData']=$fieldData;
-
-// 		return $res;
-
-// 	}
 
 	/**
 	 * フィールドデータから列表示配列を取得
@@ -2032,7 +1973,6 @@ class CrudBaseController {
 	*/
 	public function saveEntity(&$ent, $regParam = []){
 		
-	    debug('saveEntity');//■■■□□□■■■□□□)
 	    // ホワイトリストを取得する
 	    $whiteList = [];
 	    if(!empty($regParam['whiteList'])){
@@ -2053,8 +1993,7 @@ class CrudBaseController {
 			$ni_tr_place = $regParam['ni_tr_place'];
 			$ent['sort_no'] = $this->crudBaseModel->getSortNo($tbl_name, $ni_tr_place); // 順番を取得する
 		}
-		debug('A5');//■■■□□□■■■□□□)
-		debug($ent);//■■■□□□■■■□□□)
+
 		return $this->crudBaseModel->saveEntity($ent, $whiteList); // エンティティをDB保存
 	}
 	

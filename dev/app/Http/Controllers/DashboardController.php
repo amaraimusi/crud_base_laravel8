@@ -59,8 +59,6 @@ class DashboardController extends AppController
 			'fw_type' => 'laravel7',
 			'model_name_c' => 'Dashboard',
 			'tbl_name' => 'nekos', // テーブル名をセット
-// 			'kensakuJoken' => [], //検索条件情報■■■□□□■■■□□□
-// 			'fieldData' => [], //フィールドデータ
 			'crud_base_path' => $crud_base_path,
 			'crud_base_js' => $crud_base_js,
 			'crud_base_css' => $crud_base_css,
