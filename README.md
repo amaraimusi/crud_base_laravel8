@@ -17,6 +17,8 @@ CrudBase Laravel8版
 
 ![ER図](doc/crud_base_laravel8.drawio.svg "ER図")
 
+ [ER図:draw.io用xml](doc/crud_base_laravel8.drawio.xml)
+
 
 ## 設計
 
