@@ -8,8 +8,8 @@
  * - init 初期化
  * - refresh 一覧テーブルをリフレッシュする
  * 
- * @version 1.6.1
- * @date 2014-4-1 │ 2020-6-16
+ * @version 1.6.3
+ * @date 2014-4-1 │ 2022-7-7
  * @license MIT
  * @author k-uehara 
  */
@@ -34,21 +34,14 @@ var ClmShowHide =function(){
 	 * @param tblId 対象テーブルのID属性
 	 * @param chBoxsId 列表示切替チェックボックス群を出力する要素を指定
 	 * @param iniClmData 初期列表示配列 例→iniClmData=[-1,1,0,0,0,1];// -1:機能無効  0:非表示  1:表示
-	 * @param unique 画面毎に異なる一意なコード。省略時は引数tblIdを使用する。
 	 *
 	 */
-	this.init=function(tblId,chBoxsId,iniClmData,unique){
+	this.init=function(tblId,chBoxsId,iniClmData){
 
 		//引数をメンバのプロパティにセットする。
 		this.props['tblId']=tblId;
 		this.props['chBoxsId']=chBoxsId;
-		this.props['unique']=unique;
 
-
-		if(unique==null){
-			unique=tblId;
-		}
-		
 		// デフォルト列データを作成する
 		var defClmData=[];
 		for(var i=0;i < iniClmData.length ;i++){
@@ -77,7 +70,8 @@ var ClmShowHide =function(){
 
 
 		// ローカルストレージから列JSONを取得する
-		var j_clmData=localStorage.getItem(unique + '_clmData');
+		var ses_key = this._getLsKey();
+		var j_clmData=localStorage.getItem(ses_key);
 		
 
 		
@@ -137,7 +131,7 @@ var ClmShowHide =function(){
 		jQuery("#" + tblId + "_save_btn").click(function(event){
 
 			//列の表示状態をローカルストレージに保存
-			saveClmData(tblId,chBoxsId,unique);
+			saveClmData(tblId,chBoxsId);
 
 		});
 
@@ -161,12 +155,23 @@ var ClmShowHide =function(){
 		jQuery("#" + tblId + "_default_btn").click(function(event){
 
 			//列表示チェックボックスを初期状態に戻す。
-			defaultClmCb(tblId,chBoxsId,unique);
+			defaultClmCb(tblId,chBoxsId);
 
 		});
 
 
 	};
+	
+		/**
+	 * ローカルストレージキーを取得する
+	 */
+	this._getLsKey = function(){
+		// ローカルストレージキーを取得する
+		let ls_key = location.href; // 現在ページのURLを取得
+		ls_key = ls_key.split(/[?#]/)[0]; // クエリ部分を除去
+		ls_key += '_csh162';
+		return ls_key;
+	}
 	
 	/**
 	 * 列表示配列を取得
@@ -211,7 +216,7 @@ var ClmShowHide =function(){
 	this.reset=function(){
 		
 		//列表示チェックボックスを初期状態に戻す。
-		defaultClmCb(this.props.tblId,this.props.chBoxsId,this.props.unique);
+		defaultClmCb(this.props.tblId,this.props.chBoxsId);
 
 	};
 	
@@ -270,7 +275,7 @@ var ClmShowHide =function(){
 	/**
 	 * 列表示チェックボックスを初期状態に戻す
 	 */
-	function defaultClmCb(tblId,chBoxsId,unique){
+	function defaultClmCb(tblId,chBoxsId){
 		
 		// チェックボックス群要素のjQueyオブジェクトを取得する
 		var chBox = jQuery('#' + my.props.chBoxsId);
@@ -297,7 +302,8 @@ var ClmShowHide =function(){
 
 		//ローカルストレージの列データをクリア
 		var storage = localStorage;
-		storage.removeItem(unique + '_clmData');
+		var ses_key = my._getLsKey();
+		storage.removeItem(ses_key);
 
 
 	};
@@ -360,13 +366,14 @@ var ClmShowHide =function(){
 	/**
 	 * 列の表示状態をローカルストレージに保存
 	 */
-	function saveClmData(tblId,chBoxsId,unique){
+	function saveClmData(tblId,chBoxsId){
 
 		var clmData = getClmDataFromCheckbox(); //列表示切替チェックボックス群から列データを取得する。
 
 		//ローカルストレージに列データを保存
 		var j_clmData=JSON.stringify(clmData);
-		localStorage.setItem(unique + '_clmData',j_clmData);
+		var ses_key = my._getLsKey();
+		localStorage.setItem(ses_key, j_clmData);
 
 		jQuery('#csh_msg').show();
 		jQuery('#csh_msg').fadeOut(3000);

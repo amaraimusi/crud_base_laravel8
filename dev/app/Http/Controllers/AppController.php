@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate¥Support¥Facades¥DB;
 
 /**
- * CakePHP標準基本コントローラ
+ * 基本コントローラ
  *
  */
 class AppController {
