@@ -13,10 +13,6 @@ class AppController {
 	
 		// 更新ユーザー
 	    $update_user = '';
-	    // ■■■□□□■■■□□□あとで作成
-// 	    if(!empty(\Auth::user())){
-// 	        $update_user = \Auth::user()->name; // ユーザー名
-// 	    }
 		
 		// ユーザーエージェント
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -56,13 +52,9 @@ class AppController {
 	
 	
 	// 更新ユーザーなど共通フィールドをセットする。
-	protected function setCommonToEntity($ent){
-		
-	    // ■■■□□□■■■□□□あとで作成
-// 		// 更新ユーザーの取得とセット
-// 		$update_user = \Auth::user()->name; // ユーザー名
-// 		$ent['update_user'] = $update_user;
-		$ent['update_user'] = 'dummy'; // ■■■□□□■■■□□□仮
+	protected function setCommonToEntity($ent, $update_user = 'none'){
+
+		$ent['update_user'] = $update_user; 
 		
 		// ユーザーエージェントの取得とセット
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];

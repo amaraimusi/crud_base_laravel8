@@ -1,4 +1,5 @@
 <?php
+
 require_once 'ICrudBaseStrategy.php';
 require_once 'CrudBaseModel.php';
 require_once 'HashCustom.php';
