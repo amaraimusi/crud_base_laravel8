@@ -52,7 +52,6 @@ $kernel = $app->make(Kernel::class);
 
 require_once __DIR__. '/../crud_base_config.php';
 
-
 $response = $kernel->handle(
     $request = Request::capture()
 )->send();

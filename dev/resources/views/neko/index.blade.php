@@ -40,6 +40,12 @@ $ver_str = '?v=' . $this_page_version; // キャッシュ回避のためのバ�
   </ol>
 </nav>
 
+<div class="text-danger">
+	■■■□□□■■■□□□<br>
+	※当デモ環境ではセキュリティのため新規登録、編集などによる変更は反映されないようになっております。
+	ご了承ください。
+</div>
+
 <div class="cb_func_line">
 
 
