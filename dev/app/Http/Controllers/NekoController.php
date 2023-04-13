@@ -101,7 +101,7 @@ class NekoController extends AppController
 			$img_fn = $this->cb->makeFilePath($_FILES, "storage/neko/y%Y/{$ent['id']}/%unique/orig/%fn", $ent, 'img_fn');
 			$fileUploadK = $this->factoryFileUploadK();
 			
-			// ▼旧ファイルを指定ディレクトリごと削除する。
+			// ▼旧ファイルを4階層上のディレクトリごと削除する。
 			$ary = explode("/", $img_fn);
 			$ary = array_slice($ary, 0, 4);
 			$del_dp = implode('/', $ary);
